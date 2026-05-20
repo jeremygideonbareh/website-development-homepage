@@ -19,6 +19,7 @@ export default function HorizonHeroSection() {
   const section1Ref = useRef(null);
   const section2Ref = useRef(null);
   const taglineRef = useRef(null);
+  const brandRef = useRef(null);
 
   const smoothCameraPos = useRef({ x: 0, y: 30, z: 100 });
 
@@ -439,6 +440,12 @@ export default function HorizonHeroSection() {
           section2Ref.current.style.opacity = s2;
           section2Ref.current.style.transform = `translateY(${20 - s2 * 20}px)`;
         }
+        if (brandRef.current) {
+          const bIn = Math.max(0, Math.min(1, (progress - 0.25) / 0.10));
+          const bOut = Math.max(0, 1 - (progress - 0.80) / 0.10);
+          brandRef.current.style.opacity = bIn * bOut;
+          brandRef.current.style.transform = `translateY(${15 - bIn * bOut * 15}px)`;
+        }
       },
     });
 
@@ -503,6 +510,11 @@ export default function HorizonHeroSection() {
         <section className="content-section" ref={taglineRef} style={{ opacity: 0 }}>
           <p className="text-xl md:text-2xl text-zinc-300 tracking-wide">
             Implementation Made Easy
+          </p>
+        </section>
+        <section className="content-section" ref={brandRef} style={{ opacity: 0 }}>
+          <p className="text-lg md:text-xl text-zinc-400 tracking-wide max-w-xl mx-auto leading-relaxed">
+            From concept to launch — we build the infrastructure that scales your business.
           </p>
         </section>
         <section className="content-section" ref={section1Ref} style={{ opacity: 0 }}>

@@ -146,6 +146,15 @@ const Loader = () => {
     @keyframes ground { 0%, 65% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(0); } 75%, 90% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(1); } 100% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(0); } }
     @keyframes ground-shine { 0%, 70% { opacity: 0; } 75%, 87% { opacity: 0.2; } 100% { opacity: 0; } }
     @keyframes mask { 0%, 65% { opacity: 0; } 66%, 100% { opacity: 1; } }
+    .loader-title {
+      animation: title-fade var(--duration) linear forwards;
+    }
+    @keyframes title-fade {
+      0% { opacity: 0; transform: translateY(20px); }
+      15% { opacity: 1; transform: translateY(0); }
+      70% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
   `;
 
   const boxes = Array.from({ length: 8 }, (_, i) => i);
@@ -153,15 +162,20 @@ const Loader = () => {
   return (
     <>
       <style>{loaderCss}</style>
-      <div className="loader">
-        {boxes.map((i) => (
-          <div key={i} className={`box box${i}`}>
+      <div className="flex flex-col items-center justify-center gap-16">
+        <div className="loader">
+          {boxes.map((i) => (
+            <div key={i} className={`box box${i}`}>
+              <div></div>
+            </div>
+          ))}
+          <div className="ground">
             <div></div>
           </div>
-        ))}
-        <div className="ground">
-          <div></div>
         </div>
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-[0.4em] text-white loader-title">
+          HORIZON
+        </h1>
       </div>
     </>
   );

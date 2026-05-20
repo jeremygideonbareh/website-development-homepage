@@ -115,11 +115,9 @@ function App() {
         variants={navVariants}
         initial="hidden"
         animate="visible"
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-black/60 border-b border-white/5 md:px-12"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-end px-6 py-4 backdrop-blur-md bg-black/60 border-b border-white/5 md:px-12"
       >
-        <span className="text-xl font-bold tracking-tight">
-              Apex<span className="text-white">AI</span>
-        </span>
+
         <button
           onClick={() => setShowContact(!showContact)}
           className="flex items-center gap-2 px-5 py-2 text-sm font-medium rounded-full bg-white text-black hover:bg-white/90 transition-colors"

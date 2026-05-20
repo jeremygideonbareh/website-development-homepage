@@ -13,9 +13,8 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-const APP_EMAIL = 'mail@example.com'
-const APP_PHONE = '+92 300 1234567'
-const APP_PHONE_2 = '+92 321 9876543'
+const APP_EMAIL = 'cloudlyconfusing@gmail.com'
+const APP_PHONE = '+92 334 8585873'
 
 export function ContactPage() {
   const socialLinks = [
@@ -66,26 +65,15 @@ export function ContactPage() {
             description="We're available Mon-Fri, 9am-5pm."
             className="border-b-0 md:border-r-0"
           >
-            <div>
-              <div className="flex items-center gap-x-2">
+            <div className="flex items-center gap-x-2">
                 <a
                   href={`tel:${APP_PHONE}`}
                   className="block font-mono text-base font-medium tracking-wide hover:underline"
                 >
                   {APP_PHONE}
                 </a>
-                <CopyButton className="size-6" test="+923207376123" />
+                <CopyButton className="size-6" test={APP_PHONE} />
               </div>
-              <div className="flex items-center gap-x-2">
-                <a
-                  href={`tel:${APP_PHONE_2}`}
-                  className="block font-mono text-base font-medium tracking-wide hover:underline"
-                >
-                  {APP_PHONE_2}
-                </a>
-                <CopyButton className="size-6" test="+923045771644" />
-              </div>
-            </div>
           </Box>
         </div>
         <BorderSeparator />
