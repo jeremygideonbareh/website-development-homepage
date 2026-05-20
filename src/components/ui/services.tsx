@@ -5,6 +5,7 @@ import { IconHover3D } from './icon-3d-hover'
 
 interface ServiceItem {
   title: string
+  tagline: string
   image: string
   overlayImage: string
   heading: string
@@ -13,32 +14,28 @@ interface ServiceItem {
 
 const services: ServiceItem[] = [
   {
-    title: "Web Development",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=512&h=512&fit=crop&q=80",
-    overlayImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=512&h=512&fit=crop&q=80",
-    heading: "Web Development",
-    text: "Full-stack web development using modern frameworks like React, Next.js, and Node.js. We build responsive, performant websites and complex web applications tailored to your business needs.\n\nFrom landing pages to SaaS platforms, we deliver clean, maintainable code with seamless user experiences and rapid deployment.",
+    title: "The Velocity Build",
+    tagline: "Digital authority established in weeks, not months.",
+    image: "https://images.unsplash.com/photo-1551434678-e0768f8e6d4c?w=512&h=512&fit=crop&q=80",
+    overlayImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=512&h=512&fit=crop&q=80",
+    heading: "The Velocity Build",
+    text: "Zero page-reloads. Your customers experience a blazing-fast, app-like interface that prevents cart abandonment. Perfect for early-stage startups.\n\nWe strip away complexity and ship a production-grade website in record time — optimized for conversion from day one.",
   },
   {
-    title: "Creative Design",
-    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=512&h=512&fit=crop&q=80",
-    overlayImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=512&h=512&fit=crop&q=80",
-    heading: "Creative Design",
-    text: "From concept to pixel-perfect execution. Our design team crafts stunning visual experiences that capture your brand's essence and engage your audience.\n\nWe handle UI/UX design, wireframing, prototyping, and comprehensive design systems. Every pixel is intentional, every interaction delightful.",
+    title: "The Growth Stack",
+    tagline: "High-performance infrastructure built for scale.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=512&h=512&fit=crop&q=80",
+    overlayImage: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=512&h=512&fit=crop&q=80",
+    heading: "The Growth Stack",
+    text: "Your traffic is scaling, and your current site is too slow. We build custom web apps with seamless state management to handle the load.\n\nRobust architecture, headless CMS integration, and performance engineering that keeps your experience fast even under peak demand.",
   },
   {
-    title: "Branding",
-    image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=512&h=512&fit=crop&q=80",
-    overlayImage: "https://images.unsplash.com/photo-1620288627223-53302f4e8c74?w=512&h=512&fit=crop&q=80",
-    heading: "Branding",
-    text: "Comprehensive branding services including logo design, brand guidelines, visual identity systems, and messaging strategy. We help you build a brand that stands out.\n\nYour brand is more than a logo — it's the entire experience. We craft cohesive identities that resonate with your audience and scale across every touchpoint.",
-  },
-  {
-    title: "Product Design",
-    image: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=512&h=512&fit=crop&q=80",
-    overlayImage: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=512&h=512&fit=crop&q=80",
-    heading: "Product Design",
-    text: "End-to-end product design from user research and wireframing to high-fidelity prototypes and usability testing. Our process ensures every product decision is data-driven and user-centered.\n\nWe create experiences that users love and businesses thrive on — combining aesthetics with function to deliver products that make a real impact.",
+    title: "The Apex Architecture",
+    tagline: "Bespoke experiences pushing the limits of the browser.",
+    image: "https://images.unsplash.com/photo-1633356122102-3fe601e05bd2?w=512&h=512&fit=crop&q=80",
+    overlayImage: "https://images.unsplash.com/photo-1618172193763-c511deb635ca?w=512&h=512&fit=crop&q=80",
+    heading: "The Apex Architecture",
+    text: "Immersive 3D product showcases and custom WebGL environments that make your competitors' static websites look outdated.\n\nWe push the boundaries of what's possible in the browser — real-time interactivity, WebGL shaders, and cinematic storytelling that leaves a lasting impression.",
   },
 ]
 
@@ -64,22 +61,22 @@ export default function Services() {
   return (
     <>
       <section className="py-16 sm:py-20 lg:py-24 px-4 sm:px-6 w-full">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-3 sm:mb-4 tracking-tight">
-              How Can I Help?
+              Choose Your Tier
             </h2>
             <p className="text-lg sm:text-xl text-zinc-400 font-light">
-              Let&apos;s turn your vision into something amazing.
+              Every tier solves a specific problem. Pick the one that fits your stage.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {services.map((service) => (
               <button
                 key={service.title}
                 onClick={() => openService(service.title)}
-                className="group bg-white/[0.03] border border-white/10 rounded-3xl p-6 flex flex-col h-[320px] transition-all duration-300 hover:bg-white/[0.06] text-left cursor-pointer"
+                className="group bg-white/[0.03] border border-white/10 rounded-3xl p-6 flex flex-col h-[380px] transition-all duration-300 hover:bg-white/[0.06] text-left cursor-pointer"
               >
                 <div className="relative flex-grow flex items-center justify-center mb-4">
                   <img
@@ -102,9 +99,12 @@ export default function Services() {
                   />
                 </div>
 
-                <h3 className="text-left text-lg font-medium text-zinc-100 mt-auto">
+                <h3 className="text-lg font-medium text-zinc-100">
                   {service.title}
                 </h3>
+                <p className="text-sm text-zinc-400 mt-1 leading-relaxed">
+                  {service.tagline}
+                </p>
               </button>
             ))}
           </div>

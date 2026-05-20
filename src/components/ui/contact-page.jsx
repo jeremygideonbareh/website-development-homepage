@@ -56,7 +56,7 @@ export function ContactPage() {
             description="Drop by our office for a chat."
           >
             <span className="font-mono text-base font-medium tracking-wide">
-              Office # 100, 101 Second Floor Kohinoor 1, Faisalabad, Pakistan
+              Indiranagar, Bangalore
             </span>
           </Box>
           <Box

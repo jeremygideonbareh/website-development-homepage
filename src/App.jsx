@@ -10,7 +10,7 @@ import Services from './components/ui/services'
 import StarryBackground from './components/StarryBackground'
 import { ContactPage } from './components/ui/contact-page'
 import RadialOrbitalTimeline from './components/ui/radial-orbital-timeline'
-import { PortfolioGallery } from './components/ui/portfolio-gallery'
+
 import ExamplesPage from './components/ExamplesPage'
 import { InteractiveRobotSpline } from './components/ui/interactive-3d-robot'
 
@@ -49,10 +49,10 @@ const whyUs = [
 const timelineData = [
   {
     id: 1,
-    title: 'Discovery & Architecture',
-    date: 'Step 1',
-    content: 'Tell us your vision, and we map out the tech stack.',
-    category: 'Discovery',
+    title: 'Week 1: Architecture & UI Mapping',
+    date: 'Days 1–7',
+    content: 'We translate your business goals into a technical roadmap and wireframe the user journey.',
+    category: 'Architecture',
     icon: Calendar,
     relatedIds: [2],
     status: 'completed',
@@ -60,9 +60,9 @@ const timelineData = [
   },
   {
     id: 2,
-    title: 'Engineering & Design',
-    date: 'Step 2',
-    content: 'Our team writes the code and builds the interface.',
+    title: 'Week 2: Core Engineering',
+    date: 'Days 8–14',
+    content: 'Our team builds the React/Next.js foundation, focusing on millisecond load times and state management.',
     category: 'Engineering',
     icon: FileText,
     relatedIds: [1, 3],
@@ -71,21 +71,32 @@ const timelineData = [
   },
   {
     id: 3,
-    title: 'Deployment & Handoff',
-    date: 'Step 3',
-    content: 'Go live with full source code ownership.',
+    title: 'Week 3: Interactive & 3D Integration',
+    date: 'Days 15–21',
+    content: 'We weave in Three.js environments, GSAP animations, and custom features to establish the ApexAI vibe.',
+    category: 'Integration',
+    icon: Code,
+    relatedIds: [2, 4],
+    status: 'pending',
+    energy: 40,
+  },
+  {
+    id: 4,
+    title: 'Week 4: QA & Deployment',
+    date: 'Days 22–30',
+    content: 'Rigorous stress-testing across devices, followed by a live launch and complete source-code handoff.',
     category: 'Delivery',
     icon: Code,
-    relatedIds: [2],
+    relatedIds: [3],
     status: 'pending',
-    energy: 25,
+    energy: 20,
   },
 ]
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [showContact, setShowContact] = useState(false)
-  const [showPortfolio, setShowPortfolio] = useState(false)
+
   const [showExamples, setShowExamples] = useState(false)
 
   useEffect(() => {
@@ -194,7 +205,7 @@ function App() {
                   How we work
                 </p>
                 <h2 className="mt-3 text-3xl font-bold sm:text-4xl">
-                  Three steps to start
+                  The 30-Day Execution Blueprint
                 </h2>
               </motion.div>
               <motion.div
@@ -315,7 +326,7 @@ function App() {
 
       <Toaster richColors position="bottom-right" />
 
-      {showPortfolio && <PortfolioGallery onClose={() => setShowPortfolio(false)} onViewGallery={() => { setShowPortfolio(false); setShowExamples(true) }} />}
+
       </motion.div>
     </div>
   )
