@@ -12,6 +12,7 @@ import {
   Camera,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { LeadForm } from '@/components/LeadForm'
 
 const APP_EMAIL = 'cloudlyconfusing@gmail.com'
 const APP_PHONE = '+92 334 8585873'
@@ -77,32 +78,33 @@ export function ContactPage() {
           </Box>
         </div>
         <BorderSeparator />
-        <div className="relative flex h-full min-h-[320px] items-center justify-center">
-          <div
-            className={cn(
-              'z--10 absolute inset-0 size-full',
-              'bg-[radial-gradient(color-mix(in_oklab,var(--foreground)30%,transparent)_1px,transparent_1px)]',
-              'bg-[size:32px_32px]',
-              '[mask-image:radial-gradient(ellipse_at_center,var(--background)_30%,transparent)]',
-            )}
-          />
-          <div className="relative z-1 space-y-6">
-            <h2 className="text-center text-3xl font-bold md:text-4xl">Find us online</h2>
-            <div className="flex flex-wrap items-center gap-4">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white/5 hover:bg-white/10 flex items-center gap-x-2 rounded-full border border-white/10 px-4 py-2"
-                >
-                  <link.icon className="size-4" />
-                  <span className="font-mono text-sm font-medium tracking-wide">
-                    {link.label}
-                  </span>
-                </a>
-              ))}
+        <div className="grid md:grid-cols-2">
+          <div className="border-b border-white/10 md:border-b-0 md:border-r md:border-white/10 p-6 sm:p-8">
+            <h2 className="text-2xl font-bold text-white mb-1">Send us a message</h2>
+            <p className="text-sm text-zinc-400 mb-6">
+              Fill out the form and we'll get back to you within 24 hours.
+            </p>
+            <LeadForm />
+          </div>
+          <div className="flex flex-col items-center justify-center p-6 sm:p-8">
+            <div className="space-y-6 text-center">
+              <h2 className="text-2xl font-bold md:text-3xl">Find us online</h2>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-white/5 hover:bg-white/10 flex items-center gap-x-2 rounded-full border border-white/10 px-4 py-2"
+                  >
+                    <link.icon className="size-4" />
+                    <span className="font-mono text-sm font-medium tracking-wide">
+                      {link.label}
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
         </div>

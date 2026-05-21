@@ -9,6 +9,7 @@ import HorizonHeroSection from './components/HorizonHeroSection'
 import Services from './components/ui/services'
 import StarryBackground from './components/StarryBackground'
 import { ContactPage } from './components/ui/contact-page'
+import { BookingModal } from './components/BookingModal'
 import RadialOrbitalTimeline from './components/ui/radial-orbital-timeline'
 
 import ExamplesPage from './components/ExamplesPage'
@@ -96,6 +97,7 @@ const timelineData = [
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [showContact, setShowContact] = useState(false)
+  const [showBooking, setShowBooking] = useState(false)
 
   const [showExamples, setShowExamples] = useState(false)
 
@@ -285,7 +287,10 @@ function App() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-10"
           >
-            <button className="px-10 py-4 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 transition-colors shadow-lg">
+            <button
+              onClick={() => setShowBooking(true)}
+              className="px-10 py-4 text-base font-semibold rounded-full bg-white text-black hover:bg-white/90 transition-colors shadow-lg"
+            >
               Book a Free Call
             </button>
           </motion.div>
@@ -323,6 +328,8 @@ function App() {
 
         </>
       )}
+
+      <BookingModal open={showBooking} onClose={() => setShowBooking(false)} />
 
       <Toaster richColors position="bottom-right" />
 
