@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
-  base: "/website-development-homepage/",
+  base: process.env.CF_PAGES ? "/" : "/website-development-homepage/",
   plugins: [react()],
   resolve: {
     alias: {
