@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Toaster } from 'sonner'
 import {
-  ArrowLeft, Calendar, FileText, Code,
+  ArrowLeft, Calendar, FileText, Code, Sun, Moon,
 } from 'lucide-react'
 import Loader from './components/Loader'
 import MountEverestScene from './components/MountEverestScene'
@@ -102,6 +102,7 @@ function App() {
   const [showBooking, setShowBooking] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
   const [showExamples, setShowExamples] = useState(false)
+  const [theme, setTheme] = useState('night')
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 3000)
@@ -110,7 +111,7 @@ function App() {
 
   return (
     <div className="min-h-screen text-frost" style={{ backgroundColor: '#101010' }}>
-      {!showExamples && !showAbout && !showContact && <MountEverestScene />}
+      {!showExamples && !showAbout && !showContact && <MountEverestScene theme={theme} />}
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -136,6 +137,13 @@ function App() {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setTheme(prev => prev === 'night' ? 'day' : 'night')}
+            className="flex items-center justify-center size-9 rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === 'night' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+          </button>
+          <button
             onClick={() => { setShowAbout(!showAbout); setShowContact(false); }}
             className="flex items-center gap-2 px-5 py-2 text-sm font-medium rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors"
           >
@@ -159,7 +167,7 @@ function App() {
       ) : (
         <>
 
-      <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100vh' }}>
+      <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '150vh' }}>
           {/* ─── Scroll Narrative: Brand Story ─── */}
           <section className="px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: '#101010' }}>
             <div className="mx-auto max-w-5xl space-y-48">
