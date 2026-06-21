@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion } from 'framer-motion'
 
-const blockedSites = []
+const blockedSites = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
 
 function isBlocked(url) {
   return blockedSites.some(s => url.includes(s))
@@ -16,7 +16,7 @@ function getFaviconUrl(url) {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
 }
 
-export default function BrowserFrame({ ex, isDay = true }) {
+export default function BrowserFrame({ ex, isDay = true, onSelect }) {
   const blocked = isBlocked(ex.url)
   const ref = useRef(null)
   const domain = getDomain(ex.url)
@@ -27,8 +27,9 @@ export default function BrowserFrame({ ex, isDay = true }) {
       whileInView={{ x: 0, opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ type: 'spring', stiffness: 100, damping: 22 }}
-      whileHover={{ y: -4, transition: { duration: 0.25 } }}
-      className="rounded-xl overflow-hidden border group"
+      whileHover={{ y: -6, transition: { duration: 0.25 } }}
+      onClick={() => onSelect?.(ex)}
+      className="rounded-xl overflow-hidden border group cursor-pointer"
       style={{
         borderColor: isDay ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)',
         background: isDay ? '#fff' : '#1A1817',
@@ -66,7 +67,7 @@ export default function BrowserFrame({ ex, isDay = true }) {
       </div>
 
       {/* Browser body */}
-      <div className="relative" style={{ height: 360 }} ref={ref}>
+      <div className="relative" style={{ height: 480 }} ref={ref}>
         {blocked ? (
           /* Enhanced blocked fallback with favicon */
           <div
@@ -97,6 +98,7 @@ export default function BrowserFrame({ ex, isDay = true }) {
               href={ex.url}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="text-xs font-medium px-3 py-1 rounded-full transition-all"
               style={{
                 background: isDay ? '#E85D3A' : '#FF6B4A',
@@ -137,6 +139,7 @@ export default function BrowserFrame({ ex, isDay = true }) {
           href={ex.url}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="text-xs font-medium truncate hover:opacity-70 transition-opacity"
           style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
         >

@@ -63,7 +63,7 @@ function App() {
   const [showBooking, setShowBooking] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
   const [showExamples, setShowExamples] = useState(false)
-  const [theme, setTheme] = useState(() => 'day')
+  const [theme, setTheme] = useState(() => 'night')
 
   useEffect(() => {
     const timer = setTimeout(() => {

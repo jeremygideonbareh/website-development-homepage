@@ -1,7 +1,148 @@
-import { useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Code, Cpu, Palette, ArrowUpRight } from 'lucide-react'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { Code, Cpu, Palette, ArrowUpRight, X, ExternalLink } from 'lucide-react'
 import BrowserFrame from './BrowserFrame'
+
+const blockedSites = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
+
+function isBlocked(url) {
+  return blockedSites.some(s => url.includes(s))
+}
+
+function getDomain(url) {
+  return url.replace(/https?:\/\//, '').replace(/\/.*/, '')
+}
+
+function getFaviconUrl(url) {
+  const domain = getDomain(url)
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+}
+
+function PreviewModal({ example, isDay, onClose }) {
+  useEffect(() => {
+    const handleKey = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [onClose])
+
+  const blocked = isBlocked(example.url)
+  const domain = getDomain(example.url)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-8"
+      style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' }}
+    >
+      <motion.div
+        initial={{ scale: 0.92, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.92, opacity: 0, y: 20 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl"
+        style={{
+          background: isDay ? '#fff' : '#1A1817',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.5)',
+        }}
+      >
+        {/* Browser chrome */}
+        <div
+          className="flex items-center justify-between px-4 py-3 border-b"
+          style={{
+            borderColor: isDay ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)',
+            background: isDay ? '#F5F0EB' : '#222020',
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <button onClick={onClose} className="size-3 rounded-full bg-[#FF5F57] hover:brightness-110 transition-all" />
+            <span className="size-3 rounded-full bg-[#FFBD2E]" />
+            <span className="size-3 rounded-full bg-[#28C840]" />
+          </div>
+          <div
+            className="flex-1 mx-4 px-3 py-1.5 rounded-lg text-xs truncate text-center"
+            style={{
+              background: isDay ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)',
+              color: isDay ? '#5A4A3A' : '#8A8A8A',
+            }}
+          >
+            <span className="opacity-60">https://</span>
+            {domain}
+          </div>
+          <button
+            onClick={onClose}
+            className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-black/10"
+            style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
+          >
+            <X className="size-4" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="relative" style={{ height: '80vh', maxHeight: 800 }}>
+          {blocked ? (
+            <div
+              className="w-full h-full flex flex-col items-center justify-center gap-4"
+              style={{ background: isDay ? '#F9F6F2' : '#1A1817' }}
+            >
+              <img
+                src={getFaviconUrl(example.url)}
+                alt=""
+                className="size-16 rounded-xl"
+                style={{ background: isDay ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.05)' }}
+                onError={(e) => { e.target.style.display = 'none' }}
+              />
+              <p className="text-lg font-semibold" style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}>
+                {domain}
+              </p>
+              <p className="text-sm opacity-60" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
+                This site blocks iframe embedding
+              </p>
+              <div className="flex items-center gap-3 mt-2">
+                <motion.a
+                  href={example.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium text-white"
+                  style={{ background: isDay ? '#E85D3A' : '#FF6B4A' }}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <ExternalLink className="size-4" />
+                  Open in new tab
+                </motion.a>
+                <span className="text-xs font-medium" style={{ color: isDay ? '#E85D3A' : '#FF6B4A' }}>
+                  {example.award}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <>
+              <iframe
+                src={example.url}
+                title={example.name}
+                className="w-full h-full border-0"
+                sandbox="allow-scripts allow-same-origin allow-popups"
+                style={{ background: '#fff' }}
+              />
+              <div
+                className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+                style={{
+                  background: isDay
+                    ? 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.9))'
+                    : 'linear-gradient(to bottom, transparent, rgba(26,24,23,0.9))',
+                }}
+              />
+            </>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
 
 const services = [
   {
@@ -99,6 +240,7 @@ function TiltCard({ children }) {
 export default function ServicesSection({ isDay = true }) {
   const sectionRef = useRef(null)
   const [hoveredService, setHoveredService] = useState(null)
+  const [selectedExample, setSelectedExample] = useState(null)
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -242,7 +384,7 @@ export default function ServicesSection({ isDay = true }) {
                               </p>
                               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 {s.examples.map((ex) => (
-                                  <BrowserFrame key={ex.name} ex={ex} isDay={isDay} />
+                                  <BrowserFrame key={ex.name} ex={ex} isDay={isDay} onSelect={(ex) => setSelectedExample(ex)} />
                                 ))}
                               </div>
                             </div>
@@ -295,6 +437,11 @@ export default function ServicesSection({ isDay = true }) {
           </div>
         </div>
       </div>
+      <AnimatePresence>
+        {selectedExample && (
+          <PreviewModal example={selectedExample} isDay={isDay} onClose={() => setSelectedExample(null)} />
+        )}
+      </AnimatePresence>
     </section>
   )
 }
