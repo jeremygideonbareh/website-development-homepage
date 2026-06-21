@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion } from 'framer-motion'
 
-const blockedSites = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
+const blockedSites = []
 
 function isBlocked(url) {
   return blockedSites.some(s => url.includes(s))
@@ -66,7 +66,7 @@ export default function BrowserFrame({ ex, isDay = true }) {
       </div>
 
       {/* Browser body */}
-      <div className="relative" style={{ height: 180 }} ref={ref}>
+      <div className="relative" style={{ height: 360 }} ref={ref}>
         {blocked ? (
           /* Enhanced blocked fallback with favicon */
           <div

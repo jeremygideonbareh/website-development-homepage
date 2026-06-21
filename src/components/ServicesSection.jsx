@@ -11,9 +11,9 @@ const services = [
     icon: Code,
     decor: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80',
     examples: [
-      { name: 'Fauna Robotics', url: 'https://faunarobotics.com', award: 'SOTD Jun 2026', img: 'https://picsum.photos/seed/fauna-robotics/320/200' },
+      { name: 'Cuberto', url: 'https://cuberto.com', award: 'Awwwards Featured', img: 'https://picsum.photos/seed/cuberto/320/200' },
       { name: 'Apechain', url: 'https://apechain.com', award: 'SOTD Jun 2026', img: 'https://picsum.photos/seed/apechain/320/200' },
-      { name: 'Locomotive.ca', url: 'https://locomotive.ca', award: 'SOTM Mar 2023', img: 'https://picsum.photos/seed/locomotive/320/200' },
+      { name: 'Monogrid', url: 'https://monogrid.com', award: 'SOTD Feb 2026', img: 'https://picsum.photos/seed/monogrid/320/200' },
     ],
     projects: [
       { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers' },
@@ -28,7 +28,7 @@ const services = [
     icon: Cpu,
     decor: 'https://images.unsplash.com/photo-1518173946687-a36f968f7e1e?w=1600&q=80',
     examples: [
-      { name: 'Ponder AI', url: 'https://ponder.ai', award: 'Awwwards Nominee', img: 'https://picsum.photos/seed/ponder-ai/320/200' },
+      { name: 'We Are Impossible', url: 'https://www.weareimpossible.com', award: 'Awwwards Featured', img: 'https://picsum.photos/seed/we-are-impossible/320/200' },
       { name: 'Acova AI', url: 'https://acova.ai', award: 'Awwwards Featured', img: 'https://picsum.photos/seed/acova/320/200' },
       { name: 'Armory AI', url: 'https://www.armory.in', award: 'Awwwards Featured', img: 'https://picsum.photos/seed/armory/320/200' },
     ],
