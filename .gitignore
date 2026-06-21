@@ -19,6 +19,9 @@ __pycache__/
 *.pyo
 *.db
 
+# MCP config with API keys
+.opencode/mcp.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
