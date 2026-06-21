@@ -6,14 +6,14 @@ const BASE = import.meta.env.BASE_URL || '/'
 const themes = {
   night: {
     bg: '#1A1817',
-    overlay: 'rgba(0,0,0,0.5)',
+    overlay: 'rgba(0,0,0,0.12)',
     title: '#F2F2F2',
     accent: '#FF6B4A',
     subtitle: '#B0B0B0',
   },
   day: {
     bg: '#F5F0EB',
-    overlay: 'rgba(0,0,0,0.35)',
+    overlay: 'rgba(0,0,0,0.06)',
     title: '#FFFFFF',
     accent: '#E85D3A',
     subtitle: '#DDDDDD',
@@ -50,13 +50,14 @@ export default function MountEverestScene({ theme = 'day' }) {
           loop
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ transform: 'translateZ(0)', willChange: 'transform' }}
         >
           <source src={VIDEO_URL} type="video/mp4" />
         </video>
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(to bottom, ${palette.overlay}, ${palette.bg})`,
+            background: `linear-gradient(to bottom, ${palette.overlay}, transparent 60%)`,
           }}
         />
       </div>
