@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { ExternalLink, ArrowLeft, ChevronLeft, ChevronRight, Code, Zap, Cpu, Shield } from 'lucide-react'
-import { WordReveal, CharReveal, SectionEyebrow } from './RevealText'
+import { WordReveal, CharReveal, SectionEyebrow, KineticText } from './RevealText'
 
 const projects = [
   { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers', tech: 'TypeScript, Next.js, Supabase', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/gods-creatures/400/280' },
@@ -42,14 +42,21 @@ const cinematicBg = [
   'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80',
 ]
 
+const blogDecoImages = [
+  'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80',
+  'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80',
+  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80',
+]
+
 const themes = {
   night: {
     bg: '#1A1817',
     surface: '#222020',
     surface2: '#101010',
     text: '#F2F2F2',
-    muted: '#8A8A8A',
-    dim: '#6A6A6A',
+    muted: '#B0B0B0',
+    dim: '#8A8A8A',
     accent: '#FF6B4A',
     border: 'rgba(255,255,255,0.08)',
     cardBg: 'rgba(255,255,255,0.04)',
@@ -57,6 +64,7 @@ const themes = {
     glassBg: 'rgba(255,255,255,0.03)',
     glassBorder: 'rgba(255,255,255,0.06)',
     heroOverlay: 'rgba(26,24,23,0.3)',
+    eyebrow: '#FF6B4A',
   },
   day: {
     bg: '#F5F0EB',
@@ -72,6 +80,7 @@ const themes = {
     glassBg: 'rgba(255,255,255,0.5)',
     glassBorder: 'rgba(0,0,0,0.06)',
     heroOverlay: 'rgba(245,240,235,0.2)',
+    eyebrow: '#E85D3A',
   },
 }
 
@@ -108,7 +117,7 @@ function Counter({ from = 0, to, suffix = '', label, p }) {
   )
 }
 
-function ProjectCard({ proj, i }) {
+function ProjectCard({ proj, i, p }) {
   const [loaded, setLoaded] = useState(false)
 
   return (
@@ -128,17 +137,17 @@ function ProjectCard({ proj, i }) {
         whileHover={{ y: -6, transition: { duration: 0.25 } }}
         className="group block rounded-2xl border overflow-hidden transition-shadow duration-300"
         style={{
-          borderColor: 'rgba(255,255,255,0.08)',
-          background: 'rgba(255,255,255,0.04)',
+          borderColor: p.glassBorder,
+          background: p.cardBg,
           backdropFilter: 'blur(8px)',
         }}
       >
-        <div className="relative h-40 overflow-hidden" style={{ background: 'rgba(0,0,0,0.2)' }}>
+        <div className="relative h-40 overflow-hidden" style={{ background: p.surface2 }}>
           {!loaded && (
             <motion.div
               className="absolute inset-0"
               style={{
-                background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%)',
+                background: `linear-gradient(90deg, transparent 0%, ${p.text}08 50%, transparent 100%)`,
               }}
               animate={{ x: ['-100%', '100%'] }}
               transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
@@ -161,10 +170,10 @@ function ProjectCard({ proj, i }) {
 
         <div className="p-4 md:p-5">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="text-base font-semibold leading-tight" style={{ color: '#F2F2F2' }}>{proj.name}</h3>
-            <ExternalLink className="size-3.5 mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity" style={{ color: '#8A8A8A' }} />
+            <h3 className="text-base font-semibold leading-tight" style={{ color: p.text }}>{proj.name}</h3>
+            <ExternalLink className="size-3.5 mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity" style={{ color: p.dim }} />
           </div>
-          <p className="mt-1.5 text-xs" style={{ color: '#6A6A6A' }}>{proj.tech}</p>
+          <p className="mt-1.5 text-xs" style={{ color: p.dim }}>{proj.tech}</p>
           <motion.div
             className="mt-3 h-0.5 rounded-full"
             style={{ background: `linear-gradient(to right, ${proj.color}, transparent)`, transformOrigin: 'left' }}
@@ -179,7 +188,7 @@ function ProjectCard({ proj, i }) {
   )
 }
 
-function ScrollableCategory({ label, catProjects, catIdx }) {
+function ScrollableCategory({ label, catProjects, catIdx, p }) {
   const trackRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
@@ -217,9 +226,9 @@ function ScrollableCategory({ label, catProjects, catIdx }) {
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
         className="text-2xl font-bold mb-6 flex items-center gap-3"
-        style={{ color: '#F2F2F2' }}
+        style={{ color: p.text }}
       >
-        <span className="w-8 h-0.5 rounded-full" style={{ background: '#FF6B4A' }} />
+        <span className="w-8 h-0.5 rounded-full" style={{ background: p.accent }} />
         {label}
       </motion.h2>
 
@@ -228,7 +237,7 @@ function ScrollableCategory({ label, catProjects, catIdx }) {
           <button
             onClick={() => scroll('left')}
             className="absolute -left-2 top-1/2 -translate-y-1/2 z-20 size-9 rounded-full flex items-center justify-center shadow-lg"
-            style={{ background: '#222020', color: '#F2F2F2', border: '1px solid rgba(255,255,255,0.08)' }}
+            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}` }}
           >
             <ChevronLeft className="size-4" />
           </button>
@@ -237,7 +246,7 @@ function ScrollableCategory({ label, catProjects, catIdx }) {
           <button
             onClick={() => scroll('right')}
             className="absolute -right-2 top-1/2 -translate-y-1/2 z-20 size-9 rounded-full flex items-center justify-center shadow-lg"
-            style={{ background: '#222020', color: '#F2F2F2', border: '1px solid rgba(255,255,255,0.08)' }}
+            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}` }}
           >
             <ChevronRight className="size-4" />
           </button>
@@ -248,7 +257,7 @@ function ScrollableCategory({ label, catProjects, catIdx }) {
           className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
           style={{
             scrollbarWidth: 'thin',
-            scrollbarColor: '#FF6B4A66 transparent',
+            scrollbarColor: `${p.accent}66 transparent`,
             msOverflowStyle: '-ms-autohiding-scrollbar',
           }}
         >
@@ -256,12 +265,12 @@ function ScrollableCategory({ label, catProjects, catIdx }) {
             .AboutTrack::-webkit-scrollbar { height: 3px; }
             .AboutTrack::-webkit-scrollbar-track { background: transparent; }
             .AboutTrack::-webkit-scrollbar-thumb {
-              background: #FF6B4A66;
+              background: ${p.accent}66;
               border-radius: 999px;
             }
           `}</style>
           {catProjects.map((proj, i) => (
-            <ProjectCard key={proj.name} proj={proj} i={i} />
+            <ProjectCard key={proj.name} proj={proj} i={i} p={p} />
           ))}
         </div>
       </div>
@@ -275,7 +284,6 @@ export default function AboutUs({ onBack, theme = 'night' }) {
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
   const statsRef = useRef(null)
-  const statsInView = useInView(statsRef, { once: true, margin: '-80px' })
 
   return (
     <div ref={sectionRef} className="min-h-screen pt-24 pb-32 overflow-hidden relative" style={{ backgroundColor: p.bg }}>
@@ -305,19 +313,21 @@ export default function AboutUs({ onBack, theme = 'night' }) {
 
         {/* Hero */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: 'easeOut' }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7 }}
           className="mb-24 max-w-4xl"
         >
-          <SectionEyebrow>About Horizon Labs</SectionEyebrow>
+          <SectionEyebrow delay={0.1} color={p.eyebrow}>About Horizon Labs</SectionEyebrow>
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6" style={{ color: p.text }}>
-            We build the web{' '}
-            <span style={{ color: p.accent }}>that templates can't.</span>
+            <KineticText mode="spring" delay={0.2}>
+              We build the web that templates can't.
+            </KineticText>
           </h1>
           <p className="mt-6 text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: p.muted }}>
-            Every brand is unique. Your website should be too. We engineer custom digital experiences
-            from the ground up — no themes, no page builders, no compromises.
+            <KineticText mode="wave" delay={0.6}>
+              Every brand is unique. Your website should be too. We engineer custom digital experiences from the ground up — no themes, no page builders, no compromises.
+            </KineticText>
           </p>
         </motion.div>
 
@@ -331,11 +341,11 @@ export default function AboutUs({ onBack, theme = 'night' }) {
         >
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
             <div>
-              <SectionEyebrow delay={0.1}>Our Philosophy</SectionEyebrow>
+              <SectionEyebrow delay={0.1} color={p.eyebrow}>Our Philosophy</SectionEyebrow>
               <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
-                <CharReveal delay={0.2}>
+                <KineticText mode="wave" delay={0.2}>
                   Speed without sacrifice.
-                </CharReveal>
+                </KineticText>
               </h2>
             </div>
             <div className="space-y-6 pt-2">
@@ -386,9 +396,9 @@ export default function AboutUs({ onBack, theme = 'night' }) {
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <SectionEyebrow>How we build</SectionEyebrow>
+            <SectionEyebrow color={p.eyebrow}>How we build</SectionEyebrow>
             <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
-              Our principles
+              <KineticText mode="wave" delay={0.1}>Our principles</KineticText>
             </h2>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-5">
@@ -428,9 +438,9 @@ export default function AboutUs({ onBack, theme = 'night' }) {
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <SectionEyebrow>Who we are</SectionEyebrow>
+            <SectionEyebrow color={p.eyebrow}>Who we are</SectionEyebrow>
             <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
-              Meet the team
+              <KineticText mode="wave" delay={0.1}>Meet the team</KineticText>
             </h2>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-6">
@@ -467,6 +477,145 @@ export default function AboutUs({ onBack, theme = 'night' }) {
           </div>
         </section>
 
+        {/* Blog: Our Story */}
+        <section className="mb-28">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-12"
+          >
+            <SectionEyebrow color={p.eyebrow}>The story</SectionEyebrow>
+            <p className="text-xs tracking-widest uppercase mt-4" style={{ color: p.dim }}>
+              Horizon Labs &mdash; Founded 2024
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-4 leading-tight" style={{ color: p.text }}>
+              <KineticText mode="spring" delay={0.1}>
+                Starting from a single laptop.
+              </KineticText>
+            </h2>
+          </motion.div>
+
+          <div className="max-w-none space-y-10">
+            {/* Paragraph 1 with drop cap */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6 }}
+              className="text-base md:text-lg leading-relaxed"
+              style={{ color: p.muted }}
+            >
+              <span
+                className="float-left text-6xl md:text-7xl font-bold leading-none mr-4 mt-1"
+                style={{ color: p.accent }}
+              >
+                E
+              </span>
+              <WordReveal delay={0.2}>
+                very pixel we ship is guided by a single principle: your brand deserves code that is written for it, not retrofitted to it. No themes. No page builders. No compromises. What started as a belief that the web could offer more than cookie-cutter templates became the founding ethos of Horizon Labs.
+              </WordReveal>
+            </motion.div>
+
+            {/* Image + Text row 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.7 }}
+              className="grid md:grid-cols-2 gap-8 md:gap-14 items-center"
+            >
+              <div className="rounded-xl overflow-hidden">
+                <img
+                  src={blogDecoImages[0]}
+                  alt="Workspace setup"
+                  className="w-full h-64 md:h-80 object-cover"
+                  style={{ filter: theme === 'night' ? 'brightness(0.8)' : 'none' }}
+                />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-4" style={{ color: p.text }}>
+                  <KineticText mode="wave" delay={0.1}>It started with a choice.</KineticText>
+                </h3>
+                <p className="text-base leading-relaxed" style={{ color: p.muted }}>
+                  <WordReveal delay={0.2}>
+                    One laptop. A conviction that templates were a compromise. And a decision to prove that custom engineering could be faster, more affordable, and undeniably better. That first project led to another, and another. Word spread. The stack grew. But the principle never changed.
+                  </WordReveal>
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Pull quote */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6 }}
+              className="py-10 md:py-14 px-4 text-center border-y"
+              style={{ borderColor: p.glassBorder }}
+            >
+              <p className="text-xl md:text-2xl lg:text-3xl font-bold italic leading-snug max-w-3xl mx-auto" style={{ color: p.text }}>
+                &ldquo;We believe the web deserves better than templates.&rdquo;
+              </p>
+              <p className="mt-4 text-sm" style={{ color: p.dim }}>&mdash; Jeremy Gideon Bareh</p>
+            </motion.div>
+
+            {/* Image + Text row 2 (reversed) */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.7 }}
+              className="grid md:grid-cols-2 gap-8 md:gap-14 items-center"
+            >
+              <div className="order-2 md:order-1">
+                <h3 className="text-xl font-bold mb-4" style={{ color: p.text }}>
+                  <KineticText mode="wave" delay={0.1}>From freelance to full studio.</KineticText>
+                </h3>
+                <p className="text-base leading-relaxed" style={{ color: p.muted }}>
+                  <WordReveal delay={0.2}>
+                    Today Horizon Labs is a lean, AI-augmented studio that ships production-grade web experiences for clients around the world. We still own every line of code we write. We still reject shortcuts that sacrifice quality. And we still believe that the best digital experiences are the ones that feel unmistakably human.
+                  </WordReveal>
+                </p>
+              </div>
+              <div className="rounded-xl overflow-hidden order-1 md:order-2">
+                <img
+                  src={blogDecoImages[1]}
+                  alt="Team collaboration"
+                  className="w-full h-64 md:h-80 object-cover"
+                  style={{ filter: theme === 'night' ? 'brightness(0.8)' : 'none' }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Closing paragraph */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6 }}
+              className="pt-6"
+            >
+              <p className="text-base md:text-lg leading-relaxed" style={{ color: p.muted }}>
+                <WordReveal delay={0.2}>
+                  The web is still evolving. And as long as there are brands that refuse to settle for &ldquo;good enough,&rdquo; we will be here building what comes next.
+                </WordReveal>
+              </p>
+              <motion.p
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="mt-6 font-semibold"
+                style={{ color: p.text }}
+              >
+                — Horizon Labs
+              </motion.p>
+            </motion.div>
+          </div>
+        </section>
+
         {/* Project Showcase */}
         <section className="mb-20">
           <motion.div
@@ -476,13 +625,14 @@ export default function AboutUs({ onBack, theme = 'night' }) {
             transition={{ duration: 0.5 }}
             className="mb-12"
           >
-            <SectionEyebrow>Our work</SectionEyebrow>
+            <SectionEyebrow color={p.eyebrow}>Our work</SectionEyebrow>
             <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
-              Projects we've built
+              <KineticText mode="spring" delay={0.1}>Projects we&apos;ve built</KineticText>
             </h2>
             <p className="mt-4 text-base max-w-2xl" style={{ color: p.muted }}>
-              From AI agents to full-stack web apps — each project is built with the same
-              precision and care we bring to every client engagement.
+              <WordReveal delay={0.3}>
+                From AI agents to full-stack web apps — each project is built with the same precision and care we bring to every client engagement.
+              </WordReveal>
             </p>
           </motion.div>
 
@@ -494,6 +644,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
                 label={label}
                 catProjects={catProjects}
                 catIdx={catIdx}
+                p={p}
               />
             )
           })}
@@ -509,8 +660,9 @@ export default function AboutUs({ onBack, theme = 'night' }) {
           style={{ borderColor: p.glassBorder }}
         >
           <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
-            Ready to build something{' '}
-            <span style={{ color: p.accent }}>that actually works?</span>
+            <KineticText mode="spring" delay={0.1}>
+              Ready to build something that actually works?
+            </KineticText>
           </h2>
           <p className="mt-4 text-base" style={{ color: p.muted }}>
             Stop burning time on agencies that over-promise and under-deliver.
@@ -525,7 +677,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
               color: '#FFFFFF',
             }}
           >
-            Let's talk
+            Let&apos;s talk
             <ArrowLeft className="size-4 rotate-180" />
           </motion.button>
         </motion.div>
