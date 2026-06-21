@@ -53,3 +53,69 @@ Use active voice as default. A control should say exactly what happens when it's
 Treat failure and emptiness as moments for direction, not mood. Explain what went wrong and how to fix it, in the interface's voice rather than a person's. Errors don't apologize, and they are never vague about what happened. An empty screen is an invitation to act.
 
 Keep the register conversational and tuned: plain verbs, sentence case, no filler, with tone matched to the brand and the audience. Let each element do exactly one job. A label labels, an example demonstrates, and nothing quietly does double duty.
+
+---
+
+## Awwwards Reference (scraped June 2026 via Apify)
+
+### Site of the Day Winners — June 2026
+| Date | Site | Agency | Notes |
+|------|------|--------|-------|
+| Jun 21 | digitalists | digitalists | Developer Award |
+| Jun 20 | RPA COMUNICACIÓN | LaNegrita | — |
+| Jun 19 | Balmoral | MILL3 | Developer Award |
+| Jun 18 | Indigo Laboratory | FPTP Studio | — |
+| Jun 17 | Gucci: Mystery Unfolds | MONOGRID | — |
+| Jun 16 | Fauna Robotics | O0 | Developer Award |
+| Jun 15 | Elva | Lazarev. | — |
+| Jun 14 | sakazuki | Shun_Kudo | Typography Honors |
+| Jun 13 | Crav Burgers | Anyflow | — |
+| Jun 12 | Tresmares Capital | Dgrees | — |
+| Jun 11 | Serve Robotics | WILD | — |
+| Jun 10 | Hubtown | Unseen Studio | — |
+| Jun 9 | Pacôme Pertant Portfolio | Louis Bocquet | — |
+| Jun 8 | The Power of Storytelling | Noomo Agency | — |
+| Jun 7 | SOHub | sohubdigital | — |
+| Jun 6 | Apechain | makemepulse | — |
+| Jun 5 | Son Daven | The First The Last | — |
+| Jun 4 | Steven.com | OFF+BRAND. | — |
+| Jun 3 | Truck'N Roll® | Locomotive | — |
+| Jun 2 | REF Digital | REF Digital | — |
+| Jun 1 | Hashgraph Ventures | Glenn Catteeuw | — |
+
+### Design Patterns Observed on Winning Sites
+
+**Motion & Animation:**
+- Scroll-triggered reveals are the dominant motion pattern (not auto-play)
+- Sticky horizontal scroll sections used for timelines and process steps (Apple-style)
+- Micro-interactions on CTAs and navigation (hover scale, color shift, underline reveal)
+- Hero sections use layered parallax (video + text + overlay at different speeds)
+- Page transitions between sections (not just fade, but slide, scale, or morph)
+
+**Typography:**
+- Oversized hero type (clamp 3rem–8rem) with tight letter-spacing (-0.03em to 0.02em)
+- Variable fonts with weight axis animation on scroll/hover
+- Display face for headlines, clean sans for body (Satoshi, Inter, Neue Haas Grotesk common)
+- Typography as hero — full-screen type-only layouts with kinetic text
+
+**Layout & Structure:**
+- Full-bleed hero sections with no container constraint
+- Asymmetric grids for service/feature cards (not equal columns)
+- Content grouped by visual weight, not strict grid
+- Sticky nav bars that hide on scroll down, show on scroll up
+- Footer as continuation of design (not afterthought)
+
+**Color & Atmosphere:**
+- Dark mode as default (82%+ of users run devices in dark mode)
+- Accent colors used sparingly — one main + one secondary, applied to interactive elements only
+- Subtle gradient overlays on hero media (6-15% black, never solid)
+- Glassmorphism restrained to nav bars, modals, and feature cards (not full sections)
+- Noise/grain textures on backgrounds to add depth to solid colors
+
+**Technical Stack (observed frequency):**
+- Next.js / React (most common framework)
+- GSAP + Locomotive Scroll (smooth scroll)
+- framer-motion (React scroll animations)
+- Three.js / WebGL (sparingly — only when justified)
+- Custom cursor implementations (cursor followers, magnetic buttons)
+- Lenis smooth scroll library

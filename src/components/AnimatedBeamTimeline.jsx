@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 import { Calendar, FileText, Code, Rocket } from 'lucide-react'
 
 const icons = [Calendar, FileText, Code, Rocket]
@@ -9,14 +9,14 @@ const weeks = [
     id: 1,
     title: 'Architecture & UI Mapping',
     days: 'Days 1–7',
-    desc: 'We translate your business goals into a technical roadmap and wireframe the user journey.',
+    desc: 'We translate your business goals into a technical roadmap and wireframe the user journey — 60% faster than traditional agencies.',
     accent: '#E85D3A',
   },
   {
     id: 2,
     title: 'Core Engineering',
     days: 'Days 8–14',
-    desc: 'Our team builds the React/Next.js foundation, focusing on millisecond load times and state management.',
+    desc: 'Our team builds the React/Next.js foundation with millisecond load times, state management, and a deployable build by day 14.',
     accent: '#2B7A78',
   },
   {
@@ -35,87 +35,100 @@ const weeks = [
   },
 ]
 
-const fromRight = {
-  hidden: { x: 300, opacity: 0, scale: 0.96 },
-  visible: {
-    x: 0, opacity: 1, scale: 1,
-    transition: { type: 'spring', stiffness: 100, damping: 22 },
-  },
-}
+const phaseLabels = [
+  'Phase 1/4: Blueprint',
+  'Phase 2/4: Engineering',
+  'Phase 3/4: Interactive',
+  'Phase 4/4: Launch',
+]
 
-function AnimatedBeam({ start, end, accent, delay = 0, isDay = true }) {
-  const [dashOffset, setDashOffset] = useState(0)
-
-  const pathRef = useRef(null)
-  const isVisible = useInView(pathRef, { once: true, margin: '-100px' })
-
-  useEffect(() => {
-    if (!isVisible) return
-    const interval = setInterval(() => {
-      setDashOffset(prev => (prev - 1) % 200)
-    }, 30)
-    return () => clearInterval(interval)
-  }, [isVisible])
-
-  if (typeof window === 'undefined') return null
-
+function HorizontalWeekCard({ week, index, isDay }) {
+  const Icon = icons[index]
   return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
-      <defs>
-        <linearGradient id={`beam-grad-${start.x}-${start.y}`} x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor={accent} stopOpacity="0.1" />
-          <stop offset="50%" stopColor={accent} stopOpacity="0.6" />
-          <stop offset="100%" stopColor={accent} stopOpacity="0.1" />
-        </linearGradient>
-        <filter id={`glow-${start.x}-${start.y}`}>
-          <feGaussianBlur stdDeviation="2" result="blur" />
-          <feMerge>
-            <feMergeNode in="blur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-      {/* Background track */}
-      <motion.path
-        d={`M ${start.x} ${start.y} Q ${(start.x + end.x) / 2} ${(start.y + end.y) / 2} ${end.x} ${end.y}`}
-        fill="none"
-        stroke={isDay ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)'}
-        strokeWidth="1.5"
-        initial={{ pathLength: 0 }}
-        animate={isVisible ? { pathLength: 1 } : {}}
-        transition={{ duration: 0.8, delay }}
-      />
-      {/* Flowing beam */}
-      <motion.path
-        d={`M ${start.x} ${start.y} Q ${(start.x + end.x) / 2} ${(start.y + end.y) / 2} ${end.x} ${end.y}`}
-        fill="none"
-        stroke={`url(#beam-grad-${start.x}-${start.y})`}
-        strokeWidth="2.5"
-        strokeDasharray="8 12"
-        strokeDashoffset={dashOffset}
-        strokeLinecap="round"
-        filter={`url(#glow-${start.x}-${start.y})`}
-        initial={{ opacity: 0 }}
-        animate={isVisible ? { opacity: 1 } : {}}
-        transition={{ duration: 0.6, delay: delay + 0.2 }}
-      />
-    </svg>
+    <div className="flex-shrink-0 w-screen h-full flex items-center justify-center px-6 md:px-16 lg:px-24">
+      <div className="w-full max-w-5xl flex flex-col md:flex-row items-center gap-6 md:gap-12 lg:gap-20">
+        {/* Left: Giant number + icon */}
+        <div className="flex-shrink-0 flex flex-col items-center">
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            className="text-[clamp(5rem,12vw,10rem)] font-black leading-none select-none"
+            style={{ color: `${week.accent}18` }}
+          >
+            {String(index + 1).padStart(2, '0')}
+          </motion.div>
+          <motion.div
+            initial={{ scale: 0, rotate: -20 }}
+            whileInView={{ scale: 1, rotate: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: 'spring', stiffness: 200, damping: 16, delay: 0.15 }}
+            className="size-14 md:size-20 rounded-2xl flex items-center justify-center -mt-2 md:-mt-4"
+            style={{ background: `${week.accent}20`, color: week.accent }}
+          >
+            <Icon className="size-6 md:size-9" />
+          </motion.div>
+        </div>
+
+        {/* Right: Content */}
+        <div className="flex-1 text-center md:text-left">
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-sm font-semibold tracking-widest uppercase mb-2"
+            style={{ color: week.accent }}
+          >
+            {week.days}
+          </motion.p>
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight"
+            style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
+          >
+            {week.title}
+          </motion.h3>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="text-base md:text-lg leading-relaxed max-w-xl mx-auto md:mx-0"
+            style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}
+          >
+            {week.desc}
+          </motion.p>
+
+          {/* Animated accent bar */}
+          <motion.div
+            initial={{ scaleX: 0, transformOrigin: 'left' }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="h-1 rounded-full mt-6"
+            style={{
+              width: 'clamp(80px, 20vw, 160px)',
+              background: `linear-gradient(to right, ${week.accent}, transparent)`,
+            }}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 
-function WeekCard({ week, index, isDay = true }) {
+function VerticalWeekCard({ week, index, isDay }) {
   const Icon = icons[index]
-  const cardRef = useRef(null)
-  const isVisible = useInView(cardRef, { once: true, margin: '-60px' })
-
   return (
     <motion.div
-      ref={cardRef}
-      variants={fromRight}
-      initial="hidden"
-      whileInView="visible"
+      initial={{ x: 300, opacity: 0, scale: 0.96 }}
+      whileInView={{ x: 0, opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: '-60px' }}
-      custom={index}
       whileHover={{ y: -6, transition: { duration: 0.3 } }}
       className="relative rounded-2xl border overflow-hidden"
       style={{
@@ -128,7 +141,6 @@ function WeekCard({ week, index, isDay = true }) {
         boxShadow: isDay ? '0 4px 24px rgba(0,0,0,0.04)' : '0 4px 24px rgba(0,0,0,0.2)',
       }}
     >
-      {/* Accent top bar */}
       <motion.div
         className="h-1"
         style={{ background: week.accent }}
@@ -137,16 +149,11 @@ function WeekCard({ week, index, isDay = true }) {
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
       />
-
       <div className="p-5 md:p-6">
-        {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div
             className="size-10 rounded-xl flex items-center justify-center"
-            style={{
-              background: `${week.accent}18`,
-              color: week.accent,
-            }}
+            style={{ background: `${week.accent}18`, color: week.accent }}
           >
             <Icon className="size-5" />
           </div>
@@ -157,8 +164,6 @@ function WeekCard({ week, index, isDay = true }) {
             {String(index + 1).padStart(2, '0')}
           </span>
         </div>
-
-        {/* Content */}
         <h3
           className="text-lg font-bold mb-1"
           style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
@@ -177,8 +182,6 @@ function WeekCard({ week, index, isDay = true }) {
         >
           {week.desc}
         </p>
-
-        {/* Animated accent line */}
         <motion.div
           className="mt-4 h-0.5 rounded-full"
           style={{
@@ -197,6 +200,9 @@ function WeekCard({ week, index, isDay = true }) {
 
 export default function AnimatedBeamTimeline({ isDay = true }) {
   const [isMobile, setIsMobile] = useState(false)
+  const [activeWeek, setActiveWeek] = useState(0)
+  const [phaseText, setPhaseText] = useState(phaseLabels[0])
+  const sectionRef = useRef(null)
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
@@ -205,63 +211,132 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
     return () => window.removeEventListener('resize', check)
   }, [])
 
-  const sectionRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  })
 
-  /* Desktop bezier control points */
-  const d = {
-    w1: { x: '25%', y: '25%' },
-    w2: { x: '75%', y: '25%' },
-    w3: { x: '75%', y: '75%' },
-    w4: { x: '25%', y: '75%' },
-  }
+  const x = useTransform(scrollYProgress, [0, 1], ['0vw', '-300vw'])
 
-  const beamConfigs = [
-    { start: d.w1, end: d.w2, accent: '#E85D3A', delay: 0.4 },
-    { start: d.w2, end: d.w3, accent: '#2B7A78', delay: 0.7 },
-    { start: d.w3, end: d.w4, accent: '#FF6B4A', delay: 1.0 },
-  ]
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    const week = Math.min(Math.floor(latest * 4), 3)
+    setActiveWeek(week)
+    setPhaseText(phaseLabels[week])
+  })
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 overflow-hidden">
-      {/* Desktop: 2×2 grid with animated beams */}
+    <section ref={sectionRef} className="relative overflow-hidden">
+      {/* Desktop: sticky horizontal scroll */}
       {!isMobile && (
-        <div className="relative mx-auto max-w-4xl">
-          {/* SVG beams layer */}
-          <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-            {beamConfigs.map((bc, i) => (
-              <AnimatedBeam key={i} {...bc} isDay={isDay} />
-            ))}
-          </div>
+        <div className="relative" style={{ height: '500vh' }}>
+          <div className="sticky top-0 h-screen overflow-hidden">
+            {/* Floating particles background */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              {[...Array(6)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute size-1.5 rounded-full"
+                  style={{
+                    background: isDay ? weeks[i % 4].accent : weeks[i % 4].accent,
+                    left: `${15 + i * 15}%`,
+                    top: `${20 + (i % 3) * 30}%`,
+                    opacity: 0.15,
+                  }}
+                  animate={{ y: [0, -20, 0], opacity: [0.1, 0.3, 0.1] }}
+                  transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.4, ease: 'easeInOut' }}
+                />
+              ))}
+            </div>
 
-          {/* Grid */}
-          <div className="grid grid-cols-2 gap-6 md:gap-8 relative">
-            {/* Week 1 */}
-            <div className="relative" style={{ zIndex: 1 }}>
-              <WeekCard week={weeks[0]} index={0} isDay={isDay} />
+            {/* Phase label at top */}
+            <div className="absolute top-0 left-0 right-0 z-10 text-center pt-8 md:pt-12">
+              <motion.p
+                key={phaseText}
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase mb-2"
+                style={{ color: isDay ? '#E85D3A' : '#FF6B4A' }}
+              >
+                How We Work
+              </motion.p>
+              <motion.h2
+                key={`title-${activeWeek}`}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+                className="text-2xl md:text-4xl lg:text-5xl font-bold px-4"
+                style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
+              >
+                The 30-Day Sprint
+              </motion.h2>
             </div>
-            {/* Week 2 */}
-            <div className="relative" style={{ zIndex: 1 }}>
-              <WeekCard week={weeks[1]} index={1} isDay={isDay} />
+
+            {/* Horizontal track */}
+            <div className="absolute inset-0 top-20 md:top-28 bottom-16">
+              <motion.div style={{ x }} className="flex h-full">
+                {weeks.map((week, i) => (
+                  <HorizontalWeekCard key={week.id} week={week} index={i} isDay={isDay} />
+                ))}
+              </motion.div>
             </div>
-            {/* Week 3 */}
-            <div className="relative" style={{ zIndex: 1 }}>
-              <WeekCard week={weeks[2]} index={2} isDay={isDay} />
-            </div>
-            {/* Week 4 */}
-            <div className="relative" style={{ zIndex: 1 }}>
-              <WeekCard week={weeks[3]} index={3} isDay={isDay} />
+
+            {/* Progress bar at bottom */}
+            <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+              <div className="flex items-center gap-2">
+                {weeks.map((w, i) => (
+                  <motion.div
+                    key={w.id}
+                    animate={{
+                      width: i === activeWeek ? 28 : 8,
+                      background: i <= activeWeek
+                        ? weeks[activeWeek].accent
+                        : (isDay ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)'),
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className="h-1.5 rounded-full"
+                  />
+                ))}
+              </div>
+              <div className="flex items-center gap-3">
+                <span
+                  className="text-[10px] md:text-xs font-medium tracking-wider"
+                  style={{ color: isDay ? '#8A7A6A' : '#6A6A6A' }}
+                >
+                  {phaseText}
+                </span>
+                <span
+                  className="text-[10px] md:text-xs font-mono"
+                  style={{ color: isDay ? '#8A7A6A' : '#6A6A6A' }}
+                >
+                  {Math.round(scrollYProgress.get() * 100)}%
+                </span>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Mobile: Vertical stack */}
+      {/* Mobile: vertical stack */}
       {isMobile && (
         <div className="mx-auto max-w-lg px-6">
+          <div className="text-center mb-12">
+            <p
+              className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase mb-2"
+              style={{ color: isDay ? '#E85D3A' : '#FF6B4A' }}
+            >
+              How We Work
+            </p>
+            <h2
+              className="text-3xl md:text-4xl font-bold"
+              style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
+            >
+              The 30-Day Sprint
+            </h2>
+          </div>
           <div className="grid gap-6">
             {weeks.map((week, i) => (
               <div key={week.id} className="relative">
-                {/* Connecting line */}
                 {i < weeks.length - 1 && (
                   <div
                     className="absolute left-6 top-16 w-0.5 h-8"
@@ -270,7 +345,7 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
                     }}
                   />
                 )}
-                <WeekCard week={week} index={i} isDay={isDay} />
+                <VerticalWeekCard week={week} index={i} isDay={isDay} />
               </div>
             ))}
           </div>
@@ -278,21 +353,23 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
       )}
 
       {/* Footer gradient bar */}
-      <motion.div
-        className="mt-12 text-center"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 1.2 }}
-      >
-        <div
-          className="inline-block h-1 rounded-full"
-          style={{
-            width: 'clamp(120px, 20vw, 240px)',
-            background: 'linear-gradient(to right, #E85D3A, #2B7A78, #FF6B4A, #3B8A88)',
-          }}
-        />
-      </motion.div>
+      {isMobile && (
+        <motion.div
+          className="mt-12 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 1.2 }}
+        >
+          <div
+            className="inline-block h-1 rounded-full"
+            style={{
+              width: 'clamp(120px, 20vw, 240px)',
+              background: 'linear-gradient(to right, #E85D3A, #2B7A78, #FF6B4A, #3B8A88)',
+            }}
+          />
+        </motion.div>
+      )}
     </section>
   )
 }

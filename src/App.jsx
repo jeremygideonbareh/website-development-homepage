@@ -299,33 +299,7 @@ function App() {
                     </motion.p>
                   </section>
 
-                  <section className="px-6 py-24 md:px-12 relative">
-                    <div className="mx-auto max-w-6xl">
-                      <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="text-center"
-                      >
-                        <p className="text-sm font-medium tracking-widest uppercase" style={{ color: p.accent }}>
-                          How we work
-                        </p>
-                        <h2 className="mt-3 text-3xl font-bold sm:text-4xl" style={{ color: p.text }}>
-                          The 30-Day Execution Blueprint
-                        </h2>
-                      </motion.div>
-                      <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
-                        className="mt-12"
-                      >
-                        <AnimatedBeamTimeline isDay={theme === 'day'} />
-                      </motion.div>
-                    </div>
-                  </section>
+                  <AnimatedBeamTimeline isDay={theme === 'day'} />
 
                   <WhyUsSection isDay={theme === 'day'} />
                 </div>
