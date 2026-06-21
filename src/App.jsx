@@ -5,14 +5,16 @@ import {
   ArrowLeft, Calendar, FileText, Code,
 } from 'lucide-react'
 import Loader from './components/Loader'
-import HorizonHeroSection from './components/HorizonHeroSection'
+import HyperstudioHero from './components/HyperstudioHero'
 import Services from './components/ui/services'
 import StarryBackground from './components/StarryBackground'
 import { ContactPage } from './components/ui/contact-page'
 import { BookingModal } from './components/BookingModal'
 import RadialOrbitalTimeline from './components/ui/radial-orbital-timeline'
+import { WordReveal, CharReveal, SectionEyebrow, SectionHeading } from './components/RevealText'
 
 import ExamplesPage from './components/ExamplesPage'
+import Home from './components/ui/hero-ascii'
 import { InteractiveRobotSpline } from './components/ui/interactive-3d-robot'
 
 const ROBOT_SCENE_URL = "https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode";
@@ -98,7 +100,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [showContact, setShowContact] = useState(false)
   const [showBooking, setShowBooking] = useState(false)
-
+  const [showAbout, setShowAbout] = useState(false)
   const [showExamples, setShowExamples] = useState(false)
 
   useEffect(() => {
@@ -107,7 +109,7 @@ function App() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-black text-white dark">
+    <div className="min-h-screen text-frost" style={{ backgroundColor: '#101010' }}>
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -128,25 +130,101 @@ function App() {
         variants={navVariants}
         initial="hidden"
         animate="visible"
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-end px-6 py-4 backdrop-blur-md bg-black/60 border-b border-white/5 md:px-12"
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-end px-6 py-4 md:px-12" style={{ backgroundColor: 'rgba(16,16,16,0.85)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(33,33,33,0.8)' }}
       >
 
-        <button
-          onClick={() => setShowContact(!showContact)}
-          className="flex items-center gap-2 px-5 py-2 text-sm font-medium rounded-full bg-white text-black hover:bg-white/90 transition-colors"
-        >
-          {showContact && <ArrowLeft className="size-4" />}
-          {showContact ? 'Back' : 'Start a Project'}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => { setShowAbout(!showAbout); setShowContact(false); }}
+            className="flex items-center gap-2 px-5 py-2 text-sm font-medium rounded-full border border-white/20 text-white hover:bg-white/10 transition-colors"
+          >
+            {showAbout && <ArrowLeft className="size-4" />}
+            {showAbout ? 'Back' : 'About Us'}
+          </button>
+          <button
+            onClick={() => setShowContact(!showContact)}
+            className="flex items-center gap-2 px-5 py-2 text-sm font-medium rounded-full bg-white text-black hover:bg-white/90 transition-colors"
+          >
+            {showContact && <ArrowLeft className="size-4" />}
+            {showContact ? 'Back' : 'Start a Project'}
+          </button>
+        </div>
       </motion.nav>
 
       {showExamples ? (
         <ExamplesPage onBack={() => setShowExamples(false)} />
+      ) : showAbout ? (
+        <Home />
       ) : (
         <>
 
       <div className={showContact ? 'hidden' : ''}>
-          <HorizonHeroSection />
+          <HyperstudioHero />
+
+          {/* ─── Scroll Narrative: Brand Story ─── */}
+          <section className="px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: '#101010' }}>
+            <div className="mx-auto max-w-5xl space-y-48">
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: '-120px' }}
+                transition={{ duration: 0.8 }}
+                className="max-w-3xl"
+              >
+                <SectionEyebrow>Our Philosophy</SectionEyebrow>
+                <h2 className="font-aeonik font-normal text-heading-lg text-frost mt-6 leading-[1.05] tracking-[-0.48px]">
+                  <CharReveal delay={0.2}>
+                    We believe the web deserves better than templates.
+                  </CharReveal>
+                </h2>
+                <p className="font-aeonik font-normal text-body text-smoke mt-8 leading-[1.7] max-w-2xl">
+                  <WordReveal delay={0.6}>
+                    Every brand is unique. Your website should be too. We engineer custom digital experiences from the ground up — no themes, no page builders, no compromises.
+                  </WordReveal>
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: '-120px' }}
+                transition={{ duration: 0.8 }}
+                className="max-w-3xl ml-auto text-right"
+              >
+                <SectionEyebrow delay={0.1}>Our Approach</SectionEyebrow>
+                <h2 className="font-aeonik font-normal text-heading-lg text-frost mt-6 leading-[1.05] tracking-[-0.48px]">
+                  <CharReveal delay={0.3}>
+                    Speed without sacrifice.
+                  </CharReveal>
+                </h2>
+                <p className="font-aeonik font-normal text-body text-smoke mt-8 leading-[1.7] max-w-2xl ml-auto">
+                  <WordReveal delay={0.7}>
+                    We combine AI-native workflows with hand-crafted engineering to ship in weeks what takes other agencies months. The result: production-grade code that you own, forever.
+                  </WordReveal>
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: '-120px' }}
+                transition={{ duration: 0.8 }}
+                className="max-w-3xl"
+              >
+                <SectionEyebrow delay={0.1}>Our Promise</SectionEyebrow>
+                <h2 className="font-aeonik font-normal text-heading-lg text-frost mt-6 leading-[1.05] tracking-[-0.48px]">
+                  <CharReveal delay={0.3}>
+                    You focus on your business. We build the digital architecture.
+                  </CharReveal>
+                </h2>
+                <p className="font-aeonik font-normal text-body text-smoke mt-8 leading-[1.7] max-w-2xl">
+                  <WordReveal delay={0.7}>
+                    From concept to deployment, we handle everything — design, engineering, animation, optimization, and launch. One point of contact. Zero overhead.
+                  </WordReveal>
+                </p>
+              </motion.div>
+            </div>
+          </section>
 
           <StarryBackground>
             {/* ─── Stats Banner ─── */}
@@ -258,7 +336,7 @@ function App() {
       </section>
 
       {/* ─── CTA ─── */}
-      <section className="px-6 py-32 md:px-12 text-center">
+      <section className="px-6 py-32 md:px-12 text-center relative">
         <div className="mx-auto max-w-4xl">
           <motion.h2
             initial={{ opacity: 0, y: 30 }}

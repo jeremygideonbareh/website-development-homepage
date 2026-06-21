@@ -1,8 +1,8 @@
 const StarryBackground = ({ children }) => {
   return (
-    <div className="relative z-10 min-h-screen bg-black">
+    <div className="relative z-10 min-h-screen" style={{ backgroundColor: '#101010' }}>
       <div
-        className="pointer-events-none fixed inset-0 z-0"
+        className="pointer-events-none fixed inset-0 z-[1]"
         style={{
           backgroundImage: `
             radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.6), transparent),
