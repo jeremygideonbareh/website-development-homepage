@@ -5,7 +5,7 @@ import {
   ArrowLeft, Calendar, FileText, Code,
 } from 'lucide-react'
 import Loader from './components/Loader'
-import HyperstudioHero from './components/HyperstudioHero'
+import MountEverestScene from './components/MountEverestScene'
 import Services from './components/ui/services'
 import StarryBackground from './components/StarryBackground'
 import { ContactPage } from './components/ui/contact-page'
@@ -110,6 +110,7 @@ function App() {
 
   return (
     <div className="min-h-screen text-frost" style={{ backgroundColor: '#101010' }}>
+      {!showExamples && !showAbout && !showContact && <MountEverestScene />}
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -158,9 +159,7 @@ function App() {
       ) : (
         <>
 
-      <div className={showContact ? 'hidden' : ''}>
-          <HyperstudioHero />
-
+      <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100vh' }}>
           {/* ─── Scroll Narrative: Brand Story ─── */}
           <section className="px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: '#101010' }}>
             <div className="mx-auto max-w-5xl space-y-48">
