@@ -46,7 +46,30 @@ function HorizontalWeekCard({ week, index, isDay }) {
   const Icon = icons[index]
   return (
     <div className="flex-shrink-0 w-screen h-full flex items-center justify-center px-6 md:px-16 lg:px-24">
-      <div className="w-full max-w-5xl flex flex-col md:flex-row items-center gap-6 md:gap-12 lg:gap-20">
+      <div
+        className="w-full max-w-5xl rounded-3xl p-8 md:p-12 lg:p-16 relative overflow-hidden"
+        style={{
+          background: isDay
+            ? 'linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.3))'
+            : 'linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015))',
+          backdropFilter: 'blur(24px) saturate(1.4)',
+          WebkitBackdropFilter: 'blur(24px) saturate(1.4)',
+          border: isDay ? '1px solid rgba(255,255,255,0.85)' : '1px solid rgba(255,255,255,0.06)',
+          boxShadow: isDay
+            ? '0 8px 32px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.7)'
+            : '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
+        }}
+      >
+        {/* Shine highlight */}
+        <div
+          className="absolute top-0 left-1/4 right-1/4 h-px pointer-events-none"
+          style={{
+            background: isDay
+              ? 'linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent)'
+              : 'linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent)',
+          }}
+        />
+        <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12 lg:gap-20">
         {/* Left: Giant number + icon */}
         <div className="flex-shrink-0 flex flex-col items-center">
           <motion.div
@@ -119,6 +142,7 @@ function HorizontalWeekCard({ week, index, isDay }) {
         </div>
       </div>
     </div>
+  </div>
   )
 }
 
