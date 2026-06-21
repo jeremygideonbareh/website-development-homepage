@@ -6,14 +6,14 @@ const BASE = import.meta.env.BASE_URL || '/'
 const themes = {
   night: {
     bg: '#1A1817',
-    overlay: 'rgba(0,0,0,0.12)',
+    overlay: 'rgba(0,0,0,0.06)',
     title: '#F2F2F2',
     accent: '#FF6B4A',
     subtitle: '#B0B0B0',
   },
   day: {
     bg: '#F5F0EB',
-    overlay: 'rgba(0,0,0,0.06)',
+    overlay: 'rgba(0,0,0,0.03)',
     title: '#FFFFFF',
     accent: '#E85D3A',
     subtitle: '#DDDDDD',
@@ -50,7 +50,7 @@ export default function MountEverestScene({ theme = 'day' }) {
           loop
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ backfaceVisibility: 'visible', imageRendering: '-webkit-optimize-contrast' }}
+          style={{ filter: 'contrast(1.08) brightness(1.02)', willChange: 'filter' }}
         >
           <source src={VIDEO_URL} type="video/mp4" />
         </video>
@@ -58,15 +58,6 @@ export default function MountEverestScene({ theme = 'day' }) {
           className="absolute inset-0"
           style={{
             background: `linear-gradient(to bottom, ${palette.overlay}, transparent 60%)`,
-          }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            opacity: 0.035,
-            mixBlendMode: 'overlay',
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-            backgroundSize: '256px 256px',
           }}
         />
       </div>

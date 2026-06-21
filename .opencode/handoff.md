@@ -1,501 +1,263 @@
-# Session Handoff — June 16, 2026
+# Session Handoff — June 21, 2026
 
 ## Project
-Website Development Homepage — React + Vite + Three.js + GSAP ScrollTrigger particle landing page
+Website Development Homepage — React + Vite + framer-motion + Tailwind CSS agency landing page
 Git repo at `C:\Users\cloud\OneDrive\Desktop\Hybrid_Second_Brain\03_Active_Projects\websites\webistedevhompage`
+Site URL: `https://jeremygideonbareh.github.io/website-development-homepage/`
 
 ## Stack
-- React 19, Vite 8, framer-motion, Three.js, GSAP + ScrollTrigger, Tailwind CSS
-- Inter / Space Grotesk fonts
-- `http://localhost:5173/website-development-homepage/`
+- React 19, Vite 8, framer-motion 12.40, Tailwind CSS 3
+- lucide-react (icons), sonner (toasts)
+- Satoshi font (aliased as `fontFamily.aeonik` in tailwind.config.js, fallback Inter → system-ui → sans-serif)
+- Vite base: `"/website-development-homepage/"` (GitHub Pages subpath)
+- No TypeScript, no routing library, no testing framework
 
-## Particle System — Core Architecture
+## Current Features
 
-### Constants
-- `N = 6000` particles, `AdditiveBlending`, vertex colors
-- Brand palette: `#8052ff` (purple), `#ffb829` (amber), `#15846e` (teal), `#ffffff`
-- Canvas texture: stroked equilateral triangle, `lineWidth 3`, hollow
+### Hero (`MountEverestScene.jsx`)
+- Looping fullscreen `<video>` background (`Moving_fog_and_shooting_stars_202606211510.mp4`) with gradient overlay
+- Video URL uses `import.meta.env.BASE_URL` prefix for GitHub Pages subpath
+- Text overlay: "Horizon Labs" / "Sky's the Limit" with accent-colored span
+- Fade-out on scroll via framer-motion `useScroll` / `useTransform` (0–500px)
+- Animated scroll indicator at bottom
+- Day/night palette switching
 
-### Morph System (10 arrays, 11 PHASES)
-```js
-morphs: [brain, scatter, brain, brain, rocket, rocket, topScatter, globe, globe, globeLarge]
-           0       1       2      3      4       5        6        7      8       9
+### Day/Night Palette System (`App.jsx`)
+- **Day:** bg `#F5F0EB`, accent `#E85D3A`, text `#1A1A1A`
+- **Night:** bg `#1A1817`, accent `#FF6B4A`, text `#F2F2F2`
+- Applied throughout all sections via inline styles from `palette[theme]` object
+- Toggle button in fixed navbar (Sun/Moon icon)
+
+### Brand Story Section (inline in `App.jsx`)
+- 3 motion cards: "Our Philosophy", "Our Approach", "Our Promise"
+- `whileInView` with `viewport={{ once: true, margin: '-120px' }}`
+- `SectionEyebrow`, `CharReveal`, `WordReveal` text animations
+
+### Stats Banner (inline in `App.jsx`)
+- 3-column grid: "50+ Projects Delivered", "3x Faster Than In-House", "100% Code Ownership"
+- `whileInView` fade-in with surface-colored card background
+
+### ServicesSection (`ServicesSection.jsx`)
+- 3 service cards: Web Development, AI Integration, Design & Brand
+- Each card has: `BrowserFrame` Awwwards preview grid (3 per card), tilt hover effect, floating dots, progress bar, related project list
+- `PreviewModal` component: full-screen overlay (z-50) with macOS browser chrome, 80vh iframe, keyboard Escape to close, backdrop click to close, spring scale animation via `AnimatePresence`
+- Clicking any `BrowserFrame` sets `selectedExample` state → renders `PreviewModal`
+- Handles blocked sites inside modal (favicon + "Open in new tab" button)
+
+### BrowserFrame (`BrowserFrame.jsx`)
+- macOS-style browser chrome (traffic lights, URL bar)
+- 9 Awwwards example links rendered inside:
+  - **6 sites:** live `<iframe>` (no `X-Frame-Options` restriction)
+  - **3 blocked sites** (faunarobotics.com, locomotive.ca, ponder.ai): favicon-based fallback via `https://www.google.com/s2/favicons?domain=X&sz=64` + domain name + "Visit site" button
+- Clicking a card opens a full-screen `PreviewModal` with 80vh iframe
+- Preview height increased from 360px → 480px (+33%)
+- `cursor-pointer` with stronger hover lift (`y: -4` → `y: -6`)
+- `onSelect` prop notifies parent; links within card use `stopPropagation`
+
+### AnimatedBeamTimeline (`AnimatedBeamTimeline.jsx`)
+- Self-contained 4-week execution blueprint
+- Desktop: 2×2 grid with SVG bezier paths connecting weeks 1→2→3→4
+- Animated gradient dash-offset beams + glowing particles
+- Mobile: vertical stack with gradient connecting lines
+- Each card: week number badge, icon, day range, description, accent top bar, right-side spring entry
+
+### WhyUsSection (`WhyUsSection.jsx`)
+- Horizontal scroll with native `overflow-x-auto` + `snap-x snap-mandatory`
+- Left/right arrow navigation buttons
+- Custom thin scrollbar (accent-colored thumb)
+- Scroll indicator dots
+- Dark background sweep-in animation
+
+### AboutUs (`AboutUs.jsx`)
+- Category rows as horizontal scrollable tracks with snap, arrow nav, custom thin scrollbar
+- 3 categories: Websites & Apps, Mobile Apps, AI & Automation
+- Extracted `ScrollableCategory` component with scroll-state tracking
+
+### Other Components
+- `BookingModal` — booking call modal
+- `ContactPage` — contact form page (from shadcn/ui)
+- `ExamplesPage` — full Awwwards examples page
+- `RevealText` — `WordReveal`, `CharReveal`, `SectionEyebrow` text animation helpers
+- `Loader` — loading spinner (2s on mount)
+
+### Loading Flow
+1. App mounts → `isLoading=true`
+2. `Loader` shows for 2s (fixed position, z-50)
+3. After 2s → `isLoading=false`, content revealed with fade-in transition
+4. Hero + navbar visible, user can scroll through sections
+
+## Pipeline
+
+### Dev Workflow
+```
+npm run dev         # Vite dev server at localhost:5173 with HMR
+npm run build       # Production build to dist/ (vite build)
+npm run preview     # Serve dist/ locally
 ```
 
-```js
-PHASES = [0, 0.15, 0.25, 0.35, 0.48, 0.62, 0.70, 0.78, 0.86, 0.94, 1]
+### Deployment (GitHub Pages)
+`gh-pages` npm package fails on long Windows paths. Workaround:
+1. `npm run build` → produces `dist/`
+2. Copy `dist/` contents to a temp directory (short path like `C:\Users\cloud\AppData\Local\Temp\`)
+3. `git init`, `git add -A`, `git commit -m "deploy"`
+4. `git remote add origin <repo-url>`
+5. `git push --force origin main:gh-pages`
+6. Clean up temp directory
+
+GitHub Pages source set to `gh-pages` branch (configured via API).
+
+### Build & Bundle
+- JS bundle: ~1,357 kB (index-*.js)
+- CSS: ~58 kB (index-*.css)
+- No code-splitting configured
+- No chunk size optimization
+
+## Resources Available
+
+### Agents (Everything Claude Code)
+| Agent | Used? | Purpose |
+|-------|-------|---------|
+| **explore** | Yes | Traced scroll animation timing — calculated frame mapping vs `whileInView` trigger positions |
+| **planner** | Yes | Debugged why 240-frame scroll animation finished before content appeared |
+| code-reviewer | No | Code quality review before commits |
+| architect | No | System design decisions |
+| tdd-guide | No | Test-driven development |
+| security-reviewer | No | Security audit |
+| build-error-resolver | No | Build failure diagnosis |
+| refactor-cleaner | No | Dead code cleanup |
+| doc-updater | No | Documentation |
+| code-writer | No | Production code writing |
+| e2e-runner | No | End-to-end testing |
+| database-reviewer | No | Database/schema optimization |
+| rust-reviewer | No | Rust code review |
+| python-reviewer | No | Python code review |
+| java-reviewer | No | Java code review |
+| typescript-reviewer | No | TypeScript/JavaScript review |
+
+### MCP Servers (`.opencode/mcp.json`)
+| Server | Used? | What it does |
+|--------|-------|-------------|
+| **shadcn** | No | CLI for shadcn/ui component registry (`npx shadcn@latest mcp`) |
+| **magicuidesign-mcp** | No | `@magicuidesign/mcp@latest` — UI component generation |
+| **threejs** | No | `@modelcontextprotocol/server-threejs` — Three.js scene building |
+| **gemini** | No | Google Gemini models (API key embedded, script at `.opencode/scripts/gemini-mcp.mjs`) |
+| **apify** | No | `apify-mcp-server` — web scraping / Awwwards research research (APIFY_TOKEN configured, intended but never used) |
+
+### Agent Skills (`.agents/skills/`)
+| Skill | Used? | Purpose |
+|-------|-------|---------|
+| **21st.dev component builder** | Yes | Generated `BrowserFrame.jsx`, `AnimatedBeamTimeline.jsx`, and several UI components |
+| **21st.dev logo search** | No | Company logo search in JSX/TSX/SVG format |
+| **frontend-design** | No | Visual design guidance for distinctive, intentional UI |
+| **web-design-guidelines** | No | UI accessibility and UX audit |
+| **vercel-react-best-practices** | No | React/Next.js performance optimization guidelines |
+| **agent-browser** | No | Browser automation (Playwright, web testing, QA) |
+| **remotion-best-practices** | No | Video creation with Remotion |
+| **find-skills** | No | Skill discovery |
+| **customize-opencode** | No | Editing opencode's own configuration |
+
+### Third-Party Tools Used
+| Tool | Used in | Purpose |
+|------|---------|---------|
+| **21st.dev magic component builder** | Yes | Generated `BrowserFrame.jsx`, `AnimatedBeamTimeline.jsx` |
+| **Cursor AI (cursor-pro)** | Yes | Delegated complex component implementation |
+| **Web Search / Web Fetch** | Yes | Finding Unsplash images, researching Awwwards sites, favicon API patterns |
+
+### Dependencies (package.json)
+| Category | Packages | Used? |
+|----------|----------|-------|
+| **Framework** | `react`, `react-dom` v19 | Yes — core |
+| **Build** | `vite` v8, `@vitejs/plugin-react` v6 | Yes |
+| **Animation** | `framer-motion` v12.40 | Yes — scroll, text, entry animations |
+| **3D (unused)** | `three` v0.184, `@react-three/fiber` v9, `@react-three/drei` v10, `@splinetool/react-spline` v4 | No — 3D scene removed |
+| **Animation (unused)** | `gsap` v3.15 | No |
+| **UI** | `lucide-react`, `sonner` | Yes — icons, toasts |
+| **Styling** | `tailwindcss` v3, `postcss`, `autoprefixer`, `tailwind-merge`, `clsx`, `class-variance-authority` | Yes |
+| **shadcn/ui** | `@radix-ui/react-slot`, `shadcn` CLI | Partially — slot utility used by contact page |
+| **Deploy** | `gh-pages` v6.3 | No (broken on long Windows paths) |
+| **Lint** | `eslint` v10, plugins | No |
+
+## Commit History (latest first)
+```
+2a45260 feat: default night theme, preview modal, blocked sites, preconnect hints
+9d0dae1 fix: commit BrowserFrame and NetworkParticles for CI build
+95ac736 fix: commit untracked component files for CI build
+2cfc1fd feat: replace static mountain photo with looping video background
+54efb37 feat: replace scroll animation with high-res mountain photo hero
+ce816d6 fix: revert vite base to /website-development-homepage/ for GitHub Pages subpath
+7eb27e7 fix: set Vite base to / for root-level Cloudflare Workers deployment
+cc2d8d3 feat: deeper scroll-to-zoom (15→0.5) and day/night theme toggle with warm/sunrise palette
+61a7176 feat: add interactive Mount Everest 3D hero with procedural terrain, fog, and scroll-to-zoom
+d89f6f9 chore: gitignore .opencode/mcp.json to protect API keys
+d8d2af3 fix: remove _redirects conflicting with wrangler SPA config, add wrangler.jsonc
+c82ecc4 feat: ASCII art hero with Hyperstudio branding, kinetic typography, and scroll narrative
+405df2b fix: update vite base for Cloudflare and add _redirects for SPA routing
+76a155a Add FastAPI backend, SEO, security layers, and premium UI components
+ba58a7a feat: overhaul services to 3-tier model, update process to 30-day blueprint
+80f3cce chore: update contact info, remove nav brand, enhance loader
+d52a0be chore: setup github actions deployment for pages
+88aef5a feat: complete pivot to B2B web development agency with updated services and UI
 ```
 
-| i0 | Progress | Morph | State | Section |
-|----|----------|-------|-------|---------|
-| 0 | 0→0.15 | brain→scatter | 0 | 1 Results |
-| 1 | 0.15→0.25 | scatter→brain | 0 | 1 Results |
-| 2 | 0.25→0.35 | brain→brain | 1 | 2 Tiers |
-| 3 | 0.35→0.48 | brain→rocket | 1 | 2→3 trans |
-| 4 | 0.48→0.62 | rocket→rocket | 2 | 3 Digital Auth |
-| 5 | 0.62→0.70 | rocket→topScatter | 2 | 3→4 trans |
-| 6 | 0.70→0.78 | topScatter→globe | 3 | 4 Blueprint |
-| 7 | 0.78→0.86 | globe→globe | 3 | 4 Blueprint |
-| 8 | 0.86→0.94 | globe→globeLarge | 4 | 5 Edge |
-| 9 | 0.94→1 | globeLarge→globeLarge | 4 | 5 Edge |
+## Key Decisions Made This Session (June 21)
+1. **240-frame scroll animation removed.** Replaced with static mountain photo, then swapped for looping video background. Video lives at `public/videos/`, URL constructed with `import.meta.env.BASE_URL`.
+2. **`whileInView` timing fix attempted and reverted.** Animation was completing at frame ~66 (27%) when content appeared due to `margin: '-120px'` on `viewport`. Fix stretched animation across 2 viewport heights + `paddingTop: 300vh`. User reverted entirely ("nvm undo").
+3. **No npm deploy script** — `gh-pages` npm package broken on long Windows paths. Manual temp-directory git push workaround used instead.
+4. **CI build failed twice** — `BrowserFrame.jsx`, `NetworkParticles.jsx`, `ServicesSection.jsx`, `WhyUsSection.jsx`, `AnimatedBeamTimeline.jsx`, `AboutUs.jsx` were all untracked files. CI had no reference of them. Fixed by committing all 6 files across two commits.
+5. **Created cross-project learning infrastructure.** Global `~/.config/opencode/AGENTS.md` updated with pipeline section. Global `opencode.jsonc` updated with knowledge base instruction, `web-designer` agent, and `/design` command. Knowledge directory created at `~/.config/opencode/knowledge/` with first entry.
+6. **Created shareable `opencode-skill-web-designer` repo** at `https://github.com/jeremygideonbareh/opencode-skill-web-designer` with SKILL.md, README.md, and knowledge/starter.md.
+7. **Upgraded GitHub profile** at `jeremygideonbareh/jeremygideonbareh` — replaced simple 16-line README with animated typing header, GitHub stats cards, trophy showcase, activity graph, contribution snake animation, tech stack badges, featured projects, and contact links.
+8. **Default theme changed to `'night'`** — `App.jsx:66` `useState(() => 'day')` → `useState(() => 'night')`. Site loads in dark mode by default; toggle still available.
+9. **Added 3 blocked Awwwards sites** to `blockedSites` array in `BrowserFrame.jsx` — `faunarobotics.com`, `locomotive.ca`, `ponder.ai` now use favicon fallback instead of broken iframes.
+10. **Full-screen PreviewModal added** — clicking any `BrowserFrame` opens a macOS-chromed modal (80vh iframe, Escape/backdrop to close, spring animation via AnimatePresence). Works for both iframeable and blocked sites.
+11. **Preview height +33%** — inline iframe height 360px → 480px.
+12. **Preconnect hints added** — `index.html` preconnects to `images.unsplash.com`, `picsum.photos`, `www.google.com` for faster resource loading.
 
-### STATE_OFFSETS (mesh.position per state group)
-```js
-[0] [16, 1, 0]    // brain RIGHT
-[1] [-26, 1, 0]   // brain LEFT
-[2] [0, 0, 0]     // rocket CENTER (STATIC — no movement)
-[3] [-16, -1, 0]  // globe LEFT
-[4] [0, -14, 0]   // globeLarge BOTTOM
-```
+## Orphaned / Dead Files (no longer imported, safe to remove)
+- `src/components/ScrollAnimation.jsx` — 240-frame scroll animation component
+- `src/components/FogLayer.jsx` — R3F fog effect
+- `src/components/ui/radial-orbital-timeline.jsx` — Old orbital timeline component
+- `public/scrollanimation/` — 240 JPG frames (~12 MB)
+- `photos/` — Original video location (moved to `public/videos/`)
 
-### applyState() Logic (critical section)
-```js
-// morph interpolation
-pa[i] = a0[i] + (a1[i] - a0[i]) * t
+**Note:** `BrowserFrame.jsx` and `NetworkParticles.jsx` are active imports but safe to review for dead code removal.
 
-// position interpolation between STATE_OFFSETS
-mesh.position.set(lerp(o0, o1, tState))
+## Dead Dependencies (safe to uninstall)
+- `three`, `@react-three/fiber`, `@react-three/drei`, `@splinetool/react-spline`, `@splinetool/runtime`
+- `gsap`
 
-// rotation gating
-isNoRotRef.current = stateIdx === 2  // rotation disabled during rocket phase
+## Global Learning Infrastructure (outside this project)
 
-// per-state particle sizes
-stateIdx === 2 → mat.size = 0.85   // rocket (bright white)
-stateIdx === 4 → mat.size = 1.6    // globeLarge
-else → mat.size = 0.8              // default
-
-// color swap (brain ↔ rocket)
-if entering stateIdx=2 → copy rocketColors to color buffer
-if leaving stateIdx=2 → copy brainColors back
-tracked via lastStateIdxRef
-```
-
-### phaseAt() Helper
-- Maps progress (0-1) to `{ index: i0, t: 0-1 }` using PHASES array
-- `stateIdx = Math.floor(i0 / 2)` — groups i0 pairs into 5 states
-- `newPhase = Math.floor(i0 / 2)` — drives section opacity
-
-## Shape Generation
-
-### Brain (`generateProceduralRocket NOT — actually head.obj`)
-- Loads `head.obj` → `parseObjVertices(t, 'brain')` → 3,398 verts → `normalizeVertices()` → `samplePositions(N, 16)` → centered & scaled [-1,1]
-- Hemisphere coloring: x≥0 → amber/green tones, x<0 → purple tones
-- Fallback: `generateScatter(N, 16, ...)` with random hemisphere split
-
-### Scatter (`generateScatter(N, spread, ...)`)
-- Random positions in cube of size spread
-- Used for initial state, transition scatter, and as fallback brain
-
-### Top Scatter (`generateTopScatter(N)`)
-- Particles at y=15–40, x=±40, z=±20
-- Morphs to globe during section 4 (fall-from-top effect)
-
-### Rocket (`generateProceduralRocket(N, spread=16, density=0.75)`)
-- **75%** particles for rocket shape (4500), **25%** for exhaust plume (1500)
-- 22° Z-axis tilt (baked into positions)
-- Body (55%): bulge cylinder, radius 0.35×spread, slight barrel shape via `1 - 0.15*sin(yNorm*π)`
-  - Particles distributed radially using `Math.pow(Math.random(), 0.5)` for even fill
-- Nose (20%): cone tapering from 0.35×spread to 0
-- Fins (13%): 3 fins at 120°, extending from 0.35→0.65×spread
-- Base band (12%): solid disc at bottom of body
-- Plume: cone yOff:-0.5→-5.5×spread, radius factor 0.4→4.4, `Math.pow(Math.random(), 0.3)` distribution
-  - Covers ~80 units vertically, ~50 units diameter
-- **Rocket Colors** (`generateRocketColors`): separate color array swapped into buffer during rocket phase
-  - Body/nose: bright white `rgb(0.85-1.0, 0.82-0.97, 0.85-1.0)`
-  - Plume: warm amber/orange `rgb(1.0, 0.55-0.75, 0.1-0.25)`
-  - Brain colors restored when leaving rocket phase
-
-### Globe (`generateEarthGlobe(N, radius, density=1.0)`)
-- `isLand(lng, lat)` based on rough continent polygons
-- Particles displaced on sphere surface with jitter
-- density=0.7 → 30% stacked at origin (invisible)
-- Section 4: radius=16, Section 5: radius=30
-- No equator ring
-
-## Kinetic Text
-
-### KineticLines Component
-```jsx
-<KineticLines key={phase} as="h1" lines={['...', '...', '...']} style={...} />
-```
-- Uses `motion(as)` — without this, plain `<Tag>` ignored framer-motion props
-- `key={phase}` forces re-mount on every section entry → animation replays
-- Spring stagger: stiffness 120, damping 18, stagger 0.2s
-
-### Section Content
-1. **Results** — "50+ Projects Delivered / 3x Faster Than In-House / 100% Code Ownership" + CTAs
-2. **Tiers** — "Every tier solves a specific problem. Pick the one that fits."
-3. **Digital Authority** — Cycling build cards (see below)
-4. **Blueprint** — "AI meets infrastructure. Built in 30 days. Shipped with confidence." + weekly breakdown
-5. **Edge** — "AI-Native Team / 3x Faster Delivery / One Point of Contact / Global Talent" + email CTA
-
-## Section 3 — Build Card Cycling (NEW)
-
-### Current Implementation
-```jsx
-const [buildIdx, setBuildIdx] = useState(0)
-useEffect(() => {
-  const timer = setInterval(() => setBuildIdx(p => (p + 1) % 3), 2500)
-  return () => clearInterval(timer)
-}, [])
-```
-
-3 cards cycle via `AnimatePresence mode="wait"`:
-1. **THE VELOCITY BUILD** (#9d7aff) — "Digital authority established in weeks, not months."
-2. **THE GROWTH STACK** (#ffb829) — "High-performance infrastructure built for scale."
-3. **THE APEX ARCHITECTURE** (#15846e) — "Bespoke experiences pushing the limits of the browser."
-
-Entry animation: `{ opacity: 0, y: 30, scale: 0.92 } → { opacity: 1, y: 0, scale: 1 }`
-Exit animation: `{ opacity: 0, y: -30, scale: 0.92 }`
-Transition: spring, stiffness 280, damping 22
-
-Note: To prevent absolute positioned child elements from collapsing the parent's width (which was causing text squishing into a narrow vertical column of single words), the parent container is explicitly styled with `width: '100%'`, `maxWidth: '600px'`, and padding.
-
-Note: Timer runs regardless of scroll position — may need to gate with `phase === 2` check.
-
-## Canvas & Rendering
-- `WebGLRenderer` with `alpha: true`, `antialias: true`, pixel ratio capped at 2
-- `z-index` removed (was hiding particles behind container black bg)
-- `pointer-events: none` on canvas prevents click interference
-- Resize handler updates camera aspect, renderer size, camera distance (z=35→60 based on aspect)
-- Animate loop: `requestAnimationFrame`, rotation += 0.002 (when not gated)
-
-## Loaded Assets
-- `public/models/head.obj` — drummyfish CC0 MRI head, brain only (3,398 verts)
-- blub.obj and fish.obj removed (no longer used)
-- OBJ files loaded via `import.meta.env.BASE_URL` prefix
-
-## Session Notes
-
-### Changes Made This Session
-1. Extended rocket phase scroll range (0.48→0.64 → 0.48→0.70) → reverted to balanced 0.48→0.62
-2. Rocket density: 0.25→0.50→0.32→0.25→0.55 (settled on 55% for denser shape)
-3. Plume widened and lengthened (radius 0.4→4.4, yOff -0.5→-5.5)
-4. Rocket movement removed: was y:-30→+10 rising + z:-30→+30 zoom → now static at origin
-5. STATE_OFFSETS[2] changed from [0,-1,0] to [0,-31,0] (for rising) → back to [0,0,0] (static)
-6. Particle size for rocket: 0.2→0.4, then 0.08→0.12, then 0.15, then 0.35, settled at 0.55
-7. Section 3 build cards converted from static stacked list to cycling AnimatePresence carousel
-8. Rocket colors fixed — added `generateRocketColors` function with bright white body + amber plume, swaps into color buffer during rocket phase via `lastStateIdxRef` tracking
-
-### Rolling TODO (still relevant)
-- Consider gating the build card cycling timer with `phase === 2` so it only runs during section 3
-- Rocket particle size (0.55) may need further tuning vs brain/globe (0.8)
-- Build card cycle interval (2.5s) may need adjusting
-- Font: Inter / Space Grotesk via Google Fonts (verify loading)
-
-### Build Commands
-```powershell
-npm run dev         # dev server at :5173
-npm run build       # production build to dist/
-```
-
-### Dev Server Restart
-```powershell
-Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force
-Start-Process cmd -ArgumentList "/c npm run dev" -WindowStyle Hidden
-# Wait ~10s for startup
-```
-
-## Files
+### Files Created/Modified
 | File | Purpose |
 |------|---------|
-| `src/components/CosmicParticlePage.jsx` | Main particle landing page (~675 lines) |
-| `public/models/head.obj` | Brain mesh (3,398 verts) |
-| `.opencode/handoff.md` | This file — session handoff |
+| `~/.config/opencode/AGENTS.md` | Appended Cross-Project Pipeline & Learning System section — enforces knowledge base read before every project, knowledge write after every session |
+| `~/.config/opencode/opencode.jsonc` | Added `"Read knowledge base"` to instructions, added `web-designer` agent, added `/design` command |
+| `~/.config/opencode/knowledge/website-development-homepage.md` | First knowledge entry — design patterns, build gotchas, reusable components, agent performance notes, mistakes to avoid |
+| `https://github.com/jeremygideonbareh/opencode-skill-web-designer` | Public skill repo with SKILL.md, README.md, knowledge/starter.md — anyone can install |
 
-## Relevant Code Locations
-- `generateRocketColors` — line 175
-- `generateProceduralRocket` — line 197
-- `generateEarthGlobe` — line 274
-- `loadMorphData` / morph array assembly — lines 379-404
-- `applyState` — lines 467-519
-- PHASES constant — line 292
-- STATE_OFFSETS — lines 293-298
-- Section 3 build card cycling — lines 353-356 (state), 597-625 (JSX)
+### Learning Loop
+1. Before any project → AI reads `~/.config/opencode/knowledge/`
+2. During session → AI uses past patterns, avoids past mistakes
+3. After session → AI writes learnings back to knowledge/
+4. Over time → patterns compound, designs improve
 
----
+## External Repositories (outside this project)
+| Repo | What | Purpose |
+|------|------|---------|
+| `jeremygideonbareh/jeremygideonbareh` | GitHub Profile README | Animated profile with stats, trophies, activity graph, snake animation, tech stack badges |
+| `jeremygideonbareh/opencode-skill-web-designer` | opencode Skill | Shareable web-designer agent with knowledge base learning loop |
 
-# Session Handoff — June 18, 2026
-
-## About Us Page — `src/components/ui/hero-ascii.tsx`
-
-### Overview
-- Exported as `Home` (default), routed from `App.jsx` when `showAbout=true`
-- 8 sections: Hero, Our Story, Stats, What We Build, Process, CTA/Contact, Footer
-- Full ORYZO design system applied: `#100904` dark canvas, `#ffedd7` warm cream text, `#dc5000` burnt sienna accents
-- Font: `Plus Jakarta Sans` via `font-family` on section containers
-- Animated via framer-motion `whileInView` with `viewport: { once: true }`
-
-### Sub-Components (inline in hero-ascii.tsx)
-
-**KineticText (lines 7-24):**
-- Function component: wraps each character in a `<span>` and applies staggered `whileInView` animation
-- Props: `children`, `delay`, `className`, `style`
-- Animation: `{ y: 40, opacity: 0 }` → `{ y: 0, opacity: 1 }`, transition `{ duration: 0.5, delay: delay + i * 0.03 }`
-- Used for: "PERFECT PROPORTIONS", "Design, engineered with precision.", "What We Build" section title
-
-**SectionDivider (line 26-30):**
-- Dashed line: `<div style={{ borderTop: '1px dashed rgba(220, 80, 0, 0.3)' }} className="w-full my-8 lg:my-12" />`
-- Color: `#dc5000` (burnt sienna) at 30% opacity
-
-**ParallaxSection (lines 32-45):**
-- Uses `useScroll`, `useTransform` from framer-motion
-- Parallax offset range: `[0, 1]` → `[0, -60]` (scrolls up slower than page)
-- Combined with opacity fade: `useTransform(scrollYProgress, [0, 1], [1, 0.4])`
-- Renders as `<motion.section>` wrapped around children
-
-**StatBlock (lines 47-62):**
-- Animated counter: `useMotionValue` + `useTransform` to round number
-- `whileInView` transitions the `motionValue` from 0 to target
-- Formatting: `<motion.span>` inside a `<div>` with `font-bold font-mono`
-
-**FeatureCard (lines 64-83):**
-- Alternating `x` offset based on `index % 2`: left cards slide from `-80px`, right from `80px`
-- Combined with opacity `[0, 1]` transition
-- `viewport: { once: true }` with `margin: "-100px"` for early trigger
-
-### Hero Section Structure (lines 157-283)
-
-**Desktop — Unicorn Studio Embed:**
-```
-<iframe src="https://unicorn.studio/embed/..." />
-```
-- Full-height, full-width iframe with `allow="autoplay"` + pointer-events: none
-- Displays Vitruvian man animated figure
-- Hidden on mobile via `hidden lg:block`
-
-**Mobile fallback (lines 193-195):**
-- Starfield: repeated CSS `radial-gradient` dots on dark background
-- Shown only on `lg:hidden`
-
-**Text Overlay (lines 198-274):**
-- "PERFECT PROPORTIONS" — `KineticText`, 80px font, `tracking-tighter`, `font-light`
-- Subtitle: "Design, engineered with precision." in 15px
-- Two CTA buttons: "VIEW OUR WORK" (outlined) + "GET STARTED" (filled `#dc5000` bg)
-- Corner accents: four `div` elements with thin borders (top-left, top-right, bottom-left, bottom-right)
-- System status bar: "SYSTEM.ACTIVE V1.0.0" with pulsing dots
-
-**InkReveal Overlay (lines 276-282):**
-```tsx
-<InkReveal
-  maskColor={[196, 195, 182]}
-  brushSize={140}
-  lifetime={600}
-  stampStep={10}
-  style={{ zIndex: 30, cursor: 'crosshair' }}
-/>
-```
-- Overlays entire hero section at z-index 30
-- Section background `#c4c3b6` (putty) matches mask color — painting reveals content without visible color shift
-- Cursor: crosshair
-
-### Section Content
-
-**Our Story (lines 286-326):**
-- Tag: "ABOUT — 01"
-- 2-column grid: left has "Design, engineered with precision." kinetic text, right has paragraph about precision approach
-- Parallax fade on scroll
-
-**Stats (lines 334-343):**
-- 4-column grid of `StatBlock`s:
-  - "50+" Projects Delivered
-  - "3x" Faster Than In-House
-  - "100%" Code Ownership
-  - "30" Day Execution
-
-**What We Build (lines 351-403):**
-- 3×2 grid of `FeatureCard`s
-- Cards alternate slide direction based on row
-- Topics: Websites, Web Apps, E-Commerce, SaaS Platforms, APIs & Backend, Design Systems
-
-**Process (lines 411-459):**
-- 4 steps: Discovery, Design, Development, Launch
-- Dashed dividers between steps
-- Each step has: heading, description, "0X" number
-
-**CTA/Contact (lines 467-532):**
-- Background: `#dc5000` (burnt sienna)
-- "Ready to build? Let's talk."
-- Email input with "SEND" button
-- Footer links: UIMIX branding, year
-
-**Footer (lines 535-561):**
-- Two-column: UIMIX branding left, "About / Work / Contact" links right
-- Bottom bar: copyright + "Built with precision."
-
----
-
-## InkReveal Component — `src/components/ui/ink-reveal.tsx`
-
-### Architecture
-
-Canvas-based paintbrush reveal effect:
-1. Fill canvas with `maskColor` using `source-over`
-2. User moves mouse → stamps added along path with radial gradient
-3. Stamps drawn using `destination-out` compositing (carves through the mask)
-4. Wobble distortion makes stamps look organic (not perfect circles)
-
-### Props
-
-| Prop | Default | Description |
-|------|---------|-------------|
-| `maskColor` | `[252, 250, 248]` | RGB color of the mask overlay |
-| `brushSize` | `128` | Radius of each ink stamp in px |
-| `lifetime` | `600` | How long each stamp lives before expiring (ms) |
-| `rStart` | `10` | Initial radius before stamp expands (ease-out cubic) |
-| `rVary` | `0.45` | Random variation factor for stamp radius (0–1) |
-| `stampStep` | `10` | Min pixel distance between stamps along a stroke |
-| `maxStamps` | `200` | Max stamps alive at once (oldest shifted out) |
-| `segments` | `36` | Number of segments on the wobble circle |
-| `wobble` | `[0.14, 0.08, 0.05]` | Wobble amplitude weights [primary, secondary, tertiary] |
-| `gradientInnerRadius` | `0.2` | Gradient inner-radius factor (0–1, relative to stamp radius) |
-| `gradientStops` | `[0.95, 0.88, 0]` | Gradient opacity stops [center, mid, edge] |
-| `permanent` | `true` | If true, carved areas stay revealed (no mask redraw) |
-| `autoRevealThreshold` | `0.3` | 0–1 fraction of cleared area to trigger auto-reveal (0 disables) |
-| `autoRevealStaggerMs` | `4` | ms stagger between each grid stamp during auto-reveal |
-
-### Permanent Mode (`permanent = true`)
-
-When permanent:
-- `loop` **skips** the `source-over` mask fill (`ctx.fillRect`)
-- Stamp alpha = `1.0` (no fade — one-shot clear)
-- The initial mask is drawn once in `resize()` and never redrawn
-- Stamps carve permanently into the canvas
-
-When permanent = false (legacy mode):
-- Every frame: redraw the mask via `source-over` `fillRect`, then draw stamps with `destination-out`
-- Stamp alpha = `1 - t²` (fades over lifetime)
-- Mask fills back in as stamps expire — ephemeral reveal
-
-### Coverage Check (`checkCoverage`)
-
-Samples canvas alpha channel to determine what fraction is cleared:
-- Calls `ctx.getImageData(0, 0, w, h)` for the full canvas
-- Samples every 40px in both x and y directions
-- Counts pixel as "cleared" if alpha channel < 128
-- Returns `cleared / total` ratio (0–1)
-- Runs every frame inside `loop` while user stamps are active
-- Gated: only runs when `!autoRevealingRef.current && autoRevealThreshold > 0`
-
-### Auto-Reveal Mechanism (`triggerAutoReveal`)
-
-When coverage ratio >= `autoRevealThreshold`:
-
-1. Sets `autoRevealingRef.current = true` and `revealedRef.current = true`
-2. Generates a rectangular grid of stamps across the full canvas:
-   - Spacing: `brushSize * 0.55` (ensures overlapping stamps for full coverage)
-   - Each stamp's `born = performance.now() + i * autoRevealStaggerMs`
-   - Seed: random per stamp
-   - Rmax: `brushSize` (no variation — full clear)
-3. Pushes all grid stamps into `stampsRef.current`
-4. Starts RAF loop if not already running
-
-During auto-reveal animation:
-- Loop skips stamps with `t < 0` (future-born) via `if (t < 0) continue`
-- Each stamp renders at full alpha (permanent) with ease-out cubic radius growth
-- Total animation time: ~gridCount × staggerMs (e.g., 350 stamps × 4ms = 1.4s)
-- Mouse input disabled via `revealedRef` check in `onMouseEnter`/`onMouseMove`
-- `autoRevealingRef` prevents recursive coverage checks during animation
-
-### Wobble Rendering (`carveInk`)
-
-Each stamp draws a radial gradient with wobble-distorted path:
-- Radial gradient: center at `gradientInnerRadius * r`, edge at `r`
-- 3 gradient stops: center opacity, mid opacity, edge opacity (× overall alpha)
-- Path: 36 segments (`segments`), each point displaced:
-  ```
-  wobble = 0.78
-    + wobble[0] * sin(a * 3 + seed)
-    + wobble[1] * sin(a * 5 + seed * 2.1)
-    + wobble[2] * sin(a * 7 + seed * 0.7)
-  ```
-- The 0.78 base factor shrinks slightly below unit circle for natural brush feel
-
-### Stamp Lifecycle
-
-- Added via `addStamp` (single) or `stampAlong` (interpolated along mouse path)
-- Max 200 stamps (`maxStamps`); oldest shifted out when limit reached
-- Each stamp: `born`, `x`, `y`, `seed`, `rmax`
-- In loop: stamps with `t >= 1` are spliced out; stamps with `t < 0` are skipped (future-born)
-- When stamp queue empties, `runningRef.current = false` and RAF stops
-
-### Resize Handling
-
-- `resize()` called on mount and window resize
-- Captures `parent.getBoundingClientRect()` for dimensions
-- Applies `dpr` (device pixel ratio, capped at 2)
-- Fills canvas with mask color on every resize (important for permanent mode)
-- Sets `ctx.setTransform(dpr, 0, 0, dpr, 0, 0)` for proper HiDPI rendering
-
-## InkReveal Component Evolution
-
-### Version History
-
-**V1 (early session):** First implementation with `permanent`, `autoReveal`, `revealThreshold`, `checkCoverage` props. Auto-reveal used staggered grid but had bugs — stale stamps, `t < 0` not handled, loop RAF chaining issues.
-
-**V2 (clean replacement):** User provided a clean source version. Removed ALL auto-reveal and permanent logic. Simple ephemeral reveal: redraw mask every frame, stamps always fade. Props removed: `permanent`, `revealThreshold`, `autoReveal`, `checkCoverage`.
-
-**V3 (current — June 18):** Re-added permanent mode + auto-reveal with correct implementation:
-- `permanent` prop (default `true`): conditional mask redraw, alpha = 1 when permanent
-- `autoRevealThreshold` (default `0.3`): coverage check every 40px grid
-- `autoRevealStaggerMs` (default `4`): staggered stamp birth for brush animation effect
-- `revealedRef` / `autoRevealingRef`: prevent double-triggering and recursive checks
-- `loopRef` pattern: avoids circular dependency between `loop` and `triggerAutoReveal`
-- Mouse gating: mouse handlers return early if `revealedRef.current` is true
-
-### Key Decisions
-
-1. `permanent=true` as default — user explicitly requested revealed areas stay revealed
-2. Grid spacing = `brushSize * 0.55` — tighter than the typical brush interval to ensure full coverage with overlap
-3. No `rVary` during auto-reveal — `rmax = brushSize` (fixed) for uniform clear
-4. Coverage sample every 40px — balances performance vs accuracy for a 1920×1080 canvas (~1296 samples)
-5. `loopRef` pattern over direct `loop` dependency — avoids React hook circular dependency warning
-6. `revealedRef` + `autoRevealingRef` are separate guards — revealedRef gates mouse input, autoRevealingRef gates coverage checks (prevents re-trigger during animation)
-7. `stampsRef.current` uses `push(...stamps)` for auto-reveal rather than replace — preserves any in-flight user stamps (though they're effectively irrelevant once revealed)
-8. `getImageData` on full canvas — called every frame during user painting. Could be optimized to sample less frequently, but acceptable for brief painting sessions before auto-reveal triggers
-
-### Known Footguns / Edge Cases
-
-1. `getImageData` is called every frame while user stamps are active — on a 4K display this could be ~8MB per frame. The 40px stride mitigates this to ~1296 pixels checked per frame, but the full `getImageData` call still reads from GPU memory.
-2. If `permanent=false` and `autoRevealThreshold > 0`, the auto-reveal will trigger but the mask will immediately fill back in — nonsensical configuration. Not guarded.
-3. Resize while auto-reveal is animating: `resize` redraws the mask (filling entire canvas), which would undo the auto-reveal progress. Stamps continue animating and re-carve, but there's a visible flash.
-4. Auto-reveal grid count grows with canvas size: for `brushSize=140`, a 3840×2160 canvas would generate ~1400 stamps at 4ms = 5.6s animation. For very large canvases this could feel slow.
-5. The `loopRef` is set after `loop` is defined (`loopRef.current = loop`). On very first render, if `triggerAutoReveal` somehow fires before the first RAF, `loopRef.current` would be the no-op initial value. In practice this can't happen because auto-reveal requires user interaction first.
-6. `stampAlong` interpolates stamps along the mouse path using `stampStep` — with `stampStep=10`, a fast mouse swipe across 1920px generates ~192 stamps, immediately hitting `maxStamps=200` limit.
-7. Canvas `getContext('2d')` calls are not cached in a ref — each function that needs the context calls `canvas.getContext('2d')` again. This is safe but slightly wasteful. Not a perf concern in practice.
-
-## Files
-
-| File | Lines | Purpose |
-|------|-------|---------|
-| `src/components/ui/ink-reveal.tsx` | 299 | Canvas ink reveal component with permanent + auto-reveal |
-| `src/components/ui/hero-ascii.tsx` | 564 | About Us page (exported as `Home`) |
-| `src/components/ui/demo.tsx` | 29 | Standalone InkReveal demo with Unsplash image |
-| `src/App.jsx` | 354 | Conditional routing: showAbout → `<Home />` |
-| `src/components/AboutPage.jsx` | 5 | Orphaned wrapper (not wired in App) |
-| `src/components/CosmicParticlePage.jsx` | 815 | Orphaned particle experience |
-| `src/index.css` | 275 | Tailwind + shadcn tokens + hero CSS classes |
-
-## ORYZO Design System Tokens (applied in hero-ascii.tsx)
-
-```
-Dark canvas:    #100904    (bg sections)
-Warm cream:     #ffedd7    (body text, headings)
-Burnt sienna:   #dc5000    (accents, CTAs, dividers, links)
-Putty:          #c4c3b6    (hero bg, matches InkReveal mask)
-Charcoal:       #1a1a1a    (secondary bg)
-Graphite:       #595855    (muted text)
-Paper:          #ffffff    (hero text in ink layer)
-Ink:            #000000    (hero UI chrome — status bar, corner accents)
-Bone:           #e7e5e4    (light accents)
-Chalk:          #ebebeb    (alternate light accents)
-Vellum:         #dfdcd5    (mid-tone accents)
-```
-
-## Build & Dev Commands
-
-```powershell
-npm run dev                  # Vite dev server at :5173
-npm run build                # Production build to dist/
-Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force; Start-Process cmd -ArgumentList "/c npm run dev" -WindowStyle Hidden   # Dev restart
-```
+## What Hasn't Been Done
+- Accessibility audit (web-design-guidelines skill available)
+- Visual design polish (frontend-design skill available)
+- Performance optimization / bundle splitting (1.36 MB JS, chunk size warning)
+- Code review (code-reviewer agent available)
+- Security audit (security-reviewer agent available)
+- Dead code cleanup (refactor-cleaner agent — orphaned files still in repo: ScrollAnimation.jsx, FogLayer.jsx, radial-orbital-timeline.jsx, scrollanimation/ frames)
+- Any testing
+- Responsive testing on real devices
+- Using Apify MCP for Awwwards research
+- Using Gemini MCP for AI-powered development
+- Using 21st.dev logo search for company logos
+- GitHub Actions / CI pipeline for this project

@@ -178,7 +178,7 @@ function App() {
         {showExamples ? (
           <ExamplesPage onBack={() => setShowExamples(false)} />
         ) : showAbout ? (
-          <AboutUs onBack={() => setShowAbout(false)} />
+          <AboutUs theme={theme} onBack={() => setShowAbout(false)} />
         ) : (
           <>
             <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100vh' }}>
