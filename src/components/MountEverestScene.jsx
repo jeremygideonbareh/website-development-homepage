@@ -1,4 +1,7 @@
+import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+
+const BASE = import.meta.env.BASE_URL || '/'
 
 const themes = {
   night: {
@@ -17,9 +20,10 @@ const themes = {
   },
 }
 
-const MOUNTAIN_IMG = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80'
+const VIDEO_URL = `${BASE}videos/Moving_fog_and_shooting_stars_202606211510.mp4`
 
 export default function MountEverestScene({ theme = 'day' }) {
+  const videoRef = useRef(null)
   const palette = themes[theme] ?? themes.day
   const { scrollY } = useScroll()
   const opacity = useTransform(scrollY, [0, 500], [1, 0])
@@ -39,12 +43,16 @@ export default function MountEverestScene({ theme = 'day' }) {
       }}
     >
       <div className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
-        <img
-          src={MOUNTAIN_IMG}
-          alt=""
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          loop
+          playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ imageRendering: 'auto' }}
-        />
+        >
+          <source src={VIDEO_URL} type="video/mp4" />
+        </video>
         <div
           className="absolute inset-0"
           style={{
