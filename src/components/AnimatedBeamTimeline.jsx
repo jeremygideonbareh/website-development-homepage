@@ -199,14 +199,13 @@ function VerticalWeekCard({ week, index, isDay }) {
 }
 
 export default function AnimatedBeamTimeline({ isDay = true }) {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
   const [activeWeek, setActiveWeek] = useState(0)
   const [phaseText, setPhaseText] = useState(phaseLabels[0])
   const sectionRef = useRef(null)
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
-    check()
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
@@ -217,6 +216,7 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
   })
 
   const x = useTransform(scrollYProgress, [0, 1], ['0vw', '-300vw'])
+  const percentText = useTransform(scrollYProgress, (v) => `${Math.round(v * 100)}%`)
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const week = Math.min(Math.floor(latest * 4), 3)
@@ -225,7 +225,7 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
   })
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden">
+    <section ref={sectionRef} className="relative">
       {/* Desktop: sticky horizontal scroll */}
       {!isMobile && (
         <div className="relative" style={{ height: '500vh' }}>
@@ -305,12 +305,12 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
                 >
                   {phaseText}
                 </span>
-                <span
+                <motion.span
                   className="text-[10px] md:text-xs font-mono"
                   style={{ color: isDay ? '#8A7A6A' : '#6A6A6A' }}
                 >
-                  {Math.round(scrollYProgress.get() * 100)}%
-                </span>
+                  {percentText}
+                </motion.span>
               </div>
             </div>
           </div>
