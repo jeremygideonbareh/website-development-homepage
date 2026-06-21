@@ -58,6 +58,7 @@ const stats = [
 
 function App() {
   const [isLoading, setIsLoading] = useState(() => true)
+  const [showLogoFlash, setShowLogoFlash] = useState(() => false)
   const [showContact, setShowContact] = useState(false)
   const [showBooking, setShowBooking] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
@@ -65,9 +66,18 @@ function App() {
   const [theme, setTheme] = useState(() => 'day')
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000)
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+      setShowLogoFlash(true)
+    }, 2000)
     return () => clearTimeout(timer)
   }, [])
+
+  useEffect(() => {
+    if (!showLogoFlash) return
+    const timer = setTimeout(() => setShowLogoFlash(false), 800)
+    return () => clearTimeout(timer)
+  }, [showLogoFlash])
 
   const p = palette[theme]
 
@@ -84,6 +94,29 @@ function App() {
             exit={{ opacity: 0, transition: { duration: 0.5 } }}
           >
             <Loader />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showLogoFlash && (
+          <motion.div
+            key="logo-flash"
+            className="fixed inset-0 z-40 flex items-center justify-center"
+            style={{ backgroundColor: '#000000' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.4 } }}
+          >
+            <motion.h1
+              className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-[0.3em]"
+              style={{ color: '#ffffff' }}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+            >
+              HORIZON
+            </motion.h1>
           </motion.div>
         )}
       </AnimatePresence>
