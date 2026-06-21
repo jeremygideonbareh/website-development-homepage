@@ -80,7 +80,7 @@ export default function MountEverestScene({ theme = 'day' }) {
               textTransform: 'uppercase',
             }}
           >
-            Horizon Labs
+            Rouge Code
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 30 }}

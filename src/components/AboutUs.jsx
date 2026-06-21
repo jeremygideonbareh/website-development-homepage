@@ -15,7 +15,7 @@ const projects = [
   { name: 'Trading Bot', url: 'https://github.com/jeremygideonbareh/trading-bot-', tech: 'Python, TypeScript, Docker', category: 'ai', color: '#FF6B4A', img: 'https://picsum.photos/seed/trading-bot/400/280' },
   { name: 'Support Ticket Agent', url: 'https://github.com/jeremygideonbareh/support-ticket-agent', tech: 'Python, LangChain, LangGraph', category: 'ai', color: '#2B7A78', img: 'https://picsum.photos/seed/support-agent/400/280' },
   { name: 'Virtual Tapes Acoustics', url: 'https://github.com/jeremygideonbareh/virtual-tapes-acoustics', tech: 'HTML, Audio', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/virtual-tapes/400/280' },
-  { name: 'Horizon Labs (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/horizon-labs/400/280' },
+  { name: 'Rouge Code (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/rouge-code/400/280' },
 ]
 
 const categoryLabels = {
@@ -33,7 +33,7 @@ const values = [
 
 const teamData = [
   { initials: 'JG', name: 'Jeremy Gideon Bareh', role: 'Founder & Lead Developer', bio: 'Architects the technical vision. Full-stack engineer with a passion for motion, performance, and pixel-perfect execution.' },
-  { initials: 'HL', name: 'Horizon Labs', role: 'Design & Engineering', bio: 'A collective of designers, developers, and AI specialists who ship products that push the boundaries of what the web can do.' },
+  { initials: 'RC', name: 'Rouge Code', role: 'Design & Engineering', bio: 'A collective of designers, developers, and AI specialists who ship products that push the boundaries of what the web can do.' },
 ]
 
 const cinematicBg = [
@@ -318,7 +318,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
           transition={{ duration: 0.7 }}
           className="mb-24 max-w-4xl"
         >
-          <SectionEyebrow delay={0.1} color={p.eyebrow}>About Horizon Labs</SectionEyebrow>
+          <SectionEyebrow delay={0.1} color={p.eyebrow}>About Rouge Code</SectionEyebrow>
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6" style={{ color: p.text }}>
             <KineticText mode="spring" delay={0.2}>
               We build the web that templates can't.
@@ -488,7 +488,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
           >
             <SectionEyebrow color={p.eyebrow}>The story</SectionEyebrow>
             <p className="text-xs tracking-widest uppercase mt-4" style={{ color: p.dim }}>
-              Horizon Labs &mdash; Founded 2024
+              Rouge Code &mdash; Founded 2024
             </p>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-4 leading-tight" style={{ color: p.text }}>
               <KineticText mode="spring" delay={0.1}>
@@ -514,7 +514,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
                 E
               </span>
               <WordReveal delay={0.2}>
-                very pixel we ship is guided by a single principle: your brand deserves code that is written for it, not retrofitted to it. No themes. No page builders. No compromises. What started as a belief that the web could offer more than cookie-cutter templates became the founding ethos of Horizon Labs.
+                very pixel we ship is guided by a single principle: your brand deserves code that is written for it, not retrofitted to it. No themes. No page builders. No compromises. What started as a belief that the web could offer more than cookie-cutter templates became the founding ethos of Rouge Code.
               </WordReveal>
             </motion.div>
 
@@ -575,7 +575,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
                 </h3>
                 <p className="text-base leading-relaxed" style={{ color: p.muted }}>
                   <WordReveal delay={0.2}>
-                    Today Horizon Labs is a lean, AI-augmented studio that ships production-grade web experiences for clients around the world. We still own every line of code we write. We still reject shortcuts that sacrifice quality. And we still believe that the best digital experiences are the ones that feel unmistakably human.
+                    Today Rouge Code is a lean, AI-augmented studio that ships production-grade web experiences for clients around the world. We still own every line of code we write. We still reject shortcuts that sacrifice quality. And we still believe that the best digital experiences are the ones that feel unmistakably human.
                   </WordReveal>
                 </p>
               </div>
@@ -610,7 +610,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
                 className="mt-6 font-semibold"
                 style={{ color: p.text }}
               >
-                — Horizon Labs
+                — Rouge Code
               </motion.p>
             </motion.div>
           </div>

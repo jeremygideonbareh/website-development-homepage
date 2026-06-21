@@ -356,7 +356,7 @@ function App() {
                 <div className="mx-auto max-w-6xl">
                   <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
                     <span className="text-lg font-bold tracking-tight" style={{ color: p.text }}>
-                      Horizon<span style={{ color: p.accent }}>Labs</span>
+                      Rouge<span style={{ color: p.accent }}>Code</span>
                     </span>
                     <div className="flex gap-6 text-sm" style={{ color: p.dim }}>
                       <a href="#" className="hover:opacity-70 transition-opacity">Twitter</a>
@@ -366,7 +366,7 @@ function App() {
                   </div>
                   <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-8 text-sm sm:flex-row"
                     style={{ borderColor: p.border2, color: p.dim }}>
-                    <p>&copy; 2026 Horizon Labs. All rights reserved.</p>
+                    <p>&copy; 2026 Rouge Code. All rights reserved.</p>
                     <div className="flex gap-6">
                       <a href="#" className="hover:opacity-70 transition-opacity">Privacy</a>
                       <a href="#" className="hover:opacity-70 transition-opacity">Terms</a>
