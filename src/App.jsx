@@ -12,6 +12,7 @@ import { ContactPage } from './components/ui/contact-page'
 import { BookingModal } from './components/BookingModal'
 import AnimatedBeamTimeline from './components/AnimatedBeamTimeline'
 import { WordReveal, CharReveal, SectionEyebrow } from './components/RevealText'
+import GalleryPhoto, { GalleryFrame } from './components/GalleryPhoto'
 
 import ExamplesPage from './components/ExamplesPage'
 import AboutUs from './components/AboutUs'
@@ -54,6 +55,19 @@ const stats = [
   { value: '50+', label: 'Projects Delivered' },
   { value: '3x', label: 'Faster Than In-House' },
   { value: '100%', label: 'Code Ownership' },
+]
+
+const cinematicPhotos = [
+  'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&q=85',
+  'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&q=85',
+  'https://images.unsplash.com/photo-1481833761824-86256f2ba5c4?w=800&q=85',
+  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=85',
+  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=85',
+  'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=85',
+  'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=800&q=85',
+  'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=85',
+  'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=85',
+  'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=85',
 ]
 
 function App() {
@@ -184,66 +198,78 @@ function App() {
             <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100vh' }}>
               {/* Brand Story */}
               <section className="px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
-                <div className="mx-auto max-w-5xl space-y-48">
+                <div className="mx-auto max-w-6xl space-y-48">
+
+                  {/* Philosophy — text left, photo right */}
                   <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-120px' }}
                     transition={{ duration: 0.8 }}
-                    className="max-w-3xl"
+                    className="grid md:grid-cols-2 gap-12 md:gap-20 items-center"
                   >
-                    <SectionEyebrow>Our Philosophy</SectionEyebrow>
-                    <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
-                      <CharReveal delay={0.2}>
-                        We believe the web deserves better than templates.
-                      </CharReveal>
-                    </h2>
-                    <p className="mt-8 text-base leading-relaxed max-w-2xl" style={{ color: p.muted }}>
-                      <WordReveal delay={0.6}>
-                        Every brand is unique. Your website should be too. We engineer custom digital experiences from the ground up — no themes, no page builders, no compromises.
-                      </WordReveal>
-                    </p>
+                    <div className="max-w-xl">
+                      <SectionEyebrow>Our Philosophy</SectionEyebrow>
+                      <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
+                        <CharReveal delay={0.2}>
+                          We believe the web deserves better than templates.
+                        </CharReveal>
+                      </h2>
+                      <p className="mt-8 text-base leading-relaxed" style={{ color: p.muted }}>
+                        <WordReveal delay={0.6}>
+                          Every brand is unique. Your website should be too. We engineer custom digital experiences from the ground up — no themes, no page builders, no compromises.
+                        </WordReveal>
+                      </p>
+                    </div>
+                    <GalleryPhoto src={cinematicPhotos[0]} alt="" width="w-full" rotate={-2} offsetX={0} offsetY={0} from="right" delay={0.3} />
                   </motion.div>
 
+                  {/* Approach — photo left, text right */}
                   <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-120px' }}
                     transition={{ duration: 0.8 }}
-                    className="max-w-3xl ml-auto text-right"
+                    className="grid md:grid-cols-2 gap-12 md:gap-20 items-center"
                   >
-                    <SectionEyebrow delay={0.1}>Our Approach</SectionEyebrow>
-                    <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
-                      <CharReveal delay={0.3}>
-                        Speed without sacrifice.
-                      </CharReveal>
-                    </h2>
-                    <p className="mt-8 text-base leading-relaxed max-w-2xl ml-auto" style={{ color: p.muted }}>
-                      <WordReveal delay={0.7}>
-                        We combine AI-native workflows with hand-crafted engineering to ship in weeks what takes other agencies months. The result: production-grade code that you own, forever.
-                      </WordReveal>
-                    </p>
+                    <GalleryPhoto src={cinematicPhotos[1]} alt="" width="w-full" rotate={3} offsetX={0} offsetY={0} from="left" delay={0.3} />
+                    <div className="max-w-xl md:ml-auto md:text-right">
+                      <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
+                        <CharReveal delay={0.3}>
+                          Speed without sacrifice.
+                        </CharReveal>
+                      </h2>
+                      <p className="mt-8 text-base leading-relaxed" style={{ color: p.muted }}>
+                        <WordReveal delay={0.7}>
+                          We combine AI-native workflows with hand-crafted engineering to ship in weeks what takes other agencies months. The result: production-grade code that you own, forever.
+                        </WordReveal>
+                      </p>
+                    </div>
                   </motion.div>
 
+                  {/* Promise — text left, photo right */}
                   <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-120px' }}
                     transition={{ duration: 0.8 }}
-                    className="max-w-3xl"
+                    className="grid md:grid-cols-2 gap-12 md:gap-20 items-center"
                   >
-                    <SectionEyebrow delay={0.1}>Our Promise</SectionEyebrow>
-                    <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
-                      <CharReveal delay={0.3}>
-                        You focus on your business. We build the digital architecture.
-                      </CharReveal>
-                    </h2>
-                    <p className="mt-8 text-base leading-relaxed max-w-2xl" style={{ color: p.muted }}>
-                      <WordReveal delay={0.7}>
-                        From concept to deployment, we handle everything — design, engineering, animation, optimization, and launch. One point of contact. Zero overhead.
-                      </WordReveal>
-                    </p>
+                    <div className="max-w-xl">
+                      <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
+                        <CharReveal delay={0.3}>
+                          You focus on your business. We build the digital architecture.
+                        </CharReveal>
+                      </h2>
+                      <p className="mt-8 text-base leading-relaxed" style={{ color: p.muted }}>
+                        <WordReveal delay={0.7}>
+                          From concept to deployment, we handle everything — design, engineering, animation, optimization, and launch. One point of contact. Zero overhead.
+                        </WordReveal>
+                      </p>
+                    </div>
+                    <GalleryPhoto src={cinematicPhotos[2]} alt="" width="w-full" rotate={-4} offsetX={0} offsetY={0} from="right" delay={0.3} />
                   </motion.div>
+
                 </div>
               </section>
 
@@ -299,56 +325,93 @@ function App() {
                     </motion.p>
                   </section>
 
+                  {/* Photo interlude — cinematic strip */}
+                  <section className="px-6 md:px-12 py-24 relative">
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.7 }}
+                      className="flex gap-5 overflow-x-auto pb-4 -mx-6 md:-mx-12 px-6 md:px-12"
+                      style={{ scrollbarWidth: 'none' }}
+                    >
+                      {cinematicPhotos.slice(4, 9).map((src, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: i * 0.08 }}
+                          className="flex-shrink-0 overflow-hidden rounded-sm"
+                          style={{
+                            rotate: i % 2 === 0 ? `${i - 1}deg` : `${i + 1}deg`,
+                            width: i === 2 ? '300px' : '240px',
+                            height: i === 2 ? '220px' : '180px',
+                          }}
+                        >
+                          <img src={src} alt="" className="w-full h-full object-cover" />
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  </section>
+
                   <AnimatedBeamTimeline isDay={theme === 'day'} />
 
                   <WhyUsSection isDay={theme === 'day'} />
                 </div>
               </section>
 
-              {/* CTA */}
-              <section className="px-6 py-32 md:px-12 text-center relative z-10">
-                <div className="mx-auto max-w-4xl">
-                  <motion.h2
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="text-4xl font-bold leading-tight sm:text-5xl md:text-6xl"
-                    style={{ color: p.text }}
-                  >
-                    Ready to build something{' '}
-                    <span style={{ color: p.accent }}>that actually works?</span>
-                  </motion.h2>
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.15 }}
-                    className="mt-6 text-lg max-w-xl mx-auto"
-                    style={{ color: p.muted }}
-                  >
-                    Stop burning time on agencies that over-promise and under-deliver.
-                    Let&apos;s ship something real.
-                  </motion.p>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                    className="mt-10"
-                  >
-                    <button
+              {/* CTA — Full-bleed photo */}
+              <section className="px-6 py-32 md:px-12 relative z-10">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7 }}
+                  className="relative rounded-2xl overflow-hidden border"
+                  style={{ borderColor: p.border }}
+                >
+                  <div className="absolute inset-0">
+                    <img src={cinematicPhotos[9]} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0" style={{ background: `linear-gradient(to right, ${p.bg}ee, ${p.bg}99)` }} />
+                  </div>
+                  <div className="relative px-10 py-20 md:py-28 text-center">
+                    <motion.h2
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6 }}
+                      className="text-4xl font-bold leading-tight sm:text-5xl md:text-6xl"
+                      style={{ color: p.text }}
+                    >
+                      Ready to build something{' '}
+                      <span style={{ color: p.accent }}>that actually works?</span>
+                    </motion.h2>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.15 }}
+                      className="mt-6 text-lg max-w-xl mx-auto"
+                      style={{ color: p.muted }}
+                    >
+                      Stop burning time on agencies that over-promise and under-deliver. Let&apos;s ship something real.
+                    </motion.p>
+                    <motion.button
                       onClick={() => setShowBooking(true)}
-                      className="px-10 py-4 text-base font-semibold rounded-full transition-colors shadow-lg"
-                      style={{
-                        backgroundColor: p.text,
-                        color: p.bg,
-                      }}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.3 }}
+                      className="mt-10 px-10 py-4 text-base font-semibold rounded-full transition-colors shadow-lg"
+                      style={{ backgroundColor: p.accent, color: '#FFFFFF' }}
                     >
                       Book a Free Call
-                    </button>
-                  </motion.div>
-                </div>
+                    </motion.button>
+                  </div>
+                </motion.div>
               </section>
 
               {/* Footer */}
@@ -356,7 +419,7 @@ function App() {
                 <div className="mx-auto max-w-6xl">
                   <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
                     <span className="text-lg font-bold tracking-tight" style={{ color: p.text }}>
-                      Rouge<span style={{ color: p.accent }}>Code</span>
+                      Rogue<span style={{ color: p.accent }}>Code</span>
                     </span>
                     <div className="flex gap-6 text-sm" style={{ color: p.dim }}>
                       <a href="#" className="hover:opacity-70 transition-opacity">Twitter</a>
@@ -366,7 +429,7 @@ function App() {
                   </div>
                   <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-8 text-sm sm:flex-row"
                     style={{ borderColor: p.border2, color: p.dim }}>
-                    <p>&copy; 2026 Rouge Code. All rights reserved.</p>
+                    <p>&copy; 2026 Rogue Code. All rights reserved.</p>
                     <div className="flex gap-6">
                       <a href="#" className="hover:opacity-70 transition-opacity">Privacy</a>
                       <a href="#" className="hover:opacity-70 transition-opacity">Terms</a>
