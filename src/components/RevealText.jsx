@@ -5,16 +5,18 @@ export function WordReveal({ children, className, delay = 0 }) {
   return (
     <span className={className}>
       {words.map((word, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.5, delay: delay + i * 0.04, ease: [0.25, 0.4, 0.25, 1] }}
-          className="inline-block"
-        >
-          {word}&nbsp;
-        </motion.span>
+        <span key={i} className="inline">
+          <motion.span
+            initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.5, delay: delay + i * 0.04, ease: [0.25, 0.4, 0.25, 1] }}
+            className="inline-block"
+          >
+            {word}
+          </motion.span>
+          {i < words.length - 1 && <span className="inline-block w-[0.25em]">&nbsp;</span>}
+        </span>
       ))}
     </span>
   )
@@ -31,9 +33,9 @@ export function CharReveal({ children, className, delay = 0 }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.4, delay: delay + i * 0.015, ease: [0.25, 0.4, 0.25, 1] }}
-          className="inline-block"
+          className="inline"
         >
-          {char === ' ' ? '\u00A0' : char}
+          {char}
         </motion.span>
       ))}
     </span>
@@ -106,7 +108,7 @@ export function KineticText({ children, mode = 'spring', delay = 0, className })
             whileInView={anim.whileInView}
             viewport={{ once: true, margin: '-60px' }}
             transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
-            style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'inline' }}
+            style={{ display: 'inline' }}
           >
             {char === ' ' ? '\u00A0' : char}
           </motion.span>

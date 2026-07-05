@@ -25,9 +25,9 @@ export default function Loader() {
         </motion.div>
       </div>
 
-      <div className="overflow-hidden">
+      <div className="w-full text-center">
         <motion.h1
-          className="text-4xl sm:text-5xl font-bold tracking-[0.35em] text-white"
+          className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-[0.2em] sm:tracking-[0.35em] text-white"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}

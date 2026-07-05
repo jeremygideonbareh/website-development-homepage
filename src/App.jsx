@@ -200,7 +200,7 @@ function App() {
           <>
             <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100dvh' }}>
               {/* Brand Story */}
-              <section className="px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
+              <section className="px-4 sm:px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
                 <div className="mx-auto max-w-6xl space-y-48">
 
                   {/* Philosophy — text left, photo right */}
@@ -277,7 +277,7 @@ function App() {
               </section>
 
               {/* Stats */}
-              <section className="px-6 pt-24 md:px-12 relative z-10">
+              <section className="px-4 sm:px-6 pt-24 md:px-12 relative z-10">
                 <div className="mx-auto max-w-5xl">
                   <motion.div
                     initial={{ opacity: 0, y: 40 }}
@@ -305,7 +305,7 @@ function App() {
               {/* Process + Why Us */}
               <section className="relative">
                 <div className="relative z-10">
-                  <section className="px-6 py-32 md:px-12 text-center relative">
+                    <section className="px-4 sm:px-6 py-32 md:px-12 text-center relative">
                     <motion.h2
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
@@ -329,7 +329,7 @@ function App() {
                   </section>
 
                   {/* Photo interlude — cinematic strip */}
-                  <section className="px-6 md:px-12 py-24 relative">
+                  <section className="px-4 sm:px-6 md:px-12 py-24 relative">
                     <motion.div
                       initial={{ opacity: 0 }}
                       whileInView={{ opacity: 1 }}
@@ -365,7 +365,7 @@ function App() {
               </section>
 
               {/* CTA — Full-bleed photo */}
-              <section className="px-6 py-32 md:px-12 relative z-10">
+              <section className="px-4 sm:px-6 py-32 md:px-12 relative z-10">
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -418,7 +418,7 @@ function App() {
               </section>
 
               {/* Footer */}
-              <footer className="border-t px-6 py-16 md:px-12 relative z-10" style={{ borderColor: p.border }}>
+              <footer className="border-t px-4 sm:px-6 py-16 md:px-12 relative z-10" style={{ borderColor: p.border }}>
                 <div className="mx-auto max-w-6xl">
                   <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
                     <span className="text-lg font-bold tracking-tight" style={{ color: p.text }}>

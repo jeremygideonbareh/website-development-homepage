@@ -295,7 +295,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
   ]
 
   return (
-    <div className="min-h-screen pt-24 pb-32 overflow-x-hidden" style={{ backgroundColor: p.bg }}>
+    <div className="min-h-screen pt-24 pb-32 md:overflow-x-hidden" style={{ backgroundColor: p.bg }}>
       <div className="relative px-6 md:px-12 mx-auto max-w-6xl">
 
         {/* ─── HERO — Full personal intro ─── */}
