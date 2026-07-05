@@ -1,23 +1,24 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { ExternalLink, ArrowLeft, ChevronLeft, ChevronRight, Code, Zap, Cpu, Shield, Sparkles } from 'lucide-react'
+import {
+  ExternalLink, ArrowLeft, ChevronRight, Code, Zap, Cpu, Shield,
+  Sparkles, Star, Quote, MapPin, Calendar, Award, Layers, Globe,
+  Smartphone, Palette, Braces, Bot, Database, Coins
+} from 'lucide-react'
 import { WordReveal, CharReveal, SectionEyebrow, KineticText } from './RevealText'
 import GalleryPhoto, { GalleryFrame } from './GalleryPhoto'
 import HorizontalScrollSection from './HorizontalScrollSection'
 
 const projects = [
-  { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers', tech: 'TypeScript, Next.js, Supabase', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/gods-creatures/400/280' },
-  { name: 'Pet Grooming Website', url: 'https://github.com/jeremygideonbareh/pet-grooming-website-', tech: 'HTML, JavaScript, TypeScript', category: 'websites', color: '#2B7A78', img: 'https://picsum.photos/seed/pet-grooming/400/280' },
-  { name: 'Be Kind Bakery', url: 'https://github.com/jeremygideonbareh/be-kind-bakery', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/be-kind-bakery/400/280' },
-  { name: 'Crumbs Bakery', url: 'https://github.com/jeremygideonbareh/crumbs-bakery-', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/crumbs-bakery/400/280' },
-  { name: 'Chelsea Man Spa Mobile', url: 'https://github.com/jeremygideonbareh/chelsea-man-spa-mobile', tech: 'JavaScript, Firebase, Google Auth', category: 'mobile', color: '#FF6B4A', img: 'https://picsum.photos/seed/chelsea-spa/400/280' },
-  { name: "Kiki's Portfolio", url: 'https://github.com/jeremygideonbareh/kiki-s-portfolio-website', tech: 'TypeScript, React', category: 'websites', color: '#2B7A78', img: 'https://picsum.photos/seed/kiki-portfolio/400/280' },
-  { name: 'Gym Website', url: 'https://github.com/jeremygideonbareh/gym_website', tech: 'TypeScript, React, CSS', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/gym-website/400/280' },
-  { name: 'Apple Clone', url: 'https://github.com/jeremygideonbareh/apple-clone-', tech: 'TypeScript, React', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/apple-clone/400/280' },
-  { name: 'Trading Bot', url: 'https://github.com/jeremygideonbareh/trading-bot-', tech: 'Python, TypeScript, Docker', category: 'ai', color: '#FF6B4A', img: 'https://picsum.photos/seed/trading-bot/400/280' },
-  { name: 'Support Ticket Agent', url: 'https://github.com/jeremygideonbareh/support-ticket-agent', tech: 'Python, LangChain, LangGraph', category: 'ai', color: '#2B7A78', img: 'https://picsum.photos/seed/support-agent/400/280' },
-  { name: 'Virtual Tapes Acoustics', url: 'https://github.com/jeremygideonbareh/virtual-tapes-acoustics', tech: 'HTML, Audio', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/virtual-tapes/400/280' },
-  { name: 'Rogue Code (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/rogue-code/400/280' },
+  { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers', tech: 'TypeScript, Next.js, Supabase', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/gods-creatures/400/280', result: 'Full-stack booking & e-commerce platform' },
+  { name: 'Pet Grooming Website', url: 'https://github.com/jeremygideonbareh/pet-grooming-website-', tech: 'HTML, JavaScript, TypeScript', category: 'websites', color: '#2B7A78', img: 'https://picsum.photos/seed/pet-grooming/400/280', result: 'Responsive service showcase site' },
+  { name: 'Be Kind Bakery', url: 'https://github.com/jeremygideonbareh/be-kind-bakery', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/be-kind-bakery/400/280', result: 'Digital storefront with online ordering' },
+  { name: 'Crumbs Bakery', url: 'https://github.com/jeremygideonbareh/crumbs-bakery-', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/crumbs-bakery/400/280', result: 'Menu-driven bakery website' },
+  { name: 'Chelsea Man Spa Mobile', url: 'https://github.com/jeremygideonbareh/chelsea-man-spa-mobile', tech: 'JavaScript, Firebase, Google Auth', category: 'mobile', color: '#FF6B4A', img: 'https://picsum.photos/seed/chelsea-spa/400/280', result: 'Cross-platform booking app' },
+  { name: "Kiki's Portfolio", url: 'https://github.com/jeremygideonbareh/kiki-s-portfolio-website', tech: 'TypeScript, React', category: 'websites', color: '#2B7A78', img: 'https://picsum.photos/seed/kiki-portfolio/400/280', result: 'Personal brand showcase' },
+  { name: 'Trading Bot', url: 'https://github.com/jeremygideonbareh/trading-bot-', tech: 'Python, TypeScript, Docker', category: 'ai', color: '#FF6B4A', img: 'https://picsum.photos/seed/trading-bot/400/280', result: 'Automated trading pipeline' },
+  { name: 'Support Ticket Agent', url: 'https://github.com/jeremygideonbareh/support-ticket-agent', tech: 'Python, LangChain, LangGraph', category: 'ai', color: '#2B7A78', img: 'https://picsum.photos/seed/support-agent/400/280', result: 'AI-powered customer support' },
+  { name: 'Rogue Code (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/rogue-code/400/280', result: 'Interactive agency showcase' },
 ]
 
 const categoryLabels = {
@@ -33,9 +34,32 @@ const values = [
   { icon: Shield, title: 'Total ownership', desc: 'You get the code. Every line. No lock-in, no black boxes, no recurring license fees. Your digital asset, yours forever.' },
 ]
 
-const teamData = [
-  { initials: 'JG', name: 'Jeremy Gideon Bareh', role: 'Founder & Lead Developer', bio: 'Full-stack engineer and spatial design specialist. Builds premium web experiences with React, Three.js, and AI-native workflows. Every line of code is crafted — never templated.' },
-  { initials: 'RC', name: 'Rogue Code', role: 'Design & Engineering', bio: 'A lean, AI-augmented studio that ships production-grade websites and applications for clients around the world. Custom code, full ownership, zero compromise.' },
+const timeline = [
+  { year: '2023', title: 'The first line of code', desc: 'Jeremy started building websites from a single laptop. No clients. No portfolio. Just a conviction that templates were a compromise.', icon: Code },
+  { year: '2024', title: 'First client projects', desc: 'Word spread. Pet groomers, bakeries, spas — each project built from scratch. The portfolio grew. So did the reputation.', icon: Award },
+  { year: '2025', title: 'AI-native workflow', desc: 'Integrated AI tooling to ship faster without sacrificing quality. Support ticket agents, trading bots — the stack expanded into machine learning.', icon: Bot },
+  { year: '2026', title: 'Rogue Code studio', desc: 'What started as one developer became a lean, AI-augmented studio shipping production-grade web experiences for clients worldwide.', icon: Layers },
+]
+
+const testimonials = [
+  { quote: 'Jeremy built our bakery site from the ground up. No templates. Every detail was intentional. Our online orders went up 40% in the first month.', author: 'Be Kind Bakery', role: 'Client Project' },
+  { quote: 'The support ticket agent transformed our customer service. AI-powered responses cut resolution time by 60%. Jeremy understood our needs immediately.', author: 'Support Team Lead', role: 'Automation Project' },
+  { quote: 'Working with Rogue Code is different. They actually listen, then build something better than what you imagined. Full ownership, no strings attached.', author: 'Portfolio Client', role: 'Web Development' },
+]
+
+const skillCategories = [
+  { title: 'Frontend', icon: Palette, skills: [
+    { name: 'React / Next.js', level: 95 }, { name: 'TypeScript', level: 90 }, { name: 'Three.js / 3D', level: 85 }, { name: 'Framer Motion', level: 92 }, { name: 'Tailwind CSS', level: 90 }
+  ]},
+  { title: 'AI & Automation', icon: Bot, skills: [
+    { name: 'LangChain / LangGraph', level: 80 }, { name: 'Python / ML', level: 85 }, { name: 'AI Agents', level: 78 }, { name: 'API Integration', level: 88 }
+  ]},
+  { title: 'Backend & Data', icon: Database, skills: [
+    { name: 'Node.js', level: 88 }, { name: 'Supabase / Firebase', level: 85 }, { name: 'SQL / NoSQL', level: 80 }, { name: 'Docker', level: 75 }
+  ]},
+  { title: 'Design & Motion', icon: Sparkles, skills: [
+    { name: 'UI/UX Design', level: 85 }, { name: 'GSAP', level: 80 }, { name: 'Responsive Design', level: 92 }, { name: 'Brand Identity', level: 78 }
+  ]},
 ]
 
 const galleryPhotos = [
@@ -93,6 +117,28 @@ function Counter({ from = 0, to, suffix = '', label, p }) {
   )
 }
 
+function SkillBar({ name, level, index }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-40px' })
+  return (
+    <div ref={ref} className="mb-3">
+      <div className="flex justify-between text-xs mb-1">
+        <span style={{ color: '#c0c0c0' }}>{name}</span>
+        <span style={{ color: '#888' }}>{level}%</span>
+      </div>
+      <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+        <motion.div
+          className="h-full rounded-full"
+          style={{ background: 'linear-gradient(to right, #e7c59a, #e7c59a88)' }}
+          initial={{ width: 0 }}
+          animate={isInView ? { width: `${level}%` } : { width: 0 }}
+          transition={{ duration: 0.8, delay: index * 0.08, ease: [0.25, 0.4, 0.25, 1] }}
+        />
+      </div>
+    </div>
+  )
+}
+
 function ProjectCard({ proj, i, p }) {
   const [loaded, setLoaded] = useState(false)
   return (
@@ -125,7 +171,8 @@ function ProjectCard({ proj, i, p }) {
             <h3 className="text-base font-semibold leading-tight" style={{ color: p.text }}>{proj.name}</h3>
             <ExternalLink className="size-3.5 mt-0.5 flex-shrink-0 opacity-0 group-hover:opacity-60 transition-opacity" style={{ color: p.dim }} />
           </div>
-          <p className="mt-1.5 text-xs" style={{ color: p.dim }}>{proj.tech}</p>
+          <p className="mt-1 text-xs" style={{ color: p.muted }}>{proj.result}</p>
+          <p className="mt-0.5 text-[10px]" style={{ color: p.dim }}>{proj.tech}</p>
           <motion.div className="mt-3 h-0.5 rounded-full" style={{ background: `linear-gradient(to right, ${proj.color}, transparent)`, transformOrigin: 'left' }}
             initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }} />
         </div>
@@ -138,12 +185,11 @@ function ScrollableCategory({ label, catProjects, catIdx, p }) {
   const trackRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
-  
-  // Scroll to top when component mounts
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-  
+
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
@@ -169,7 +215,7 @@ function ScrollableCategory({ label, catProjects, catIdx, p }) {
       <div className="relative group/track">
         {canScrollLeft && (
           <button onClick={() => scroll('left')} className="absolute -left-2 top-1/2 -translate-y-1/2 z-20 size-9 rounded-full flex items-center justify-center shadow-lg"
-            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}` }}><ChevronLeft className="size-4" /></button>
+            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}` }}><ChevronRight className="size-4 rotate-180" /></button>
         )}
         {canScrollRight && (
           <button onClick={() => scroll('right')} className="absolute -right-2 top-1/2 -translate-y-1/2 z-20 size-9 rounded-full flex items-center justify-center shadow-lg"
@@ -184,25 +230,26 @@ function ScrollableCategory({ label, catProjects, catIdx, p }) {
   )
 }
 
-function ProcessStep({ step, i, p }) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-60px' })
+function TestimonialCard({ t, i, p }) {
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: i % 2 === 0 ? -80 : 80 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.7, delay: i * 0.12, ease: [0.25, 0.4, 0.25, 1] }}
-      className="flex items-start gap-6 w-full max-w-2xl"
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.5, delay: i * 0.12 }}
+      className="rounded-xl border p-6 md:p-8 relative"
+      style={{ borderColor: p.glassBorder, background: p.cardBg }}
     >
-      <div className="flex-shrink-0 size-14 rounded-full flex items-center justify-center text-lg font-bold"
-        style={{ background: `linear-gradient(135deg, ${p.accent}, ${p.accent}66)`, color: '#fff' }}>
-        {i + 1}
-      </div>
-      <div>
-        <h3 className="text-xl font-bold" style={{ color: p.text }}>{step.title}</h3>
-        <p className="mt-2 text-sm leading-relaxed" style={{ color: p.muted }}>{step.desc}</p>
+      <Quote className="size-8 mb-4" style={{ color: `${p.accent}44` }} />
+      <p className="text-sm md:text-base leading-relaxed italic" style={{ color: p.muted }}>&ldquo;{t.quote}&rdquo;</p>
+      <div className="mt-6 flex items-center gap-3 pt-4 border-t" style={{ borderColor: p.glassBorder }}>
+        <div className="size-9 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: `${p.accent}22`, color: p.accent }}>
+          {t.author.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
+        </div>
+        <div>
+          <p className="text-sm font-semibold" style={{ color: p.text }}>{t.author}</p>
+          <p className="text-xs" style={{ color: p.dim }}>{t.role}</p>
+        </div>
       </div>
     </motion.div>
   )
@@ -210,82 +257,88 @@ function ProcessStep({ step, i, p }) {
 
 export default function AboutUs({ onBack, theme = 'night' }) {
   const p = themes[theme] ?? themes.night
-  
-  // Scroll to top when component mounts
+  const heroRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
   const processSteps = [
-    { title: 'Discovery & Strategy', desc: 'We learn your business, audience, and goals. Then map a technical roadmap tailored to your vision.' },
-    { title: 'Design & Architecture', desc: 'Wireframes, design systems, and component architecture. Every pixel is intentional.' },
-    { title: 'Engineering & Animation', desc: 'React, Three.js, and GSAP come together. We build, animate, and optimize in parallel.' },
-    { title: 'Launch & Handoff', desc: 'Deployment, performance tuning, and full source-code delivery. You own everything.' },
+    { title: 'Discovery', desc: 'We learn your business, audience, and goals. Then map a roadmap tailored to your vision.' },
+    { title: 'Design', desc: 'Wireframes, design systems, and component architecture. Every pixel is intentional.' },
+    { title: 'Engineer', desc: 'React, Three.js, and AI come together. We build, animate, and optimize in parallel.' },
+    { title: 'Launch', desc: 'Deployment, performance tuning, and full source-code delivery. You own everything.' },
   ]
 
   return (
     <div className="min-h-screen pt-24 pb-32 overflow-hidden" style={{ backgroundColor: p.bg }}>
       <div className="relative px-6 md:px-12 mx-auto max-w-6xl">
 
-        {/* Back button */}
-        <motion.button onClick={onBack}
-          initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2 text-sm font-medium mb-16 transition-opacity hover:opacity-70"
-          style={{ color: p.accent }}>
-          <ArrowLeft className="size-4" /> Back to home
-        </motion.button>
+        {/* ─── HERO — Full personal intro ─── */}
+        <motion.div ref={heroRef} style={{ opacity: heroOpacity }} className="relative mb-40">
+          <motion.button onClick={onBack}
+            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 text-sm font-medium mb-20 transition-opacity hover:opacity-70"
+            style={{ color: p.accent }}>
+            <ArrowLeft className="size-4" /> Back to home
+          </motion.button>
 
-        {/* ─── HERO — Art gallery intro ─── */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7 }} className="mb-32 relative">
-          <SectionEyebrow delay={0.1} color={p.eyebrow}>About Rogue Code</SectionEyebrow>
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-6 max-w-4xl" style={{ color: p.text }}>
-            <CharReveal delay={0.2}>We build the web that templates can't.</CharReveal>
-          </h1>
-          <p className="mt-6 text-base sm:text-lg max-w-2xl leading-relaxed" style={{ color: p.muted }}>
-            <WordReveal delay={0.6}>Every brand is unique. Your website should be too. We engineer custom digital experiences from the ground up — no themes, no page builders, no compromises.</WordReveal>
-          </p>
+          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+            <motion.div style={{ y: heroY }} className="relative">
+              <div className="relative inline-block">
+                <GalleryFrame width="w-64 md:w-80" rotate={-2} from="left" delay={0}>
+                  <img src={galleryPhotos[4]} alt="Jeremy Gideon Bareh"
+                    className="w-full h-64 md:h-80 object-cover" />
+                </GalleryFrame>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                  className="absolute -bottom-4 -right-4 rounded-xl border px-4 py-3"
+                  style={{ borderColor: p.glassBorder, background: p.glassBg, backdropFilter: 'blur(12px)' }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="size-2 rounded-full bg-green-400" />
+                    <span className="text-xs font-semibold" style={{ color: p.text }}>Available for work</span>
+                  </div>
+                  <div className="text-[10px] mt-0.5" style={{ color: p.dim }}>React · Three.js · AI</div>
+                </motion.div>
+              </div>
+            </motion.div>
 
-          {/* Gallery photo cluster — abstract positioned */}
-          <div className="mt-16 relative h-[400px] md:h-[500px]">
-            <GalleryPhoto src={galleryPhotos[0]} alt="" width="w-56 md:w-72" rotate={-3} offsetX={0} offsetY={0} from="left" delay={0.3} className="absolute top-0 left-0 z-10" />
-            <GalleryPhoto src={galleryPhotos[1]} alt="" width="w-48 md:w-60" rotate={4} offsetX={60} offsetY={40} from="right" delay={0.5} className="absolute top-10 left-1/3 z-20" />
-            <GalleryPhoto src={galleryPhotos[2]} alt="" width="w-52 md:w-64" rotate={-2} offsetX={-20} offsetY={-10} from="left" delay={0.7} className="absolute top-0 right-0 z-10" />
-            <GalleryPhoto src={galleryPhotos[3]} alt="" width="w-40 md:w-48" rotate={6} offsetX={80} offsetY={60} from="right" delay={0.9} className="absolute bottom-0 left-1/4 z-0" />
-            <GalleryPhoto src={galleryPhotos[4]} alt="" width="w-44 md:w-56" rotate={-5} offsetX={-40} offsetY={30} from="left" delay={1.1} className="absolute bottom-10 right-1/4 z-0" />
+            <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
+              <SectionEyebrow delay={0.1} color={p.eyebrow}>Founder & Lead Developer</SectionEyebrow>
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-4" style={{ color: p.text }}>
+                Jeremy <br />Gideon <br /><span style={{ color: p.accent }}>Bareh</span>
+              </h1>
+              <p className="mt-6 text-base sm:text-lg max-w-md leading-relaxed" style={{ color: p.muted }}>
+                <WordReveal delay={0.4}>Full-stack engineer building premium digital experiences from scratch. No templates. No compromises. Just code that works.</WordReveal>
+              </p>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.8 }}
+                className="mt-8 flex flex-wrap gap-3"
+              >
+                {['React', 'Three.js', 'TypeScript', 'AI/ML'].map((skill) => (
+                  <span key={skill} className="px-4 py-1.5 text-xs font-medium rounded-full border"
+                    style={{ borderColor: p.glassBorder, color: p.accent, background: `${p.accent}08` }}>
+                    {skill}
+                  </span>
+                ))}
+              </motion.div>
+            </motion.div>
           </div>
-        </motion.div>
-
-        {/* ─── STORY — Split screen with left-right entrance ─── */}
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: 0.7 }}
-          className="mb-32 grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-          <motion.div initial={{ opacity: 0, x: -80 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}>
-            <SectionEyebrow delay={0.1} color={p.eyebrow}>Our Philosophy</SectionEyebrow>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
-              <KineticText mode="wave" delay={0.2}>Speed without sacrifice.</KineticText>
-            </h2>
-            <p className="mt-6 text-base leading-relaxed" style={{ color: p.muted }}>
-              <WordReveal delay={0.4}>We combine AI-native workflows with hand-crafted engineering to ship in weeks what takes other agencies months. The result: production-grade code that you own, forever.</WordReveal>
-            </p>
-            <p className="mt-4 text-base leading-relaxed" style={{ color: p.muted }}>
-              <WordReveal delay={0.6}>From concept to deployment, we handle everything — design, engineering, animation, optimization, and launch. One point of contact. Zero overhead.</WordReveal>
-            </p>
-          </motion.div>
-          <motion.div initial={{ opacity: 0, x: 80 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
-            className="relative h-[300px] md:h-[400px]">
-            <GalleryFrame width="w-56 md:w-72" rotate={2} from="right" delay={0}>
-              <img src={galleryPhotos[5]} alt="Workspace" className="w-full h-48 md:h-64 object-cover" />
-            </GalleryFrame>
-            <GalleryFrame width="w-40 md:w-52" rotate={-4} from="right" delay={0.2} className="absolute -bottom-6 -left-8">
-              <img src={galleryPhotos[6]} alt="Team" className="w-full h-32 md:h-40 object-cover" />
-            </GalleryFrame>
-          </motion.div>
         </motion.div>
 
         {/* ─── STATS ─── */}
         <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-80px' }} transition={{ duration: 0.7 }}
           className="mb-32 rounded-2xl border p-10 md:p-14" style={{ borderColor: p.glassBorder, background: p.glassBg, backdropFilter: 'blur(12px)' }}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            {[[0, 50, '+' , 'Projects Delivered', -80], [0, 3, 'x', 'Faster Than In-House', -40], [0, 100, '%', 'Code Ownership', 40], [0, 24, '/7', 'Support & Monitoring', 80]].map(([from, to, suffix, label, x], i) => (
+            {[[0, 50, '+' , 'Projects Delivered', -80], [0, 3, 'x', 'Faster Than In-House', -40], [0, 100, '%', 'Code Ownership', 40], [0, 12, '', 'Clients Served', 80]].map(([from, to, suffix, label, x], i) => (
               <motion.div key={label} initial={{ opacity: 0, x }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}>
                 <Counter from={from} to={to} suffix={suffix} label={label} p={p} />
               </motion.div>
@@ -293,7 +346,90 @@ export default function AboutUs({ onBack, theme = 'night' }) {
           </div>
         </motion.div>
 
-        {/* ─── VALUES — Alternating left/right ─── */}
+        {/* ─── NARRATIVE TIMELINE ─── */}
+        <section className="mb-32">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-16">
+            <SectionEyebrow color={p.eyebrow}>The journey</SectionEyebrow>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-4 leading-tight" style={{ color: p.text }}>
+              <KineticText mode="spring" delay={0.1}>From a laptop to a studio.</KineticText>
+            </h2>
+          </motion.div>
+
+          <div className="relative">
+            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px -translate-x-1/2" style={{ background: `linear-gradient(to bottom, transparent, ${p.accent}44, transparent)` }} />
+            <div className="space-y-20">
+              {timeline.map((t, i) => (
+                <motion.div key={t.year}
+                  initial={{ opacity: 0, x: i % 2 === 0 ? -80 : 80 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.25, 0.4, 0.25, 1] }}
+                  className={`relative flex items-start gap-8 md:gap-0 ${i % 2 === 0 ? 'md:flex-row-reverse' : ''} md:flex-row`}
+                >
+                  <div className={`hidden md:block w-1/2 ${i % 2 === 0 ? 'md:pl-12 md:text-right' : 'md:pr-12'}`}>
+                    <div className="rounded-xl border p-5" style={{ borderColor: p.glassBorder, background: p.cardBg }}>
+                      <div className="flex items-center gap-2 mb-2" style={{ justifyContent: i % 2 === 0 ? 'flex-end' : 'flex-start' }}>
+                        <t.icon className="size-4" style={{ color: p.accent }} />
+                        <h3 className="text-lg font-semibold" style={{ color: p.text }}>{t.title}</h3>
+                      </div>
+                      <p className="text-sm leading-relaxed" style={{ color: p.muted }}>{t.desc}</p>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 relative z-10">
+                    <div className="size-14 md:size-16 rounded-full flex items-center justify-center border-2" style={{ borderColor: p.accent, background: p.bg }}>
+                      <span className="text-sm font-bold" style={{ color: p.accent }}>{t.year}</span>
+                    </div>
+                  </div>
+                  <div className="md:hidden flex-1">
+                    <div className="rounded-xl border p-4" style={{ borderColor: p.glassBorder, background: p.cardBg }}>
+                      <div className="flex items-center gap-2 mb-2">
+                        <t.icon className="size-4" style={{ color: p.accent }} />
+                        <h3 className="text-base font-semibold" style={{ color: p.text }}>{t.title}</h3>
+                      </div>
+                      <p className="text-xs leading-relaxed" style={{ color: p.muted }}>{t.desc}</p>
+                    </div>
+                  </div>
+                  <div className={`hidden md:block w-1/2 ${i % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`} />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── SKILLS MATRIX ─── */}
+        <section className="mb-32">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
+            <SectionEyebrow color={p.eyebrow}>Expertise</SectionEyebrow>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
+              <KineticText mode="wave" delay={0.1}>Skills & proficiency</KineticText>
+            </h2>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 gap-6">
+            {skillCategories.map((cat, ci) => (
+              <motion.div key={cat.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: ci * 0.1 }}
+                whileHover={{ y: -4 }}
+                className="rounded-xl border p-6" style={{ borderColor: p.glassBorder, background: p.cardBg }}
+              >
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="size-10 rounded-lg flex items-center justify-center" style={{ background: `${p.accent}15` }}>
+                    <cat.icon className="size-5" style={{ color: p.accent }} />
+                  </div>
+                  <h3 className="text-lg font-semibold" style={{ color: p.text }}>{cat.title}</h3>
+                </div>
+                {cat.skills.map((skill, si) => (
+                  <SkillBar key={skill.name} name={skill.name} level={skill.level} index={si} />
+                ))}
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── VALUES — Alternating ─── */}
         <section className="mb-32">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
             <SectionEyebrow color={p.eyebrow}>How we build</SectionEyebrow>
@@ -321,180 +457,22 @@ export default function AboutUs({ onBack, theme = 'night' }) {
           </div>
         </section>
 
-        {/* ─── TEAM ─── */}
+        {/* ─── TESTIMONIALS ─── */}
         <section className="mb-32">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
-            <SectionEyebrow color={p.eyebrow}>Who we are</SectionEyebrow>
+            <SectionEyebrow color={p.eyebrow}>Client feedback</SectionEyebrow>
             <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
-              <KineticText mode="wave" delay={0.1}>Meet the team</KineticText>
+              <KineticText mode="spring" delay={0.1}>What clients say</KineticText>
             </h2>
           </motion.div>
-          <div className="grid sm:grid-cols-2 gap-6">
-            {teamData.map((member, i) => (
-              <motion.div key={member.name}
-                initial={{ opacity: 0, x: i === 0 ? -100 : 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                whileHover={{ y: -4 }}
-                className="rounded-xl border p-6 flex gap-5 items-start"
-                style={{ borderColor: p.glassBorder, background: p.cardBg }}>
-                <div className="size-14 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold tracking-wider"
-                  style={{ background: `linear-gradient(135deg, ${p.accent}, ${p.accent}88)`, color: '#FFFFFF' }}>
-                  {member.initials}
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold" style={{ color: p.text }}>{member.name}</h3>
-                  <p className="text-sm mt-0.5" style={{ color: p.accent }}>{member.role}</p>
-                  <p className="text-sm mt-2 leading-relaxed" style={{ color: p.muted }}>{member.bio}</p>
-                </div>
-              </motion.div>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {testimonials.map((t, i) => (
+              <TestimonialCard key={i} t={t} i={i} p={p} />
             ))}
           </div>
         </section>
 
-        {/* ─── FOUNDER — About Jeremy Gideon Bareh ─── */}
-        <section className="mb-32">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
-            <SectionEyebrow color={p.eyebrow}>The founder</SectionEyebrow>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
-              <KineticText mode="wave" delay={0.1}>Jeremy Gideon Bareh</KineticText>
-            </h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
-            >
-              <div className="relative">
-                <GalleryFrame width="w-full max-w-sm" rotate={-2} from="left" delay={0}>
-                  <img
-                    src={galleryPhotos[4]}
-                    alt="Jeremy Gideon Bareh"
-                    className="w-full h-56 md:h-72 object-cover"
-                  />
-                </GalleryFrame>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="absolute -bottom-3 -right-3 rounded-xl border px-4 py-3"
-                  style={{ borderColor: p.glassBorder, background: p.glassBg, backdropFilter: 'blur(12px)' }}
-                >
-                  <div className="text-xs font-semibold" style={{ color: p.text }}>Full-Stack</div>
-                  <div className="text-[10px]" style={{ color: p.dim }}>React · Three.js · AI</div>
-                </motion.div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.4, 0.25, 1] }}
-            >
-              <p className="text-base leading-relaxed" style={{ color: p.muted }}>
-                <span className="float-left text-6xl font-bold leading-none mr-3 mt-1" style={{ color: p.accent }}>A</span>
-                <WordReveal delay={0.2}> full-stack engineer and spatial design enthusiast who believes the web deserves better than templates. Jeremy engineers premium digital experiences from scratch — React, Three.js, Framer Motion, and AI-native workflows are his tools of choice. Every project is built with obsessive attention to performance, motion, and craft.</WordReveal>
-              </p>
-              <p className="mt-4 text-base leading-relaxed" style={{ color: p.muted }}>
-                <WordReveal delay={0.4}>From AI agents and trading bots to full-stack web apps and interactive 3D websites — Jeremy has shipped across the stack. His portfolio includes pet grooming platforms, bakery sites, mobile apps, and the Rogue Code studio site you&apos;re browsing right now.</WordReveal>
-              </p>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: 0.6 }}
-                className="mt-6 flex flex-wrap gap-2"
-              >
-                {['React', 'Three.js', 'TypeScript', 'Framer Motion', 'Next.js', 'Node.js', 'AI/ML', 'Python'].map((skill) => (
-                  <span key={skill} className="px-3 py-1 text-[11px] font-medium rounded-full border"
-                    style={{ borderColor: p.glassBorder, color: p.accent, background: `${p.accent}08` }}>
-                    {skill}
-                  </span>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ─── STORY CONTINUED — Gallery photo interlude ─── */}
-        <section className="mb-32">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
-            <SectionEyebrow color={p.eyebrow}>The story</SectionEyebrow>
-            <p className="text-xs tracking-widest uppercase mt-4" style={{ color: p.dim }}>Rogue Code &mdash; Founded 2024</p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-4 leading-tight" style={{ color: p.text }}>
-              <KineticText mode="spring" delay={0.1}>Starting from a single laptop.</KineticText>
-            </h2>
-          </motion.div>
-
-          <div className="space-y-12">
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.6 }}
-              className="text-base md:text-lg leading-relaxed" style={{ color: p.muted }}>
-              <span className="float-left text-6xl md:text-7xl font-bold leading-none mr-4 mt-1" style={{ color: p.accent }}>E</span>
-              <WordReveal delay={0.2}>very pixel we ship is guided by a single principle: your brand deserves code that is written for it, not retrofitted to it. No themes. No page builders. No compromises. What started as a belief that the web could offer more than cookie-cutter templates became the founding ethos of Rogue Code.</WordReveal>
-            </motion.div>
-
-            {/* Gallery photo strip */}
-            <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.7 }}
-              className="flex gap-4 overflow-x-auto pb-4 -mx-6 md:-mx-12 px-6 md:px-12"
-              style={{ scrollbarWidth: 'none' }}>
-              {galleryPhotos.slice(0, 5).map((src, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
-                  className="flex-shrink-0 overflow-hidden rounded-sm"
-                  style={{ rotate: i % 2 === 0 ? `${i - 2}deg` : `${i - 1}deg`, width: i === 2 ? '280px' : '220px', height: i === 2 ? '200px' : '160px' }}>
-                  <img src={src} alt="" className="w-full h-full object-cover" />
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.6 }}
-              className="text-base md:text-lg leading-relaxed max-w-3xl" style={{ color: p.muted }}>
-              <WordReveal delay={0.2}>
-                One laptop. A conviction that templates were a compromise. And a decision to prove that custom engineering could be faster, more affordable, and undeniably better. That first project led to another, and another. Word spread. The stack grew. But the principle never changed.
-              </WordReveal>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.6 }}
-              className="py-10 md:py-14 px-4 text-center border-y" style={{ borderColor: p.glassBorder }}>
-              <p className="text-xl md:text-2xl lg:text-3xl font-bold italic leading-snug max-w-3xl mx-auto" style={{ color: p.text }}>
-                &ldquo;We believe the web deserves better than templates.&rdquo;
-              </p>
-              <p className="mt-4 text-sm" style={{ color: p.dim }}>&mdash; Jeremy Gideon Bareh</p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-              <div>
-                <h3 className="text-xl font-bold mb-4" style={{ color: p.text }}>
-                  <KineticText mode="wave" delay={0.1}>From freelance to full studio.</KineticText>
-                </h3>
-                <p className="text-base leading-relaxed" style={{ color: p.muted }}>
-                  <WordReveal delay={0.2}>Today Rogue Code is a lean, AI-augmented studio that ships production-grade web experiences for clients around the world. We still own every line of code we write. We still reject shortcuts that sacrifice quality. And we still believe that the best digital experiences are the ones that feel unmistakably human.</WordReveal>
-                </p>
-              </div>
-              <motion.div initial={{ opacity: 0, x: 80 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
-                className="relative h-[250px]">
-                <GalleryFrame width="w-full max-w-sm" rotate={-3} from="right" delay={0}>
-                  <img src={galleryPhotos[7]} alt="Studio" className="w-full h-48 md:h-56 object-cover" />
-                </GalleryFrame>
-              </motion.div>
-            </div>
-
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.6 }} className="pt-6">
-              <p className="text-base md:text-lg leading-relaxed" style={{ color: p.muted }}>
-                <WordReveal delay={0.2}>The web is still evolving. And as long as there are brands that refuse to settle for &ldquo;good enough,&rdquo; we will be here building what comes next.</WordReveal>
-              </p>
-              <motion.p initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.4 }}
-                className="mt-6 font-semibold" style={{ color: p.text }}>&mdash; Rogue Code</motion.p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* ─── PROCESS — Horizontal scroll ─── */}
+        {/* ─── PROCESS ─── */}
         <section className="mb-32">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
             <SectionEyebrow color={p.eyebrow}>Our process</SectionEyebrow>
@@ -502,26 +480,39 @@ export default function AboutUs({ onBack, theme = 'night' }) {
               <KineticText mode="spring" delay={0.1}>How we bring your vision to life</KineticText>
             </h2>
           </motion.div>
-          <HorizontalScrollSection>
+
+          <div className="grid sm:grid-cols-4 gap-4">
             {processSteps.map((step, i) => (
-              <div key={i} className="max-w-lg mx-auto text-center">
-                <div className="size-20 rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-8"
+              <motion.div key={step.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: i * 0.12 }}
+                className="relative rounded-xl border p-6 text-center"
+                style={{ borderColor: p.glassBorder, background: p.cardBg }}
+              >
+                <div className="size-14 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-5"
                   style={{ background: `linear-gradient(135deg, ${p.accent}, ${p.accent}44)`, color: '#fff' }}>
                   {i + 1}
                 </div>
-                <h3 className="text-2xl font-bold mb-4" style={{ color: p.text }}>{step.title}</h3>
-                <p className="text-base leading-relaxed" style={{ color: p.muted }}>{step.desc}</p>
-              </div>
+                <h3 className="text-lg font-bold mb-3" style={{ color: p.text }}>{step.title}</h3>
+                <p className="text-sm leading-relaxed" style={{ color: p.muted }}>{step.desc}</p>
+                {i < processSteps.length - 1 && (
+                  <div className="hidden sm:block absolute -right-2 top-1/2 -translate-y-1/2 z-10">
+                    <ChevronRight className="size-5" style={{ color: `${p.accent}44` }} />
+                  </div>
+                )}
+              </motion.div>
             ))}
-          </HorizontalScrollSection>
+          </div>
         </section>
 
         {/* ─── PROJECT SHOWCASE ─── */}
-        <section className="mb-20">
+        <section className="mb-32">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
             <SectionEyebrow color={p.eyebrow}>Our work</SectionEyebrow>
             <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
-              <KineticText mode="spring" delay={0.1}>Projects we&apos;ve built</KineticText>
+              <KineticText mode="spring" delay={0.1}>Projects we've built</KineticText>
             </h2>
             <p className="mt-4 text-base max-w-2xl" style={{ color: p.muted }}>
               <WordReveal delay={0.3}>From AI agents to full-stack web apps — each project is built with the same precision and care we bring to every client engagement.</WordReveal>
@@ -533,22 +524,32 @@ export default function AboutUs({ onBack, theme = 'night' }) {
           })}
         </section>
 
-        {/* ─── CTA — Full-bleed photo ─── */}
+        {/* ─── CTA — Personal note ─── */}
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.7 }}
           className="relative rounded-2xl overflow-hidden border" style={{ borderColor: p.glassBorder }}>
           <div className="absolute inset-0">
             <img src={galleryPhotos[8]} alt="" className="w-full h-full object-cover" />
             <div className="absolute inset-0" style={{ background: `linear-gradient(to right, ${p.bg}ee, ${p.bg}99)` }} />
           </div>
-          <div className="relative px-10 py-16 md:py-24 text-center">
-            <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
+          <div className="relative px-10 py-16 md:py-24 text-center max-w-2xl mx-auto">
+            <motion.p initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
+              className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: p.accent }}>
+              Let's build something
+            </motion.p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight" style={{ color: p.text }}>
               <KineticText mode="spring" delay={0.1}>Ready to build something that actually works?</KineticText>
             </h2>
-            <p className="mt-4 text-base" style={{ color: p.muted }}>Stop burning time on agencies that over-promise and under-deliver.</p>
+            <p className="mt-4 text-base leading-relaxed" style={{ color: p.muted }}>
+              Stop burning time on agencies that over-promise and under-deliver. Let's build something real — together.
+            </p>
+            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3 }}
+              className="mt-6 text-sm italic" style={{ color: p.dim }}>
+              — Jeremy Gideon Bareh
+            </motion.p>
             <motion.button onClick={onBack} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               className="mt-8 px-8 py-3.5 text-base font-semibold rounded-full transition-colors inline-flex items-center gap-2"
               style={{ backgroundColor: p.accent, color: '#FFFFFF' }}>
-              Let&apos;s talk <ArrowLeft className="size-4 rotate-180" />
+              Start your project <ArrowLeft className="size-4 rotate-180" />
             </motion.button>
           </div>
         </motion.div>

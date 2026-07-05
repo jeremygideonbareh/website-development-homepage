@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft, ExternalLink, Search, Grid3X3, List,
@@ -8,6 +8,76 @@ import {
   Lightbulb, Send
 } from 'lucide-react'
 import { toast } from 'sonner'
+
+function getDomain(url) {
+  try { return new URL(url).hostname.replace('www.', '') } catch { return url }
+}
+
+function getFaviconUrl(url) {
+  const domain = getDomain(url)
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+}
+
+function SiteThumbnail({ url, name }) {
+  const [error, setError] = useState(false)
+  const domain = getDomain(url)
+  return (
+    <div className="relative overflow-hidden" style={{ height: 160, background: '#0A0A0A' }}>
+      {error ? (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+          <img src={getFaviconUrl(url)} alt="" className="size-6 rounded"
+            onError={(e) => { e.target.style.display = 'none' }} />
+          <span className="text-[10px] font-medium text-white/50 text-center px-2 leading-tight">{domain}</span>
+        </div>
+      ) : (
+        <>
+          <iframe
+            src={url}
+            title={name}
+            className="w-full h-full border-0"
+            loading="lazy"
+            sandbox="allow-scripts allow-same-origin allow-popups"
+            style={{ background: '#fff', pointerEvents: 'none' }}
+            onError={() => setError(true)}
+          />
+          <div className="absolute inset-0" style={{ pointerEvents: 'none' }} />
+        </>
+      )}
+    </div>
+  )
+}
+
+function SitePreview({ url, name }) {
+  const [error, setError] = useState(false)
+  const domain = getDomain(url)
+  return (
+    <div className="relative overflow-hidden" style={{ height: '80vh', maxHeight: 800 }}>
+      {error ? (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-4" style={{ background: '#1A1817' }}>
+          <img src={getFaviconUrl(url)} alt="" className="size-16 rounded-xl" style={{ background: 'rgba(255,255,255,0.05)' }}
+            onError={(e) => { e.target.style.display = 'none' }} />
+          <p className="text-lg font-semibold text-white">{domain}</p>
+          <p className="text-sm opacity-60" style={{ color: '#8A8A8A' }}>Preview unavailable — open in new tab</p>
+          <motion.a href={url} target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium text-white"
+            style={{ background: '#FF6B4A' }} whileHover={{ scale: 1.05 }}>
+            <ExternalLink className="size-4" /> Open in new tab
+          </motion.a>
+        </div>
+      ) : (
+        <iframe
+          src={url}
+          title={name}
+          className="w-full h-full border-0"
+          loading="lazy"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          style={{ background: '#fff' }}
+          onError={() => setError(true)}
+        />
+      )}
+    </div>
+  )
+}
 
 const categories = [
   {
@@ -385,10 +455,6 @@ export default function ExamplesPage({ onBack }) {
     return groups
   }, [filtered])
 
-  function getDomain(url) {
-    try { return new URL(url).hostname.replace('www.', '') } catch { return url }
-  }
-
   return (
     <div className="min-h-screen" style={{ background: '#0A0A0A' }}>
       {/* Fixed header */}
@@ -491,7 +557,7 @@ export default function ExamplesPage({ onBack }) {
                       className="group relative rounded-xl border overflow-hidden cursor-pointer transition-all duration-300"
                       style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)' }}
                     >
-                      <ScreenshotThumbnail url={item.url} name={item.name} />
+                      <SiteThumbnail url={item.url} name={item.name} />
                       <div className="absolute top-2 right-2 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium" style={{ background: 'rgba(0,0,0,0.6)', color: group.color }}>
                         {item.complexity}
                       </div>
@@ -598,7 +664,7 @@ export default function ExamplesPage({ onBack }) {
                 </div>
               </div>
 
-              <ScreenshotModalPreview url={selectedItem.url} name={selectedItem.name} />
+              <SitePreview url={selectedItem.url} name={selectedItem.name} />
               {/* Info overlay at bottom */}
               <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
                 <div className="flex items-center gap-3">

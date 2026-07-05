@@ -186,7 +186,7 @@ const services = [
     decor: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80',
     examples: [
       { name: 'Studio Simms', url: 'https://studio-simms.com', award: 'Awwwards Nominee', img: 'https://picsum.photos/seed/studio-simms/320/200' },
-      { name: 'Playfight', url: 'http://www.letsplayfight.com', award: 'Awwwards Featured', img: 'https://picsum.photos/seed/playfight/320/200' },
+      { name: 'Playfight', url: 'https://www.letsplayfight.com', award: 'Awwwards Featured', img: 'https://picsum.photos/seed/playfight/320/200' },
       { name: 'Noomo Agency', url: 'https://noomoagency.com', award: 'SOTY 2023', img: 'https://picsum.photos/seed/noomo/320/200' },
     ],
     projects: [
