@@ -1,4 +1,4 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 
@@ -6,7 +6,12 @@ import { useRef } from "react";
 function WordsPullUp({ text, className = "", showAsterisk = false, style }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const shouldReduce = useReducedMotion();
   const words = text.split(" ");
+
+  const animProps = shouldReduce
+    ? { initial: {}, animate: {} }
+    : { initial: { y: 20, opacity: 0 }, animate: isInView ? { y: 0, opacity: 1 } : {} };
 
   return (
     <div ref={ref} className={`inline-flex flex-wrap ${className}`} style={style}>
@@ -15,8 +20,7 @@ function WordsPullUp({ text, className = "", showAsterisk = false, style }) {
         return (
           <motion.span
             key={i}
-            initial={{ y: 20, opacity: 0 }}
-            animate={isInView ? { y: 0, opacity: 1 } : {}}
+            {...animProps}
             transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
             className="inline-block relative"
             style={{ marginRight: isLast ? 0 : "0.25em" }}
@@ -36,6 +40,7 @@ function WordsPullUp({ text, className = "", showAsterisk = false, style }) {
 function WordsPullUpMultiStyle({ segments, className = "", style }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const shouldReduce = useReducedMotion();
 
   const words = [];
   segments.forEach((seg) => {
@@ -44,13 +49,16 @@ function WordsPullUpMultiStyle({ segments, className = "", style }) {
     });
   });
 
+  const animProps = shouldReduce
+    ? { initial: {}, animate: {} }
+    : { initial: { y: 20, opacity: 0 }, animate: isInView ? { y: 0, opacity: 1 } : {} };
+
   return (
     <div ref={ref} className={`inline-flex flex-wrap justify-center ${className}`} style={style}>
       {words.map((w, i) => (
         <motion.span
           key={i}
-          initial={{ y: 20, opacity: 0 }}
-          animate={isInView ? { y: 0, opacity: 1 } : {}}
+          {...animProps}
           transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
           className={`inline-block ${w.className ?? ""}`}
           style={{ marginRight: "0.25em" }}
@@ -86,6 +94,7 @@ export default function PrismaHero({ onStartProject }) {
           loop
           muted
           playsInline
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%230a0a0a' width='1280' height='720'/%3E%3C/svg%3E"
           className="absolute inset-0 h-full w-full object-cover"
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
         />
@@ -97,13 +106,13 @@ export default function PrismaHero({ onStartProject }) {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
 
         {/* Hero content */}
-        <div className="absolute bottom-[10%] sm:bottom-[15%] lg:bottom-[20%] left-0 right-0 px-4 sm:px-6 md:px-10">
+        <div className="absolute inset-0 flex flex-col justify-end sm:justify-end lg:justify-center px-4 sm:px-6 md:px-10 pb-[15%] sm:pb-[10%] lg:pb-[5%]">
           <div className="max-w-5xl">
           <div className="grid grid-cols-12 items-end gap-4">
             
             <div className="col-span-12 lg:col-span-8">
               <h1
-                className="font-medium leading-[0.9] tracking-[-0.05em] text-[clamp(2rem,5vw,4rem)]"
+                className="font-medium leading-[0.9] tracking-[-0.05em] sm:tracking-[-0.03em] text-[clamp(2rem,5vw,4rem)]"
                 style={{ color: "#E1E0CC" }}
               >
                 <WordsPullUp text={tagline} />
@@ -116,7 +125,7 @@ export default function PrismaHero({ onStartProject }) {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="text-xs sm:text-sm md:text-base"
+                className="text-sm sm:text-sm md:text-base"
                 style={{ lineHeight: 1.2, color: "rgba(225, 224, 204, 0.8)" }}
               >
                 Premium web engineering & spatial design agency — we craft custom digital experiences with no templates, no page builders, no compromises.
@@ -131,7 +140,7 @@ export default function PrismaHero({ onStartProject }) {
                 style={{ backgroundColor: "#E1E0CC", color: "#0A0A0A" }}
               >
                 Start a project
-                <span className="flex h-9 w-9 items-center justify-center rounded-full transition-transform group-hover:scale-110 sm:h-10 sm:w-10"
+                <span className="flex h-11 w-11 items-center justify-center rounded-full transition-transform group-hover:scale-110"
                   style={{ backgroundColor: "#0A0A0A" }}
                 >
                   <ArrowRight className="h-4 w-4" style={{ color: "#E1E0CC" }} />
