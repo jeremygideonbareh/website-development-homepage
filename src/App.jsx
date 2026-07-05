@@ -58,15 +58,15 @@ const stats = [
 ]
 
 const cinematicPhotos = [
-  'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&q=85',
-  'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&q=85',
-  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=85',
+  'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/3184340/pexels-photo-3184340.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/3862632/pexels-photo-3862632.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'https://images.pexels.com/photos/3861972/pexels-photo-3861972.jpeg?auto=compress&cs=tinysrgb&w=800',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=85',
-  'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=85',
-  'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=85',
-  'https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=800&q=85',
-  'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=85',
-  'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=85',
   'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=85',
 ]
 
