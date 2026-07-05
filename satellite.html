@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Famous Satellites Explorer</title>a
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #000;
+        }
+        #nebula-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .satellite-list-item {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.5s forwards;
+        }
+        .satellite-list-item:hover {
+            transform: scale(1.05) translateX(0);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Opening Animation */
+        #main-header {
+            opacity: 0;
+            transform: translateY(-30px);
+            animation: fadeInDown 1s forwards 0.5s;
+        }
+
+        @keyframes fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        #3d-viewer {
+             cursor: grab;
+        }
+         #3d-viewer:active {
+             cursor: grabbing;
+        }
+
+    </style>
+</head>
+<body class="text-white">
+    <canvas id="nebula-canvas"></canvas>
+
+    <div class="container mx-auto p-4 md:p-8 relative z-10">
+        <header id="main-header" class="text-center mb-8">
+            <h1 class="text-4xl md:text-6xl font-bold tracking-wider" style="text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #0077ff, 0 0 40px #0077ff, 0 0 50px #0077ff, 0 0 60px #0077ff, 0 0 70px #0077ff;">Famous Satellites Explorer</h1>
+            <p class="text-lg text-gray-300 mt-2">Click on a satellite to learn more about it.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div id="satellite-list" class="md:col-span-1 space-y-4 h-[60vh] overflow-y-auto pr-4">
+                <!-- Satellite items will be injected here -->
+            </div>
+            <div id="3d-viewer" class="md:col-span-2 h-[60vh] rounded-lg glassmorphism flex items-center justify-center">
+                 <p id="viewer-placeholder" class="text-gray-400 text-center">Select a satellite to view its 3D model.<br/>Click and drag to rotate, scroll to zoom.</p>
+            </div>
+        </div>
+        
+        <div class="fixed bottom-4 right-4 z-20">
+            <div class="flex items-center space-x-4 p-3 rounded-lg glassmorphism">
+                <span class="text-sm">Ambient Music:</span>
+                <button id="play-pause-btn" class="w-10 h-10 bg-blue-500/50 hover:bg-blue-500/80 rounded-full flex items-center justify-center transition-all">
+                    <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="0.5" class="w-24">
+            </div>
+        </div>
+    </div>
+
+    <div id="satellite-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="glassmorphism rounded-lg p-8 max-w-2xl w-full relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h2 id="modal-title" class="text-3xl font-bold mb-4"></h2>
+            <p id="modal-launch-date" class="text-sm text-gray-300 mb-4"></p>
+            <p id="modal-purpose" class="mb-4"></p>
+            <div id="modal-facts" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <audio id="background-music" src="https://www.radiotunes.com/ambient" preload="none"></audio>
+
+    <script>
+        // --- Nebula Background ---
+        const nebulaCanvas = document.getElementById('nebula-canvas');
+        const nebulaCtx = nebulaCanvas.getContext('2d');
+        let nebulaParticles = [];
+
+        function resizeNebula() {
+            nebulaCanvas.width = window.innerWidth;
+            nebulaCanvas.height = window.innerHeight;
+        }
+        resizeNebula();
+        window.addEventListener('resize', resizeNebula);
+
+        function createNebulaParticle() {
+            return {
+                x: Math.random() * nebulaCanvas.width,
+                y: Math.random() * nebulaCanvas.height,
+                size: Math.random() * 2 + 1,
+                speedX: Math.random() * 0.5 - 0.25,
+                speedY: Math.random() * 0.5 - 0.25,
+                color: `rgba(${Math.random() * 100 + 155}, ${Math.random() * 100 + 155}, 255, ${Math.random() * 0.5 + 0.2})`
+            };
+        }
+
+        for (let i = 0; i < 200; i++) {
+            nebulaParticles.push(createNebulaParticle());
+        }
+
+        function animateNebula() {
+            nebulaCtx.clearRect(0, 0, nebulaCanvas.width, nebulaCanvas.height);
+            nebulaCtx.fillStyle = '#000';
+            nebulaCtx.fillRect(0, 0, nebulaCanvas.width, nebulaCanvas.height);
+
+            for (let i = 0; i < nebulaParticles.length; i++) {
+                const p = nebulaParticles[i];
+                p.x += p.speedX;
+                p.y += p.speedY;
+
+                if (p.x < 0 || p.x > nebulaCanvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > nebulaCanvas.height) p.speedY *= -1;
+
+                nebulaCtx.beginPath();
+                nebulaCtx.fillStyle = p.color;
+                nebulaCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                nebulaCtx.fill();
+            }
+            requestAnimationFrame(animateNebula);
+        }
+        animateNebula();
+
+        // --- Satellite Data ---
+        const satellites = [
+            {
+                name: 'Sputnik 1',
+                launchDate: 'October 4, 1957',
+                purpose: 'First artificial Earth satellite, launched by the Soviet Union. It transmitted radio signals back to Earth.',
+                facts: [
+                    'It was the size of a beach ball (58 cm in diameter).',
+                    'Its launch marked the beginning of the Space Race.',
+                    'It orbited for three weeks before its batteries died, then silently continued to orbit for two more months before falling back into the atmosphere.'
+                ],
+                model: 'sputnik'
+            },
+            {
+                name: 'Hubble Space Telescope',
+                launchDate: 'April 24, 1990',
+                purpose: 'A large, space-based observatory, it has revolutionized astronomy by providing deep and clear views into the universe.',
+                facts: [
+                    'Hubble orbits about 547 kilometers (340 miles) above Earth.',
+                    'It has made more than 1.5 million observations over its lifetime.',
+                    'It travels at about 28,000 kilometers per hour (17,500 mph).'
+                ],
+                model: 'hubble'
+            },
+            {
+                name: 'International Space Station (ISS)',
+                launchDate: 'November 20, 1998 (first module)',
+                purpose: 'A modular space station in low Earth orbit. It is a multinational collaborative project involving five participating space agencies.',
+                facts: [
+                    'The ISS is the largest human-made object in space, visible from Earth with the naked eye.',
+                    'It serves as a microgravity and space environment research laboratory.',
+                    'It has been continuously occupied by astronauts since November 2000.'
+                ],
+                model: 'iss'
+            },
+            {
+                name: 'GPS Satellite (Navstar)',
+                launchDate: 'First launch in 1978',
+                purpose: 'A constellation of satellites providing geolocation and time information to a GPS receiver anywhere on or near the Earth.',
+                facts: [
+                    'The full GPS constellation consists of 24 to 32 satellites.',
+                    'They orbit at an altitude of about 20,200 kilometers (12,550 miles).',
+                    'Each satellite circles the Earth twice a day.'
+                ],
+                model: 'gps'
+            },
+            {
+                name: 'James Webb Space Telescope',
+                launchDate: 'December 25, 2021',
+                purpose: 'An infrared space observatory, it is the successor to the Hubble Space Telescope, designed to see the first stars and galaxies forming in the early universe.',
+                facts: [
+                    'Its primary mirror is made of 18 hexagonal segments, coated in gold.',
+                    'It orbits the Sun about 1.5 million kilometers (1 million miles) from Earth.',
+                    'It has a five-layer sunshield the size of a tennis court to keep it cool.'
+                ],
+                model: 'jwst'
+            }
+        ];
+
+        // --- UI Population ---
+        const satelliteList = document.getElementById('satellite-list');
+        satellites.forEach((satellite, index) => {
+            const div = document.createElement('div');
+            div.className = 'satellite-list-item p-4 rounded-lg glassmorphism';
+            div.style.animationDelay = `${index * 0.1 + 1}s`;
+            div.innerHTML = `<h3 class="text-xl font-semibold">${satellite.name}</h3>`;
+            div.addEventListener('click', () => {
+                showSatelliteInfo(satellite);
+                createSatelliteModel(satellite.model);
+                 document.getElementById('viewer-placeholder').style.display = 'none';
+            });
+            satelliteList.appendChild(div);
+        });
+
+        // --- Modal ---
+        const modal = document.getElementById('satellite-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+
+        function showSatelliteInfo(satellite) {
+            document.getElementById('modal-title').textContent = satellite.name;
+            document.getElementById('modal-launch-date').textContent = `Launched: ${satellite.launchDate}`;
+            document.getElementById('modal-purpose').textContent = satellite.purpose;
+            const factsList = document.getElementById('modal-facts');
+            factsList.innerHTML = satellite.facts.map(fact => `<p class="border-l-2 border-blue-400 pl-2">${fact}</p>`).join('');
+            modal.classList.remove('hidden');
+        }
+
+        closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+
+        // --- Three.js 3D Viewer ---
+        let scene, camera, renderer, currentModel;
+        const viewer = document.getElementById('3d-viewer');
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        function init3DViewer() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, viewer.clientWidth / viewer.clientHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+            viewer.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xcccccc, 1);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+            camera.position.z = 7;
+
+            // Mouse controls
+            viewer.addEventListener('mousedown', e => { isDragging = true; });
+            viewer.addEventListener('mouseup', e => { isDragging = false; });
+            viewer.addEventListener('mousemove', e => {
+                const deltaMove = {
+                    x: e.offsetX - previousMousePosition.x,
+                    y: e.offsetY - previousMousePosition.y
+                };
+
+                if (isDragging && currentModel) {
+                    const deltaRotationQuaternion = new THREE.Quaternion()
+                        .setFromEuler(new THREE.Euler(
+                            toRadians(deltaMove.y * 1),
+                            toRadians(deltaMove.x * 1),
+                            0,
+                            'XYZ'
+                        ));
+                    currentModel.quaternion.multiplyQuaternions(deltaRotationQuaternion, currentModel.quaternion);
+                }
+                previousMousePosition = { x: e.offsetX, y: e.offsetY };
+            });
+            viewer.addEventListener('wheel', e => {
+                if (!currentModel) return;
+                camera.position.z += e.deltaY * 0.01;
+                camera.position.z = Math.max(3, Math.min(20, camera.position.z)); // Clamp zoom
+            });
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function toRadians(angle) {
+            return angle * (Math.PI / 180);
+        }
+
+        function onWindowResize() {
+            camera.aspect = viewer.clientWidth / viewer.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(viewer.clientWidth, viewer.clientHeight);
+        }
+
+        function createSatelliteModel(modelType) {
+            if (currentModel) {
+                scene.remove(currentModel);
+            }
+            camera.position.z = 7; // Reset zoom
+
+            const material = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.7, roughness: 0.3 });
+            const solarPanelMaterial = new THREE.MeshStandardMaterial({ color: 0x0A2A4A, metalness: 0.4, roughness: 0.8 });
+            const goldMaterial = new THREE.MeshStandardMaterial({ color: 0xFFD700, metalness: 0.9, roughness: 0.2 });
+            const group = new THREE.Group();
+
+            switch (modelType) {
+                case 'sputnik':
+                    const sphere = new THREE.Mesh(new THREE.SphereGeometry(1.2, 32, 32), material);
+                    group.add(sphere);
+                    for (let i = 0; i < 4; i++) {
+                        const antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 4, 8), material);
+                        const angle = i * Math.PI / 2 + Math.PI / 4;
+                        antenna.position.set(Math.sin(angle) * 0.8, Math.cos(angle) * 0.8, 0);
+                        antenna.lookAt(new THREE.Vector3(Math.sin(angle) * 3, Math.cos(angle) * 3, Math.sin(angle)));
+                        group.add(antenna);
+                    }
+                    break;
+                case 'hubble':
+                    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1, 4, 32), material);
+                    group.add(body);
+                    const panel1 = new THREE.Mesh(new THREE.BoxGeometry(4, 1.8, 0.1), solarPanelMaterial);
+                    panel1.position.x = 3;
+                    group.add(panel1);
+                    const panel2 = panel1.clone();
+                    panel2.position.x = -3;
+                    group.add(panel2);
+                    const aperture = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.2, 32), new THREE.MeshStandardMaterial({color: 0x333333}));
+                    aperture.position.y = 2;
+                    aperture.rotation.x = Math.PI / 2;
+                    group.add(aperture);
+                    break;
+                case 'iss':
+                    const mainTruss = new THREE.Mesh(new THREE.BoxGeometry(12, 0.4, 0.4), material);
+                    group.add(mainTruss);
+                    const solarPanel = new THREE.Mesh(new THREE.BoxGeometry(2, 5, 0.1), solarPanelMaterial);
+                    for(let i = -1; i <= 1; i+=2) {
+                        for(let j = -1; j <= 1; j+=2) {
+                            const panel = solarPanel.clone();
+                            panel.position.set(i * 4.5, j * 2.5, 0);
+                            group.add(panel);
+                        }
+                    }
+                    const module = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 2.5, 16), material);
+                    module.rotation.z = Math.PI / 2;
+                    group.add(module);
+                    break;
+                case 'gps':
+                    const gpsBody = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 1.8), material);
+                    group.add(gpsBody);
+                    const gpsPanel1 = new THREE.Mesh(new THREE.BoxGeometry(3.5, 1.5, 0.1), solarPanelMaterial);
+                    gpsPanel1.position.x = 2.5;
+                    group.add(gpsPanel1);
+                    const gpsPanel2 = gpsPanel1.clone();
+                    gpsPanel2.position.x = -2.5;
+                    group.add(gpsPanel2);
+                    break;
+                case 'jwst':
+                    const mirror = new THREE.Mesh(new THREE.CylinderGeometry(1.8, 1.8, 0.1, 6), goldMaterial);
+                    group.add(mirror);
+                    const secondaryMirrorArm = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.1, 2.5), material);
+                    secondaryMirrorArm.position.set(0, 1.2, 1.2);
+                    secondaryMirrorArm.rotation.x = -Math.PI / 6;
+                    group.add(secondaryMirrorArm);
+                    const sunshield = new THREE.Mesh(new THREE.BoxGeometry(5, 3, 0.05), new THREE.MeshStandardMaterial({ color: 0xc0c0c0, metalness: 0.9, roughness: 0.1 }));
+                    sunshield.position.z = -0.8;
+                    group.add(sunshield);
+                    break;
+            }
+
+            currentModel = group;
+            scene.add(currentModel);
+        }
+
+        function animate3D() {
+            if (currentModel && !isDragging) {
+                currentModel.rotation.y += 0.002;
+            }
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate3D);
+        }
+
+        init3DViewer();
+        animate3D();
+
+        // --- Audio Player ---
+        const audio = document.getElementById('background-music');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().catch(error => {
+                    console.error("Audio playback failed:", error);
+                });
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            } else {
+                audio.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+        });
+
+    </script>
+</body>
+</html>
+ 

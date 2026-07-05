@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Solar System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+        }
+        /* General info panel styling */
+        #info-panel {
+            transition: transform 0.5s ease-in-out;
+            transform: translateX(100%); /* Hidden by default */
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        #info-panel.visible {
+            transform: translateX(0);
+        }
+        /* Loader animation */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1ee459;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Style for interactive buttons - Warm Shades */
+        .btn-primary {
+            @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200;
+        }
+        .btn-active {
+            @apply bg-orange-600 hover:bg-orange-700 text-white shadow-md;
+        }
+        .btn-inactive {
+            @apply bg-gray-700 hover:bg-gray-600 text-gray-200;
+        }
+        /* Styles for constellation name in info panel */
+        #info-content h2 {
+            @apply text-4xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-500;
+        }
+        #info-content p {
+            @apply text-lg leading-relaxed text-gray-200;
+        }
+
+        /* Custom styles for range slider thumb */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #f97316; /* orange-500 */
+            cursor: pointer;
+            border-radius: 50%;
+            margin-top: -6px; /* Center thumb on track */
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
+        }
+
+        input[type=range]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #f97316; /* orange-500 */
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
+        }
+        
+        /* Style for the date input calendar icon to be visible on dark background */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.8); /* Makes the icon light on dark background */
+            cursor: pointer;
+        }
+
+        /* Modal specific styles */
+        #info-modal {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #info-modal.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <div id="canvas-container" class="absolute top-0 left-0 w-full h-full"></div>
+
+    <div id="control-panel" class="absolute top-6 left-6 z-10 bg-black bg-opacity-60 p-5 rounded-xl shadow-xl border border-gray-700 backdrop-blur-sm w-64">
+        <div class="flex justify-between items-center mb-2" id="control-panel-header">
+            <h1 class="text-2xl font-bold text-gray-100">Interactive Cosmos</h1>
+            <button id="collapse-toggle-btn" class="text-xl text-gray-400 hover:text-white transition-colors" title="Toggle Controls">&#9650;</button>
+        </div>
+
+        <div id="collapsible-content" class="overflow-hidden" style="transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;">
+                <div class="flex flex-wrap gap-3 mb-4">
+                    <button id="solar-system-toggle" class="btn-primary">Solar System</button>
+                    <button id="asteroids-toggle" class="btn-primary">Asteroids</button>
+                    <button id="constellations-toggle" class="btn-primary">Constellations</button>
+                    <button id="neo-toggle" class="btn-primary btn-inactive">NEO Asteroids</button>
+                </div>
+            <div class="mt-4">
+                <button id="pause-toggle" class="w-full px-3 py-1 bg-yellow-600 rounded-md hover:bg-yellow-700 transition-colors text-sm font-semibold">Pause</button>
+            </div>
+            <div class="mt-4">
+                <label for="speed-slider" class="block text-sm font-medium mb-1">
+                    Simulation Speed: <span id="speed-value" class="font-semibold">1.0</span>x
+                </label>
+                <input id="speed-slider" type="range" min="0" max="50" step="0.1" value="1" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div class="mt-3">
+                 <label class="block text-sm font-medium">
+                      Current Date: <span id="simulation-date" class="font-semibold"></span>
+                 </label>
+            </div>
+            <div class="mt-3">
+                <label for="date-input" class="block text-sm font-medium mb-1">Jump to Date:</label>
+                <div class="flex space-x-2">
+                    <input type="date" id="date-input" class="bg-gray-800 border border-gray-600 rounded-md px-2 py-1 text-sm w-full text-white">
+                    <button id="jump-to-date-btn" class="px-3 py-1 bg-orange-600 rounded-md hover:bg-orange-700 transition-colors text-sm">Go</button>
+                </div>
+            </div>
+            <div id="neo-section" class="mt-4 hidden">
+                <label class="block text-sm font-medium mb-1">NEO Date Range:</label>
+                <div class="flex space-x-2 mb-1">
+                    <input type="date" id="neo-start-date" class="bg-gray-800 border border-gray-600 rounded-md px-2 py-1 text-sm w-full text-white">
+                    <input type="date" id="neo-end-date" class="bg-gray-800 border border-gray-600 rounded-md px-2 py-1 text-sm w-full text-white">
+                    <button id="fetch-neo-btn" class="px-3 py-1 bg-orange-600 rounded-md hover:bg-orange-700 transition-colors text-sm whitespace-nowrap">Fetch</button>
+                </div>
+                <div id="neo-status" class="text-xs text-gray-400 mt-1"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-panel" class="absolute top-0 right-0 h-full w-full max-w-sm bg-black bg-opacity-70 backdrop-blur-md p-6 overflow-y-auto shadow-2xl z-20">
+        <button id="close-panel" class="absolute top-4 right-4 text-3xl text-gray-400 hover:text-white transition-colors">&times;</button>
+        <div id="info-content" class="mt-8">
+             </div>
+        <div id="loader-container" class="absolute inset-0 flex justify-center items-center bg-black bg-opacity-80 hidden">
+            <div class="loader"></div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-opacity duration-300">
+        <div id="modal-content" class="bg-gray-900 text-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative border border-gray-700">
+            <button id="modal-close-btn" class="absolute top-3 right-4 text-3xl text-gray-400 hover:text-white transition-colors z-10">&times;</button>
+            
+            <div class="p-6 md:p-8">
+                <h2 id="modal-title" class="text-3xl md:text-4xl font-bold mb-4 text-cyan-300"></h2>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3 flex-shrink-0">
+                        <img id="modal-image" src="" alt="Image" class="w-full h-auto rounded-lg object-cover aspect-square">
+                    </div>
+                    
+                    <div class="md:w-2/3">
+                        <p id="modal-description" class="text-gray-300 mb-6 text-base"></p>
+                        
+                        <div class="grid grid-cols-2 gap-x-6 gap-y-4 text-sm">
+                            <div>
+                                <span class="font-semibold text-gray-400 block">Mass</span>
+                                <span id="modal-mass" class="text-lg"></span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-400 block">Diameter</span>
+                                <span id="modal-diameter" class="text-lg"></span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-400 block">Gravity</span>
+                                <span id="modal-gravity" class="text-lg"></span>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-gray-400 block">Avg. Temp</span>
+                                <span id="modal-temp" class="text-lg"></span>
+                            </div>
+                            <div class="col-span-2">
+                                <span class="font-semibold text-gray-400 block">Length of Day</span>
+                                <span id="modal-day" class="text-lg"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-gray-700">
+                            <h3 class="font-semibold text-gray-400 mb-2 text-sm">Fun Fact 💡</h3>
+                            <p id="modal-funfact" class="text-gray-300 italic"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        
+        const clock = new THREE.Clock(); // Clock for time-based animation
+
+        // --- CONTROLS ---
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.minDistance = 1; // Allow closer zoom for moons
+        controls.maxDistance = 5000; // Increased max distance for Voyager 1
+        camera.position.set(0, 150, 300);
+
+        // --- LIGHTING ---
+        const sunLight = new THREE.PointLight(0xffffff, 3, 2000);
+        scene.add(sunLight);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        // --- STATE MANAGEMENT ---
+        let selectedObject = null;
+        let highlightedConstellation = null;
+        let highlightedConstellationStars = null;
+        const celestialBodies = []; // Stores planet and moon meshes for click detection and animation
+        const planetPivots = []; // Stores top-level pivots for planets
+        const constellationClickables = [];
+        const orbitLines = new THREE.Group(); // Group for all planet orbit lines
+        scene.add(orbitLines);
+        const asteroidsGroup = new THREE.Group();
+        scene.add(asteroidsGroup);
+        const constellationsGroup = new THREE.Group();
+        scene.add(constellationsGroup);
+        const neoGroup = new THREE.Group();
+        scene.add(neoGroup);
+        let neoMeshes = [];
+        let neoDataMap = {};
+        let saturnRingsMesh = null; // Renamed to avoid conflict with data.ring
+
+        // Time and Date state
+        let timeScale = 1.0; // Global speed multiplier
+        let isPaused = false;
+        let isControlsCollapsed = false;
+        const simulationStartDate = new Date('2025-01-01T00:00:00Z'); // Fixed start date for consistent calculations
+        let elapsedSimulationDays = 0;
+        // Adjusted: One Earth year every 60 seconds at 1x speed (previously 30 seconds)
+        const daysPerSecondAt1x = 365.25 / 60; 
+
+        const visibilityState = {
+            solarSystem: true,
+            asteroids: false,
+            constellations: false,
+            neos: false
+        };
+
+        // --- UI ELEMENTS ---
+        const infoPanel = document.getElementById('info-panel');
+        const infoContent = document.getElementById('info-content');
+        const closePanelBtn = document.getElementById('close-panel');
+        const solarSystemToggle = document.getElementById('solar-system-toggle');
+        const asteroidsToggle = document.getElementById('asteroids-toggle');
+        const constellationsToggle = document.getElementById('constellations-toggle');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValueDisplay = document.getElementById('speed-value');
+        const simulationDateDisplay = document.getElementById('simulation-date');
+        const pauseToggle = document.getElementById('pause-toggle');
+        const dateInput = document.getElementById('date-input');
+        const jumpToDateBtn = document.getElementById('jump-to-date-btn');
+        const infoModal = document.getElementById('info-modal');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const collapseToggleBtn = document.getElementById('collapse-toggle-btn');
+        const collapsibleContent = document.getElementById('collapsible-content');
+        const controlPanelHeader = document.getElementById('control-panel-header');
+        const neoToggle = document.getElementById('neo-toggle');
+        const neoStartDate = document.getElementById('neo-start-date');
+        const neoEndDate = document.getElementById('neo-end-date');
+        const fetchNeoBtn = document.getElementById('fetch-neo-btn');
+        const neoStatus = document.getElementById('neo-status');
+
+
+        // --- HELPERS ---
+        const textureLoader = new THREE.TextureLoader();
+
+        /**
+         * Creates an orbit line for a celestial body.
+         * @param {number} radius - The radius of the orbit.
+         * @param {boolean} isMoon - True if it's a moon's orbit, for thinner lines.
+         * @returns {THREE.Mesh} The orbit line mesh.
+         */
+        function createOrbit(radius, isMoon = false) {
+            const geometry = new THREE.TorusGeometry(radius, isMoon ? 0.02 : 0.05, 16, 100);
+            const material = new THREE.MeshBasicMaterial({ color: 0x444444 });
+            const orbit = new THREE.Mesh(geometry, material);
+            orbit.rotation.x = Math.PI / 2;
+            return orbit;
+        }
+        
+        // --- DATA ---
+        // Consolidated detailed data for all celestial bodies and constellations
+        const detailedApiData = {
+            'Sun': { 
+                fullname: 'Sun', des: 'The Sun is the star at the centre of the Solar System. It is a massive, nearly perfect sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core, radiating the energy from its surface mainly as visible light and infrared radiation with 10% at ultraviolet energies The Sun does not have a definite boundary, but its density decreases exponentially with increasing height above the photosphere.',
+                image: 'https://ichef.bbci.co.uk/ace/standard/976/cpsprodpb/12AE8/production/_110702567_gettyimages-1132314392.jpg',
+                mass: '1.989 × 10^30 kg',
+                diameter: '1.39 million km',
+                gravity: '274 m/s²',
+                avgTemp: '5,505 °C (Surface)',
+                dayLength: '27 Earth days (at equator)',
+                funFact: 'The Sun accounts for 99.86% of the total mass of the Solar System.',
+                type: 'planet'
+            },
+            'Mercury': {
+                fullname: 'Mercury', des: 'Mercury is the first planet from the Sun and the smallest in the Solar System. It is a rocky planet with a trace atmosphere and a surface gravity slightly higher than that of Mars. The surface of Mercury is similar to Earth\'s Moon, being heavily cratered, with an expansive rupes system generated from thrust faults, and bright ray systems, formed by ejecta. Its largest crater, Caloris Planitia, has a diameter of 1,550 km (960 mi), which is about one-third the diameter of the planet (4,880 km or 3,030 mi) it always appears close to the sun in Earth\'s sky, either as a "morning star" or an "evening star.”',
+                image: 'https://external-preview.redd.it/Pl5aSNxMB5u_M_fBRI0XKCAG8t3j1tWNf0N6hE5iJ0s.jpg?width=1080&crop=smart&auto=webp&s=f6c375e3baa9d092b363494180238c9483f28cdb',
+                mass: '0.330 × 10^24 kg',
+                diameter: '4,879 km',
+                gravity: '3.7 m/s²',
+                avgTemp: '167 °C',
+                dayLength: '59 Earth days',
+                funFact: 'A year on Mercury is just 88 Earth days long, but a day on Mercury lasts for 176 Earth days!',
+                type: 'planet'
+            },
+            'Venus': {
+                fullname: 'Venus', des: 'Venus is the second planet from the Sun. It is often called Earth\'s "twin" or "sister" among the planets of the Solar System for its orbit being the closest to Earth\'s, both being rocky planets and having the most similar and nearly equal size and mass. Venus, though, differs significantly by having no liquid water, and its atmosphere is far thicker and denser than that of any other rocky body in the Solar System',
+                image: 'https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/pia00271/PIA00271~large.jpg?w=1920&h=1920&fit=clip&crop=faces%2Cfocalpoint',
+                mass: '4.87 × 10^24 kg',
+                diameter: '12,104 km',
+                gravity: '8.9 m/s²',
+                avgTemp: '465 °C',
+                dayLength: '243 Earth days',
+                funFact: 'Venus rotates on its axis backwards compared to most other planets in the solar system.',
+                type: 'planet'
+            },
+            'Earth': {
+                fullname: 'Earth', des: 'Earth is the third planet from the Sun and the only astronomical object known to harbor life. This is enabled by Earth being an ocean world, the only one in the Solar System sustaining liquid surface water. Almost all of Earth\'s water is contained in its global ocean, covering 70.8% of Earth\'s crust. The remaining 29.2% of Earth\'s crust is land, most of which is located in the form of continental landmasses within Earth\'s land hemisphere. .',
+                image: 'https://images.pexels.com/photos/87651/earth-blue-planet-globe-planet-87651.jpeg?cs=srgb&dl=pexels-pixabay-87651.jpg&fm=jpg',
+                mass: '5.97 × 10^24 kg',
+                diameter: '12,742 km',
+                gravity: '9.8 m/s²',
+                avgTemp: '15 °C',
+                dayLength: '24 hours',
+                funFact: 'Earth is not a perfect sphere. It is slightly flattened at the poles and bulges at the equator due to its rotation.',
+                type: 'planet'
+            },
+            'Moon': { 
+                fullname: 'The Moon', des: "The Moon is Earth's only natural satellite. It orbits around Earth at an average distance of 384,399 kilometres (238,854 mi), about 30 times Earth's diameter.[f] Its orbital period (lunar month) and its rotation period (lunar day) are synchronized at 29.5 days by the pull of Earth's gravity. This makes the Moon tidally locked to Earth, always facing it with the same side. The Moon's gravitational pull produces tidal forces on Earth which are the main driver of Earth's tides", 
+                image: 'https://thumbs.dreamstime.com/b/full-moon-11366692.jpg',
+                mass: '7.34 × 10^22 kg',
+                diameter: '3,474 km',
+                gravity: '1.62 m/s²',
+                avgTemp: '-20 °C (Day), -153 °C (Night)',
+                dayLength: '27.3 Earth days',
+                funFact: 'The Moon is slowly drifting away from Earth at a rate of about 3.8 cm per year.' ,
+                type: 'moon'
+            },
+            'Mars': {
+                fullname: 'Mars', des: 'Mars is a desert-like rocky planet with a tenuous carbon dioxide (CO2) atmosphere. At the average surface level the atmospheric pressure is a few thousandths of Earth\'s, atmospheric temperature ranges from −153 to 20 °C (−243 to 68 °F)[24] and cosmic radiation is high. Mars retains some water, in the ground as well as thinly in the atmosphere, forming cirrus clouds, frost, larger polar regions of permafrost and ice caps (with seasonal CO2 snow)',
+                image: 'https://w0.peakpx.com/wallpaper/353/103/HD-wallpaper-mars-dark-planet-red-space.jpg',
+                mass: '0.642 × 10^24 kg',
+                diameter: '6,779 km',
+                gravity: '3.7 m/s²',
+                avgTemp: '-65 °C',
+                dayLength: '24.6 hours',
+                funFact: 'Mars is home to Olympus Mons, the largest volcano in the solar system. It\'s three times the height of Mount Everest.',
+                type: 'planet'
+            },
+            'Phobos': { 
+                fullname: 'Phobos', des: 'The larger and innermost of Mars\' two moons. It orbits Mars much faster than Mars rotates and completes an orbit in just 7 hours and 39 minutes. As a result, from the surface of Mars it appears to rise in the west, move across the sky in 4 hours and 15 minutes or less, and set in the east, twice each Martian day.', 
+                image: 'https://assets.science.nasa.gov/dynamicimage/assets/science/psd/mars/resources/detail_files/6/6989_Phobos-Mars-Moon-HIRISE-MRO-PIA10368-full2.jpg?w=2088&h=2042&fit=clip&crop=faces%2Cfocalpoint',
+                mass: '1.07 × 10^16 kg',
+                diameter: '22.2 km',
+                gravity: '0.0057 m/s²',
+                avgTemp: '-4 °C (Day), -112 °C (Night)',
+                dayLength: '7.65 hours',
+                funFact: 'Phobos is slowly spiraling inwards and is expected to crash into Mars or break up into a ring in 30 to 50 million years.' ,
+                type: 'moon'
+            },
+            'Deimos': { 
+                fullname: 'Deimos', des: 'The smaller and outermost of Mars\' two moons. Like Phobos, it is irregularly shaped and likely a captured asteroid The moon is named after Deimos, a figure representing dread in Greek mythology.[11] The name was suggested by academic Henry Madan, .', 
+                image: 'https://upload.wikimedia.org/wikipedia/commons/8/86/NASA-Deimos-MarsMoon-20090221.jpg',
+                mass: '1.4762 × 10^15 kg',
+                diameter: '12.4 km',
+                gravity: '0.003 m/s²',
+                avgTemp: '-40 °C',
+                dayLength: '30.3 hours',
+                funFact: 'Deimos is one of the smallest moons in the solar system.' ,
+                type: 'moon'
+            },
+            'Jupiter': {
+                fullname: 'Jupiter', des: 'The largest planet in our solar system, a gas giant with a Great Red Spot which is a coagulation of wind storms stirring up the dusty surface.',
+                image: 'https://images2.alphacoders.com/132/1328088.png',
+                mass: '1898 × 10^24 kg',
+                diameter: '139,820 km',
+                gravity: '24.8 m/s²',
+                avgTemp: '-110 °C',
+                dayLength: '9.9 hours',
+                funFact: 'Jupiter has the shortest day of all the planets. It completes one full rotation in just under 10 hours.',
+                type: 'planet'
+            },
+            'Io': { 
+                fullname: 'Io', des: 'Jupiter\'s most volcanically active moon with over 400 volcanoes, with hundreds of volcanoes and a landscape dotted with lava flows.', 
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoGXZwzAlCi-JK-2bIYpKlx-yuApD2XsM_CQ&s',
+                mass: '8.93 × 10^22 kg',
+                diameter: '3,643 km',
+                gravity: '1.796 m/s²',
+                avgTemp: '-143 °C',
+                dayLength: '1.77 Earth days',
+                funFact: 'Io is the most volcanically active world in the solar system, with hundreds of volcanoes erupting constantly.' ,
+                type: 'moon'
+            },
+            'Europa': { 
+                fullname: 'Europa', des: 'A moon of Jupiter believed to harbor a vast subsurface ocean, making it a prime candidate for extraterrestrial life Probably having an iron–nickel core, it consists mainly of silicate rock, with a water-ice shell.[16] It has a very thin atmosphere, composed primarily of oxygen.', 
+                image: 'https://images.newscientist.com/wp-content/uploads/2009/02/dn16626-3_300.jpg',
+                mass: '4.8 × 10^22 kg',
+                diameter: '3,121 km',
+                gravity: '1.314 m/s²',
+                avgTemp: '-170 °C',
+                dayLength: '3.55 Earth days',
+                funFact: 'Scientists believe Europa has a salty ocean beneath its icy shell, which could potentially harbor life.' ,
+                type: 'moon'
+            },
+            'Ganymede': { 
+                fullname: 'Ganymede', des: 'The largest moon in the Solar System, even bigger than the planet Mercury. It is a moon of Jupiter with its own magnetic field huge internal ocean which is believed to hold more water than the entire earth\'s ocean.', 
+                image: 'https://scx2.b-cdn.net/gfx/news/2015/8-jupitersmoon.jpg',
+                mass: '1.48 × 10^23 kg',
+                diameter: '5,268 km',
+                gravity: '1.428 m/s²',
+                avgTemp: '-160 °C',
+                dayLength: '7.15 Earth days',
+                funFact: 'Ganymede is the only moon in the solar system known to have its own magnetic field.' ,
+                type: 'moon'
+            },
+            'Callisto': { 
+                fullname: 'Callisto', des: 'Jupiter\'s second-largest moon and one of the most heavily cratered objects in the Solar System Callisto\'s rotation is tidally locked to its orbit around Jupiter, so that it always faces the same direction, making Jupiter appear to hang directly overhead over its near-side..', 
+                image: 'https://i.pinimg.com/736x/a4/49/9b/a4499b56020b9a36f93a3750836ff8aa.jpg',
+                mass: '1.08 × 10^23 kg',
+                diameter: '4,821 km',
+                gravity: '1.236 m/s²',
+                avgTemp: '-132 °C',
+                dayLength: '16.69 Earth days',
+                funFact: 'Callisto\'s surface is one of the most heavily cratered in the solar system, indicating very little geological activity.' ,
+                type: 'moon'
+            },
+            'Saturn': {
+                fullname: 'Saturn', des: 'Known for its extensive and beautiful ring system At least 274 moons orbit the planet, of which 63 are officially named; these do not include the hundreds of moonlets in the rings..',
+                image: 'https://i.pinimg.com/736x/ba/90/80/ba9080eba8dc90a41d490941c432e782.jpg',
+                mass: '568 × 10^24 kg',
+                diameter: '116,460 km',
+                gravity: '10.4 m/s²',
+                avgTemp: '-140 °C',
+                dayLength: '10.7 hours',
+                funFact: 'Saturn is the least dense planet in the Solar System. It is so light that it would float in water (if you could find a bathtub big enough!).',
+                type: 'planet'
+            },
+            'Titan': { 
+                fullname: 'Titan', des: 'Saturn\'s largest moon and the only moon in the Solar System known to have a dense atmosphere and stable bodies of liquid on its surface.', 
+                image: 'https://media.wired.com/photos/5dd85094a0926f0008a865a2/master/pass/PIA20016_orig.jpg',
+                mass: '1.345 × 10^23 kg',
+                diameter: '5,149 km',
+                gravity: '1.352 m/s²',
+                avgTemp: '-179 °C',
+                dayLength: '15.9 Earth days',
+                funFact: 'Titan is the only moon in the solar system with a dense atmosphere and liquid on its surface, much like early Earth.' ,
+                type: 'moon'
+            },
+            'Rhea': { 
+                fullname: 'Rhea', des: 'The second-largest moon of Saturn, a heavily cratered, icy body with a tenuous atmosphere The moon itself has a fairly low density, composed of roughly three-quarters ice and only one-quarter rock. .', 
+                image: 'https://media.sciencephoto.com/c0/34/20/25/c0342025-800px-wm.jpg',
+                mass: '2.38 × 10^21 kg',
+                diameter: '1,527 km',
+                gravity: '0.264 m/s²',
+                avgTemp: '-174 °C',
+                dayLength: '4.5 Earth days',
+                funFact: 'Rhea is thought to be mostly water ice, with a small rocky core.' ,
+                type: 'moon'
+            },
+            'Iapetus': { 
+                fullname: 'Iapetus', des: 'A two-toned moon of Saturn with one side exceptionally bright and the other very dark, giving it a distinctive appearance.', 
+                image: 'https://www.shutterstock.com/shutterstock/videos/3807299025/thumb/1.jpg?ip=x480',
+                mass: '1.8 × 10^21 kg',
+                diameter: '1,468 km',
+                gravity: '0.223 m/s²',
+                avgTemp: '-180 °C',
+                dayLength: '79 Earth days',
+                funFact: 'Iapetus has a prominent equatorial ridge that makes it look like a walnut.' ,
+                type: 'moon'
+            },
+            'Uranus': {
+                fullname: 'Uranus', des: 'An ice giant with a unique tilt, rotating on its side. Its atmosphere is made of hydrogen, helium, and methane Uranus is visible to the naked eye, but it is very dim and was not classified as a planet until 1781, when it was first observed by William Herschel.',
+                image: 'https://png.pngtree.com/thumb_back/fh260/background/20230620/pngtree-uranus-in-3d-amidst-the-vast-expanse-of-space-image_3649968.jpg',
+                mass: '86.8 × 10^24 kg',
+                diameter: '50,724 km',
+                gravity: '8.7 m/s²',
+                avgTemp: '-195 °C',
+                dayLength: '17.2 hours',
+                funFact: 'Uranus is tilted on its side with an axial tilt of 98 degrees. It is often described as "rolling around the Sun on its side."',
+                type: 'planet'
+            },
+            'Titania': { 
+                fullname: 'Titania', des: 'The largest moon of Uranus, a cratered and fractured world with possible evidence of geological activity Titania consists of approximately equal amounts of ice and rock, and is probably differentiated into a rocky core and an icy mantle.', 
+                image: 'https://sos.noaa.gov/ftp_mirror/astronomy/uranus_moons/miranda/media/thumbnail_big.jpg',
+                mass: '3.53 × 10^21 kg',
+                diameter: '1,578 km',
+                gravity: '0.367 m/s²',
+                avgTemp: '-203 °C',
+                dayLength: '8.7 Earth days',
+                funFact: 'Titania has large canyons and fault lines, suggesting past geological activity.' ,
+                type: 'moon'
+            },
+            'Oberon': { 
+                fullname: 'Oberon', des: 'Uranus\'s second-largest moon, a dark, icy body with numerous impact craters Oberon likely formed from the accretion disk that surrounded Uranus just after the planet\'s formation. .', 
+                image: 'https://cdn.britannica.com/69/4869-050-0E9AA5BC/image-moons-outermost-Uranus-Oberon-Voyager-2-Jan-24-1986.jpg',
+                mass: '3.01 × 10^21 kg',
+                diameter: '1,522 km',
+                gravity: '0.346 m/s²',
+                avgTemp: '-203 °C',
+                dayLength: '13.5 Earth days',
+                funFact: 'Oberon\'s surface is heavily cratered, with some craters reaching depths of several kilometers.' ,
+                type: 'moon'
+            },
+            'Neptune': {
+                fullname: 'Neptune', des: 'A dark, cold, and windy ice giant, the most distant planet from the Sun Neptune was subsequently directly observed with a telescope on 23 September 1846 by Johann Gottfried Galle within a degree of the position predicted by Le Verrier.',
+                image: 'https://cdn.pixabay.com/photo/2024/08/08/09/30/neptune-8954034_640.jpg',
+                mass: '102 × 10^24 kg',
+                diameter: '49,244 km',
+                gravity: '11.2 m/s²',
+                avgTemp: '-200 °C',
+                dayLength: '16.1 hours',
+                funFact: 'Neptune has the strongest winds in the Solar System, which can reach speeds of over 2,000 km/h.',
+                type: 'planet'
+            },
+            'Triton': { 
+                fullname: 'Triton', des: 'Neptune\'s largest moon, known for its retrograde orbit and active geysers that erupt nitrogen ice and dust At 2,710 kilometers (1,680 mi)[6] in diameter, Triton is the seventh-largest moon in the Solar System, the second-largest planetary moon in relation to its primary (after Earth\'s Moon), and larger than all of the known dwarf planets .', 
+                image: 'https://thumbs.dreamstime.com/b/stunning-photograph-captured-nasa-hdr-hq-showcases-incredibly-detailed-full-frame-triton-revealing-presence-doge-309121550.jpg',
+                mass: '2.14 × 10^22 kg',
+                diameter: '2,700 km',
+                gravity: '0.779 m/s²',
+                avgTemp: '-235 °C',
+                dayLength: '5.88 Earth days',
+                funFact: 'Triton is the only large moon in the solar system that orbits its planet in a retrograde direction (opposite to the planet\'s rotation).' ,
+                type: 'moon'
+            },
+            // Constellation data with images
+            "Aries": { fullname: "Aries", des: "Aries, the Ram, whose golden fleece was the object of the voyage of Jason and the Argonauts.", type: 'constellation', image: 'https://darkskiestenerifeguide.com/wp-content/uploads/2019/01/aries.jpg' },
+            "Taurus": { fullname: "Taurus", des: "Taurus, the Bull, is famous for its bright star Aldebaran and the Pleiades star cluster.", type: 'constellation', image: 'https://www.star-registration.com/cdn/shop/articles/71_Stier_42f5f1e3-52f3-410e-af94-d8e14dd98337_1200x1200.jpg?v=1748064751' },
+            "Gemini": { fullname: "Gemini", des: "Gemini, the Twins, is represented by its two brightest stars, Castor and Pollux.", type: 'constellation', image: 'https://assets.mypandit.com/wp-content/uploads/2025/02/gemini-constellation-1.webp' },
+            "Cancer": { fullname: "Cancer", des: "Cancer, the Crab, is a faint constellation, but it is home to the Beehive Cluster (Praesepe).", type: 'constellation', image: 'https://www.star-registration.com/cdn/shop/articles/40_Krebs_1200x1200.jpg?v=1681456204' },
+            "Leo": { fullname: "Leo", des: "Leo, the Lion, is one of the most recognizable constellations, with a distinctive sickle shape forming the lion's mane.", type: 'constellation', image: 'https://starwalk.space/gallery/images/leo-nh-spring/1920x1080.jpg' },
+            "Virgo": { fullname: "Virgo", des: "Virgo, the Maiden, is the largest zodiac constellation, often associated with harvest and fertility.", type: 'constellation', image: 'https://www.star-registration.com/cdn/shop/articles/31_Jungfrau_58000cd9-338c-4315-9d4b-9b1355a4fb60_1200x1200.jpg?v=1748064975' },
+            "Libra": { fullname: "Libra", des: "Libra, the Scales, is the only zodiac constellation that represents an inanimate object.", type: 'constellation', image: 'https://www.star-registration.com/cdn/shop/articles/79_Waage_6674c693-791a-4c73-af1d-7fb5d0604ba3_1200x1200.jpg?v=1748064266' },
+            "Scorpius": { fullname: "Scorpius", des: "Scorpius, the Scorpion, is a bright constellation with a distinctive J-shape, dominated by the red supergiant Antares.", type: 'constellation', image: 'https://www.star-registration.com/cdn/shop/articles/79_Waage_6674c693-791a-4c73-af1d-7fb5d0604ba3_1200x1200.jpg?v=1748064266' },
+            "Sagittarius": { fullname: "Sagittarius", des: "Sagittarius, the Archer, is often depicted as a centaur. The center of the Milky Way galaxy lies in its direction.", type: 'constellation', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Sagittarius_constellation_map.svg/1024px-Sagittarius_constellation_map.svg.png' },
+            "Capricornus": { fullname: "Capricornus", des: "Capricornus, the Sea-Goat, is a mythical creature with the head of a goat and the tail of a fish.", type: 'constellation', image: 'https://www.star-registration.com/cdn/shop/articles/70_Steinbock_1200x1200.jpg?v=1681998386' },
+            "Aquarius": { fullname: "Aquarius", des: "Aquarius, the Water-Bearer, is often depicted pouring water from an urn, which flows towards the fish, Pisces.", type: 'constellation', image: 'https://www.star-registration.com/cdn/shop/articles/81_Wassermann_1200x1200.jpg?v=1682346733' },
+            "Pisces": { fullname: "Pisces", des: "Pisces represents two fish tied together by a cord, a theme originating from Babylonian astronomy.", type: 'constellation', image: 'https://starregistration.net/media/wysiwyg/Constellations/Pisces.png' },
+
+            // NASA Satellites Data
+            'Hubble Space Telescope': {
+                fullname: 'Hubble Space Telescope',
+                des: 'The Hubble Space Telescope is a space telescope launched in 1990. It has provided stunning images and data, revolutionizing our understanding of the universe by observing distant galaxies, stars, and planets.',
+                image: 'https://science.nasa.gov/wp-content/uploads/2023/07/hubble-space-telescope-hst-6.jpg',
+                mass: '11,110 kg', diameter: '4.2 m', gravity: 'N/A', avgTemp: '20 °C', dayLength: 'N/A', funFact: 'Hubble has traveled more than 4 billion miles in its orbit around Earth.',
+                type: 'satellite'
+            },
+            'International Space Station': {
+                fullname: 'International Space Station',
+                des: 'The International Space Station is a habitable artificial satellite in low Earth orbit. It is a multinational collaborative project, serving as a microgravity research laboratory and a platform for human spaceflight.',
+                image: 'https://www.esa.int/var/esa/storage/images/esa_multimedia/images/2010/06/iss2/18901111-1-eng-GB/ISS.jpg',
+                mass: '419,725 kg', diameter: '109 m (length)', gravity: 'N/A', avgTemp: '22-27 °C', dayLength: 'N/A', funFact: 'The ISS orbits Earth every 90 minutes, experiencing 16 sunrises and sunsets each day.',
+                type: 'satellite'
+            },
+            'James Webb Space Telescope': {
+                fullname: 'James Webb Space Telescope',
+                des: 'The James Webb Space Telescope is a powerful space observatory designed to conduct infrared astronomy. It is the premier observatory of the next decade, exploring every phase of cosmic history.',
+                image: 'https://static.scientificamerican.com/dam/m/7b2a83b24c5c533e/original/2RNRD1F_WEB.jpg?m=1718372452.582&crop=1%3A1%2Csmart&w=1000',
+                mass: '6,200 kg', diameter: '20.197 m (sunshield)', gravity: 'N/A', avgTemp: '-223 °C', dayLength: 'N/A', funFact: 'JWST operates at the Sun-Earth L2 Lagrange point, about 1.5 million km from Earth.',
+                type: 'satellite'
+            },
+            'Terra (EOS AM-1)': {
+                fullname: 'Terra (EOS AM-1)',
+                des: 'Terra is a multi-national NASA scientific research satellite in orbit around the Earth, carrying five remote sensors to monitor Earth\'s environment and climate change, providing crucial data for climate science.',
+                image: 'https://www.eoportal.org/api/cms/documents/d/eoportal/terra_auto37-jpeg',
+                mass: '4,864 kg', diameter: '6.8 m (length)', gravity: 'N/A', avgTemp: 'N/A', dayLength: 'N/A', funFact: 'Terra collects data on Earth\'s atmosphere, land, ice, and oceans.',
+                type: 'satellite'
+            },
+            'Cassini Orbiter': {
+                fullname: 'Cassini Orbiter',
+                des: 'Cassini was a space probe sent to study Saturn and its system, including its rings and natural satellites. It spent 13 years orbiting Saturn, revolutionizing our understanding of the gas giant before its grand finale.',
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWOUoEScwJwbdzwITkX2bKVo-QGzeaZxiV4Q&s',
+                mass: '2,150 kg', diameter: '6.7 m (height)', gravity: 'N/A', avgTemp: 'N/A', dayLength: 'N/A', funFact: 'Cassini performed daring dives through Saturn\'s rings and between the planet and its innermost rings.',
+                type: 'satellite'
+            },
+            'Voyager 1': {
+                fullname: 'Voyager 1',
+                des: 'Voyager 1 is a space probe launched by NASA in 1977 to study the outer Solar System and interstellar space. It is the most distant human-made object from Earth, continuing to send back data from beyond our solar system.',
+                image: 'https://news.cornell.edu/sites/default/files/styles/story_thumbnail_xlarge/public/2021-05/0510_voyager.jpg?itok=twY6Vp9v',
+                mass: '721.9 kg', diameter: '3.66 m (antenna)', gravity: 'N/A', avgTemp: '-270 °C', dayLength: 'N/A', funFact: 'Voyager 1 carries a Golden Record, a message from Earth to any extraterrestrial life it might encounter.',
+                type: 'satellite'
+            }
+        };
+
+        /**
+         * Creates an orbiter (moon or satellite) and adds it to the scene, orbiting its parent body.
+         * @param {object} data - Orbiter data.
+         * @param {THREE.Object3D} parentBody - The body the orbiter orbits around.
+         * @param {string} type - 'moon' or 'satellite'.
+         * @param {THREE.Color} [customColor] - Optional custom color for the orbiter.
+         */
+        function createOrbiter(data, parentBody, type, customColor = null) {
+            const geometry = new THREE.SphereGeometry(data.radius, 32, 32);
+            let material;
+
+            // MODIFIED: Create a solid pink material for satellites, and textured material for moons.
+            if (type === 'satellite') {
+                material = new THREE.MeshStandardMaterial({ color: 0xFFC0CB }); // Solid pink
+            } else {
+                material = new THREE.MeshStandardMaterial({
+                    map: textureLoader.load(data.texture, undefined, undefined, (error) => {
+                        console.error(`Failed to load texture for ${type} ${data.name}:`, error);
+                        material.map = new THREE.TextureLoader().load(`https://placehold.co/${data.radius*2}x${data.radius*2}/555555/FFFFFF?text=${data.name[0]}`);
+                        material.needsUpdate = true;
+                    }),
+                    transparent: false,
+                    color: customColor || new THREE.Color(0xffffff)
+                });
+            }
+
+            const orbiter = new THREE.Mesh(geometry, material);
+            orbiter.position.x = data.distance;
+            orbiter.userData = { ...data, type: type };
+
+            const pivot = new THREE.Object3D();
+            pivot.add(orbiter);
+
+            const orbiterOrbit = createOrbit(data.distance, true);
+            pivot.add(orbiterOrbit);
+
+            parentBody.add(pivot);
+            orbiter.userData.pivot = pivot;
+            celestialBodies.push(orbiter);
+        }
+
+        /**
+         * Creates a celestial body (planet or sun) and its children (moons, rings, satellites).
+         * @param {object} data - Data for the celestial body.
+         * @param {THREE.Object3D} parentGroup - The group this body's pivot will be added to (e.g., scene).
+         * @param {string} type - 'planet' or 'moon'.
+         * @returns {THREE.Mesh} The celestial body mesh.
+         */
+        function createCelestialBody(data, parentGroup, type = 'planet') {
+            const geometry = new THREE.SphereGeometry(data.radius, 64, 64);
+            let material;
+
+            // MODIFIED: Create a solid pink material for satellites, and textured materials for others.
+            if (data.type === 'satellite') {
+                material = new THREE.MeshStandardMaterial({ color: 0xFFC0CB }); // Solid pink
+            } else {
+                const texture = textureLoader.load(data.texture, undefined, undefined, (error) => {
+                    console.error(`Failed to load texture for ${data.name}:`, error);
+                    material.map = new THREE.TextureLoader().load(`https://placehold.co/${data.radius*2}x${data.radius*2}/333333/FFFFFF?text=${data.name[0]}`);
+                    material.needsUpdate = true;
+                });
+
+                material = data.emissive 
+                    ? new THREE.MeshStandardMaterial({ 
+                        map: texture, 
+                        emissive: 0xffddaa, 
+                        emissiveIntensity: 1, 
+                        emissiveMap: texture 
+                      })
+                    : new THREE.MeshStandardMaterial({ map: texture });
+            }
+            
+            const body = new THREE.Mesh(geometry, material);
+            body.position.x = data.distance;
+            body.userData = { ...data, type: data.type || type }; 
+            
+            const pivot = new THREE.Object3D();
+            pivot.add(body);
+            parentGroup.add(pivot);
+
+            body.userData.pivot = pivot;
+            celestialBodies.push(body);
+
+            if ((data.type === 'planet' || !data.type) && data.distance > 0) {
+                const planetOrbit = createOrbit(data.distance);
+                orbitLines.add(planetOrbit);
+                planetPivots.push(pivot);
+            } else if (data.name === 'Sun') {
+                planetPivots.push(pivot);
+            }
+
+            if (data.ring) {
+                const ringGeometry = new THREE.RingGeometry(data.ring.innerRadius, data.ring.outerRadius, 64);
+                const ringTexture = textureLoader.load(data.ring.texture, undefined, undefined, (error) => {
+                    console.error(`Failed to load ring texture for ${data.name}:`, error);
+                });
+                const ringMaterial = new THREE.MeshStandardMaterial({
+                    map: ringTexture,
+                    color: new THREE.Color(0xFFDB58),
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                ring.rotation.x = Math.PI / 2;
+                body.add(ring);
+                if (data.name === 'Saturn') {
+                    saturnRingsMesh = ring;
+                }
+            }
+
+            if (data.moons && data.moons.length > 0) {
+                data.moons.forEach(moonData => {
+                    const moonColor = (data.name === 'Saturn') ? new THREE.Color(0xFFDB58) : null;
+                    createOrbiter(moonData, body, 'moon', moonColor); 
+                });
+            }
+
+            if (data.satellites && data.satellites.length > 0) {
+                data.satellites.forEach(satData => {
+                    createOrbiter(satData, body, 'satellite'); // Custom color is no longer needed here
+                });
+            }
+
+            return body;
+        }
+        
+        // Data for planets and their moons/rings
+        const solarSystemData = [
+            { 
+                name: 'Sun', radius: 35, distance: 0, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ebbf2019-9330-43af-945d-d93d81bfadc7/dg4via3-7bde39bd-4a37-4fec-8f3d-69cdd28a3ebc.png/v1/fill/w_1264,h_632,q_70,strp/venus_texture_by_planetboiearth_dg4via3-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvZWJiZjIwMTktOTMzMC00M2FmLTk0NWQtZDkzZDgxYmZhZGM3XC9kZzR2aWEzLTdiZGUzOWJkLTRhMzctNGZlYy04ZjNkLTY5Y2RkMjhhM2ViYy5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.Uwx_XPXSbWeUfUUfY6hltnRxkp2gXblLKxB1O947IuQ', 
+                emissive: true, orbitalPeriod: 0, rotationSpeed: 0.001 
+            },
+            { 
+                name: 'Mercury', radius: 2, distance: 40, texture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Solarsystemscope_texture_8k_mercury.jpg/1200px-Solarsystemscope_texture_8k_mercury.jpg', 
+                emissive: true, orbitalPeriod: 0.24, rotationSpeed: 0.002 
+            },
+            { 
+                name: 'Venus', radius: 4, distance: 60, texture: 'https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/image/venus/preview.webp', 
+                emissive: true, orbitalPeriod: 0.62, rotationSpeed: 0.001 
+            },
+            { 
+                name: 'Earth', radius: 5, distance: 90, texture: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoF91xtgLjxM2hZJwYZ77_nU33S0ZrGdeOBw&s', 
+                emissive: true, orbitalPeriod: 1.0, rotationSpeed: 0.02,
+                moons: [
+                    { name: 'Moon', radius: 1, distance: 10, texture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Solarsystemscope_texture_8k_moon.jpg/1200px-Solarsystemscope_texture_8k_moon.jpg', orbitalPeriod: 0.0748, rotationSpeed: 0.005 } // Moon's orbital period in Earth years
+                ],
+                satellites: [
+                    { name: 'Hubble Space Telescope', radius: 0.2, distance: 12, texture: '', orbitalPeriod: 0.00027, rotationSpeed: 0.001 }, // MODIFIED: Corrected texture value
+                    { name: 'International Space Station', radius: 0.3, distance: 14, texture: 'https://www.nasa.gov/sites/default/files/thumbnails/image/iss069e000002.jpg', orbitalPeriod: 0.00026, rotationSpeed: 0.001 }, // 93 mins
+                    { name: 'James Webb Space Telescope', radius: 0.4, distance: 18, texture: 'https://www.nasa.gov/sites/default/files/thumbnails/image/jwst_deployment_sequence.jpg', orbitalPeriod: 0.003, rotationSpeed: 0.001 }, // Simplified orbit
+                    { name: 'Terra (EOS AM-1)', radius: 0.25, distance: 11, texture: 'https://www.nasa.gov/sites/default/files/thumbnails/image/terra_satellite_artist_concept.jpg', orbitalPeriod: 0.00027, rotationSpeed: 0.001 } // 98 mins
+                ]
+            },
+            { 
+                name: 'Mars', radius: 3, distance: 120, texture: 'https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/image/mars/preview.webp', 
+                emissive: true, orbitalPeriod: 1.88, rotationSpeed: 0.018,
+                moons: [
+                    { name: 'Phobos', radius: 0.5, distance: 8, texture: 'https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/image/mars---phobos/preview.webp?w=2048', orbitalPeriod: 0.0021, rotationSpeed: 0.01 },
+                    { name: 'Deimos', radius: 0.3, distance: 7, texture: 'https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/image/mars---deimos/preview.webp?w=2048', orbitalPeriod: 0.0086, rotationSpeed: 0.008 }
+                ]
+            },
+            { 
+                name: 'Jupiter', radius: 12, distance: 180, texture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Solarsystemscope_texture_8k_jupiter.jpg/2560px-Solarsystemscope_texture_8k_jupiter.jpg', 
+                emissive: true, orbitalPeriod: 11.86, rotationSpeed: 0.04,
+                moons: [
+                    { name: 'Io', radius: 1.5, distance: 18, texture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Io_colour_true.jpg/1920px-Io_colour_true.jpg', orbitalPeriod: 0.0048, rotationSpeed: 0.01 },
+                    { name: 'Europa', radius: 1.0, distance: 20, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5938ae9e-47de-424a-8836-f98e6658d37b/dcqbaif-1c3842cd-2e90-4be9-884c-ae1e6f266835.jpg/v1/fill/w_1920,h_960,q_75,strp/europa_texture_map__20k__by_askaniy_dcqbaif-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTYwIiwicGF0aCI6IlwvZlwvNTkzOGFlOWUtNDdkZS00MjRhLTg4MzYtZjk4ZTY2NThkMzdiXC9kY3FiYWlmLTFjMzg0MmNkLTJlOTAtNGJlOS04ODRjLWFlMWU2ZjI2NjgzNS5qcGciLCJ3aWR0aCI6Ijw9MTkyMCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.FH3YqbUcsS8Bl4cop8um5YHRk-uauUS6k63CB-orogE', orbitalPeriod: 0.0097, rotationSpeed: 0.009 },
+                    { name: 'Ganymede', radius: 1.8, distance: 25, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9b7029c3-9717-4658-9066-11c30aa24029/dcot5o2-70760742-c449-4cf5-8ef3-d3fb160fc953.png/v1/fill/w_1280,h_640,q_80,strp/ganymede_texture_map__improved__by_oleg_pluton_dcot5o2-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvOWI3MDI5YzMtOTcxNy00NjU4LTkwNjYtMTFjMzBhYTI0MDI5XC9kY290NW8yLTcwNzYwNzQyLWM0NDktNGNmNS04ZWYzLWQzZmIxNjBmYzk1My5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.E2yrG38KYVZG_6-R-2E-9dN_YmmMXXNo8uboTAysNzY', orbitalPeriod: 0.0196, rotationSpeed: 0.007 },
+                    { name: 'Callisto', radius: 1.6, distance: 30, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/7c46c5ac-a717-469a-b4f8-b8fdfbc4c44f/dgs72a0-0457fbba-7452-4cb7-9bf7-d6f7cf0ae0f3.png/v1/fill/w_1280,h_640,q_80,strp/callisto_texture__2k__by_ducn1567_dgs72a0-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvN2M0NmM1YWMtYTcxNy00NjlhLWI0ZjgtYjhmZGZiYzRjNDRmXC9kZ3M3MmEwLTA0NTdmYmJhLTc0NTItNGNiNy05YmY3LWQ2ZjdjZjBhZTBmMy5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.knYkLVSNu8wbqo_xk8Vs3Udq6ceP14LmTuCVCWRXLhg', orbitalPeriod: 0.0459, rotationSpeed: 0.006 }
+                ]
+            },
+            { 
+                name: 'Saturn', radius: 10, distance: 250, texture: 'https://upload.wikimedia.org/wikipedia/commons/1/1e/Solarsystemscope_texture_8k_saturn.jpg', 
+                emissive: true, orbitalPeriod: 29.46, rotationSpeed: 0.038,
+                ring: { innerRadius: 12, outerRadius: 20, texture: 'https://www.solarsystemscope.com/textures/rings/2k_saturn_ring_alpha.png' },
+                moons: [
+                    { name: 'Titan', radius: 1.7, distance: 23, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/06a094a4-7bd7-4bb9-b998-6c1e17f66c08/dd05ce1-85223ebd-b00f-4e50-9d46-2b0cf9399385.png/v1/fill/w_1264,h_632,q_70,strp/titan_texture_map_8k__2018_editon__by_fargetanik_dd05ce1-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvMDZhMDk0YTQtN2JkNy00YmI5LWI5OTgtNmMxZTE3ZjY2YzA4XC9kZDA1Y2UxLTg1MjIzZWJkLWIwMGYtNGU1MC05ZDQ2LTJiMGNmOTM5OTM4NS5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.smHZBjLWOOg1BWyvScmZcUzKMPwABgMIOvx3RLjiCE0', orbitalPeriod: 0.0439, rotationSpeed: 0.008 },
+                    { name: 'Rhea', radius: 1.0, distance: 28, texture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Solarsystemscope_texture_8k_moon.jpg/2560px-Solarsystemscope_texture_8k_moon.jpg', orbitalPeriod: 0.0125, rotationSpeed: 0.007 },
+                    { name: 'Iapetus', radius: 0.8, distance: 35, texture: 'https://upload.wikimedia.org/wikipedia/commons/a/ad/Iapetus_trailing_natural_color.jpg', orbitalPeriod: 0.212, rotationSpeed: 0.005 }
+                ],
+                satellites: [
+                    { name: 'Cassini Orbiter', radius: 0.2, distance: 22, texture: 'https://www.nasa.gov/sites/default/files/thumbnails/image/cassini_saturn_orbiter.jpg', orbitalPeriod: 0.005, rotationSpeed: 0.001 }
+                ]
+            },
+            { 
+                name: 'Uranus', radius: 7, distance: 320, texture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Solarsystemscope_texture_2k_uranus.jpg/1600px-Solarsystemscope_texture_2k_uranus.jpg', 
+                emissive: true, orbitalPeriod: 84.01, rotationSpeed: 0.03,
+                moons: [
+                    { name: 'Titania', radius: 1.1, distance: 12, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e0763947-6f42-4d09-944f-c2d6f41c415b/dccgm21-0328c017-4a38-4ba5-82ec-581b8e898d21.jpg/v1/fill/w_1024,h_512,q_75,strp/titania_texture_map_by_neptuneproproduction_dccgm21-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NTEyIiwicGF0aCI6IlwvZlwvZTA3NjM5NDctNmY0Mi00ZDA5LTk0NGYtYzJkNmY0MWM0MTViXC9kY2NnbTIxLTAzMjhjMDE3LTRhMzgtNGJhNS04MmVjLTU4MWI4ZTg5OGQyMS5qcGciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.lUUD4MZ9KBFnnvVpAMX9eMT0mqHPssMNHnFXO9e5R2Y', orbitalPeriod: 0.0243, rotationSpeed: 0.007 },
+                    { name: 'Oberon', radius: 1.0, distance: 15, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/2f961ba4-4243-4889-928c-e7f4c2d38614/dhy0tjt-a2e49295-a3da-4e36-8372-7c44d5eef9cb.jpg/v1/fill/w_1264,h_632,q_70,strp/oberon_map_2k_by_greaterhtrae_dhy0tjt-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MCIsInBhdGgiOiJcL2ZcLzJmOTYxYmE0LTQyNDMtNDg4OS05MjhjLWU3ZjRjMmQzODYxNFwvZGh5MHRqdC1hMmU0OTI5NS1hM2RhLTRlMzYtODM3Mi03YzQ0ZDVlZWY5Y2IuanBnIiwid2lkdGgiOiI8PTI1NjAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.GPue0hchP6OdSqcCXQS50KCPmcc0FoEwocM0XIimwoU', orbitalPeriod: 0.0376, rotationSpeed: 0.006 }
+                ]
+            },
+            { 
+                name: 'Neptune', radius: 7, distance: 400, texture: 'https://assets.science.nasa.gov/dynamicimage/assets/science/cds/3d/resources/image/neptune/preview.webp', 
+                emissive: true, orbitalPeriod: 164.8, rotationSpeed: 0.029,
+                moons: [
+                    { name: 'Triton', radius: 1.4, distance: 12, texture: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5938ae9e-47de-424a-8836-f98e6658d37b/dcln18g-a53d437a-f218-4431-94dc-8edf718de293.png/v1/fill/w_1920,h_961,q_80,strp/triton_texture_map__14k__by_askaniy_dcln18g-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9OTYxIiwicGF0aCI6IlwvZlwvNTkzOGFlOWUtNDdkZS00MjRhLTg4MzYtZjk4ZTY2NThkMzdiXC9kY2xuMThnLWE1M2Q0MzdhLWYyMTgtNDQzMS05NGRjLThlZGY3MThkZTI5My5wbmciLCJ3aWR0aCI6Ijw9MTkyMCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.tPBYOxmVS5D_GZGaDbLaQrcOgRXFsPbqhbIPP__1BHU', orbitalPeriod: 0.016, rotationSpeed: -0.01 }
+                ]
+            },
+            {
+                name: 'Voyager 1', radius: 0.5, distance: 1500, texture: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Voyager_1_in_space.jpg/1200px-Voyager_1_in_space.jpg',
+                emissive: false, orbitalPeriod: 300, rotationSpeed: 0.0001, type: 'satellite'
+            }
+        ];
+        
+        // Constellation Data (already includes story property)
+        const zodiacConstellationData = {
+            "Aries": { "story": "Aries, the Ram, whose golden fleece was the object of the voyage of Jason and the Argonauts.", "starCoords": { "Hamal": [31.8, 23.4], "Sheratan": [26.6, 20.8], "Mesarthim": [27.9, 19.3], "41 Ari": [44.2, 27.2] }, "lines": [["Hamal", "Sheratan"], ["Sheratan", "Mesarthim"], ["Hamal", "41 Ari"]] },
+            "Taurus": { "story": "Taurus, the Bull, is famous for its bright star Aldebaran and the Pleiades star cluster.", "starCoords": { "Aldebaran": [68.9, 16.5], "Elnath": [80.4, 28.6], "Hyadum I": [66.4, 15.6], "Ain": [67.1, 15.9], "Zeta Tau": [84.4, 21.1] }, "lines": [["Aldebaran", "Ain"], ["Ain", "Hyadum I"], ["Aldebaran", "Elnath"], ["Elnath", "Zeta Tau"]] },
+            "Gemini": { "story": "Gemini, the Twins, is represented by its two brightest stars, Castor and Pollux.", "starCoords": { "Castor": [113.6, 31.8], "Pollux": [116.3, 28.0], "Alhena": [99.8, 16.4], "Wasat": [110.3, 21.9], "Mebsuta": [103.1, 25.1], "Tejat": [90.5, 22.5] }, "lines": [["Castor", "Mebsuta"], ["Mebsuta", "Tejat"], ["Tejat", "Alhena"], ["Alhena", "Wasat"], ["Wasat", "Pollux"], ["Wasat", "Castor"]] },
+            "Cancer": { "story": "Cancer, the Crab, is a faint constellation, but it is home to the Beehive Cluster (Praesepe).", "starCoords": { "Asellus Australis": [132.2, 18.1], "Asellus Borealis": [130.1, 21.4], "Acubens": [134.7, 11.8], "Altarf": [130.4, 9.2], "Iota Cnc": [131.8, 28.8] }, "lines": [["Asellus Australis", "Asellus Borealis"], ["Asellus Australis", "Acubens"], ["Asellus Borealis", "Iota Cnc"], ["Acubens", "Altarf"]] },
+            "Leo": { "story": "Leo, the Lion, is one of the most recognizable constellations, with a distinctive sickle shape forming the lion's mane.", "starCoords": { "Regulus": [152.0, 11.9], "Denebola": [178.9, 14.5], "Algieba": [155.0, 19.8], "Zosma": [168.5, 20.7], "Chertan": [172.4, 10.5], "Epsilon Leo": [147.4, 23.7] }, "lines": [["Regulus", "Algieba"], ["Algieba", "Epsilon Leo"], ["Algieba", "Zosma"], ["Zosma", "Chertan"], ["Chertan", "Denebola"]] },
+            "Virgo": { "story": "Virgo, the Maiden, is the largest zodiac constellation, often associated with harvest and fertility.", "starCoords": { "Spica": [201.3, -11.1], "Vindemiatrix": [197.3, 10.9], "Porrima": [191.8, -1.4], "Auva": [182.2, -1.7], "Heze": [181.7, 5.3], "Zavijava": [175.7, 1.4] }, "lines": [["Spica", "Porrima"], ["Porrima", "Zavijava"], ["Zavijava", "Vindemiatrix"], ["Porrima", "Auva"], ["Auva", "Heze"]] },
+            "Libra": { "story": "Libra, the Scales, is the only zodiac constellation that represents an inanimate object.", "starCoords": { "Zubeneschamali": [227.6, -16.0], "Zubenelgenubi": [222.8, -16.0], "Brachium": [235.3, -15.7], "Upsilon Lib": [232.0, -25.2] }, "lines": [["Zubeneschamali", "Zubenelgenubi"], ["Zubenelgenubi", "Upsilon Lib"], ["Upsilon Lib", "Brachium"], ["Brachium", "Zubeneschamali"]] },
+            "Scorpius": { "story": "Scorpius, the Scorpion, is a bright constellation with a distinctive J-shape, dominated by the red supergiant Antares.", "starCoords": { "Antares": [247.3, -26.4], "Shaula": [263.1, -37.1], "Sargas": [263.8, -43.0], "Dschubba": [240.0, -22.6], "Acrab": [241.2, -19.8], "Pi Sco": [239.5, -26.1], "Lambda Sco": [263.1, -37.1] }, "lines": [["Acrab", "Dschubba"], ["Dschubba", "Pi Sco"], ["Pi Sco", "Antares"], ["Antares", "Sargas"], ["Sargas", "Lambda Sco"]] },
+            "Sagittarius": { "story": "Sagittarius, the Archer, is often depicted as a centaur. The center of the Milky Way galaxy lies in its direction.", "starCoords": { "Kaus Australis": [275.9, -34.3], "Nunki": [283.4, -26.3], "Ascella": [279.5, -29.9], "Kaus Media": [274.6, -29.8], "Kaus Borealis": [271.4, -25.4], "Rukbat": [288.9, -40.6] }, "lines": [["Nunki", "Ascella"], ["Ascella", "Kaus Media"], ["Kaus Media", "Kaus Australis"], ["Kaus Media", "Kaus Borealis"], ["Kaus Borealis", "Nunki"], ["Kaus Australis", "Rukbat"]] },
+            "Capricornus": { "story": "Capricornus, the Sea-Goat, is a mythical creature with the head of a goat and the tail of a fish.", "starCoords": { "Deneb Algedi": [326.3, -16.1], "Nashira": [323.5, -16.7], "Algedi": [305.8, -12.5], "Psi Cap": [311.5, -25.3], "Omega Cap": [310.1, -26.9] }, "lines": [["Algedi", "Nashira"], ["Nashira", "Deneb Algedi"], ["Deneb Algedi", "Psi Cap"], ["Psi Cap", "Omega Cap"], ["Omega Cap", "Algedi"]] },
+            "Aquarius": { "story": "Aquarius, the Water-Bearer, is often depicted pouring water from an urn, which flows towards the fish, Pisces.", "starCoords": { "Sadalsuud": [325.2, -5.5], "Sadalmelik": [331.6, -0.3], "Skat": [342.3, -15.7], "Ancha": [336.1, -7.7], "Lambda Aqr": [343.9, -7.6] }, "lines": [["Sadalmelik", "Sadalsuud"], ["Sadalsuud", "Ancha"], ["Ancha", "Skat"], ["Skat", "Lambda Aqr"]] },
+            "Pisces": { "story": "Pisces represents two fish tied together by a cord, a theme originating from Babylonian astronomy.", "starCoords": { "Eta Psc": [25.8, 15.3], "Gamma Psc": [355.6, 3.2], "Omega Psc": [359.5, 6.9], "Iota Psc": [353.4, 5.5], "Alrescha": [29.9, 2.7] }, "lines": [["Eta Psc", "Gamma Psc"], ["Gamma Psc", "Omega Psc"], ["Omega Psc", "Iota Psc"], ["Iota Psc", "Alrescha"]] }
+        };
+
+        // Materials for constellation lines and stars
+        const defaultConstellationLineMaterial = new THREE.LineBasicMaterial({ color: 0x00BFFF, transparent: true, opacity: 0.4, depthTest: false }); // Deep Sky Blue, slightly transparent
+        const highlightedConstellationLineMaterial = new THREE.LineBasicMaterial({ color: 0x00FFFF, linewidth: 3, transparent: true, opacity: 0.9, depthTest: false }); // Aqua, bright for highlight
+        
+        const defaultConstellationStarMaterial = new THREE.PointsMaterial({ color: 0x87CEFA, size: 2, sizeAttenuation: true, depthTest: false }); // Light Sky Blue for stars
+        const highlightedConstellationStarMaterial = new THREE.PointsMaterial({ color: 0x1E90FF, size: 4, sizeAttenuation: true, depthTest: false }); // Dodger Blue for highlighted stars
+
+        /**
+         * Converts Right Ascension (RA) and Declination (Dec) to 3D Cartesian coordinates.
+         * @param {number[]} coords - [RA, Dec] in degrees.
+         * @param {number} radius - The radius of the celestial sphere.
+         * @returns {THREE.Vector3} The 3D vector.
+         */
+        function getStarVector(coords, sphereRadius) {
+            const ra = (coords[0]) * (Math.PI / 180); 
+            const dec = coords[1] * (Math.PI / 180); 
+            return new THREE.Vector3(
+                sphereRadius * Math.cos(dec) * Math.cos(ra),
+                sphereRadius * Math.sin(dec),
+                sphereRadius * Math.cos(dec) * Math.sin(ra)
+            );
+        }
+
+        /**
+         * Creates and adds zodiac constellations to the scene.
+         * Each constellation now consists of lines (LineSegments) and stars (Points).
+         */
+        function createConstellations() {
+            const sphereRadius = 1500; 
+
+            for (const constellationName in zodiacConstellationData) {
+                const constellationData = zodiacConstellationData[constellationName];
+                const starCoords = constellationData.starCoords;
+                const lineSegmentsPoints = []; 
+                const starPoints = []; 
+                
+                for (const starName in starCoords) {
+                    starPoints.push(getStarVector(starCoords[starName], sphereRadius));
+                }
+
+                constellationData.lines.forEach(line => {
+                    const startCoords = starCoords[line[0]];
+                    const endCoords = starCoords[line[1]];
+                    if (startCoords && endCoords) {
+                        lineSegmentsPoints.push(getStarVector(startCoords, sphereRadius));
+                        lineSegmentsPoints.push(getStarVector(endCoords, sphereRadius));
+                    }
+                });
+
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints(lineSegmentsPoints);
+                const lineSegments = new THREE.LineSegments(lineGeometry, defaultConstellationLineMaterial);
+                lineSegments.userData = { 
+                    type: 'constellation',
+                    name: constellationName, 
+                    story: constellationData.story 
+                };
+                constellationsGroup.add(lineSegments);
+                constellationClickables.push(lineSegments); 
+
+                const starGeometry = new THREE.BufferGeometry().setFromPoints(starPoints);
+                const stars = new THREE.Points(starGeometry, defaultConstellationStarMaterial);
+                stars.userData = {
+                    type: 'constellation-stars', 
+                    name: constellationName,
+                    story: constellationData.story,
+                    parentLineSegments: lineSegments 
+                };
+                constellationsGroup.add(stars);
+                constellationClickables.push(stars); 
+            }
+        }
+
+        // --- ASTEROID BELT ---
+        function createAsteroidBelt() {
+            const asteroidCount = 1500;
+            const beltInnerRadius = 140;
+            const beltOuterRadius = 160;
+            const beltHeight = 10; 
+            const asteroidColors = [0xCCCCCC, 0xD0D0D0, 0xD3D3D3, 0xD8D8D8]; 
+            for (let i = 0; i < asteroidCount; i++) {
+                const size = Math.random() * 0.5 + 0.1; 
+                const geometry = new THREE.DodecahedronGeometry(size, 0); 
+                const material = new THREE.MeshStandardMaterial({ 
+                    color: asteroidColors[Math.floor(Math.random() * asteroidColors.length)], 
+                    flatShading: true 
+                });
+                const asteroid = new THREE.Mesh(geometry, material);
+                const angle = Math.random() * Math.PI * 2;
+                const radius = beltInnerRadius + Math.random() * (beltOuterRadius - beltInnerRadius);
+                asteroid.position.set(
+                    Math.cos(angle) * radius, 
+                    (Math.random() - 0.5) * beltHeight, 
+                    Math.sin(angle) * radius
+                );
+                asteroid.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+                asteroidsGroup.add(asteroid);
+            }
+        }
+
+        // --- STARFIELD ---
+        function createStarfield() {
+            const starCount = 15000; 
+            const positions = new Float32Array(starCount * 3);
+            const colors = new Float32Array(starCount * 3);
+            const sizes = new Float32Array(starCount);
+
+            for (let i = 0; i < starCount; i++) {
+                positions[i * 3 + 0] = (Math.random() - 0.5) * 4000;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 4000;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 4000;
+
+                const color = new THREE.Color();
+                color.setHSL(0.6 + Math.random() * 0.2, 0.5 + Math.random() * 0.5, 0.7 + Math.random() * 0.3); 
+                colors[i * 3 + 0] = color.r;
+                colors[i * 3 + 1] = color.g;
+                colors[i * 3 + 2] = color.b;
+
+                sizes[i] = Math.random() * 2 + 0.5; 
+            }
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1)); 
+
+            const material = new THREE.PointsMaterial({ 
+                size: 1.5, 
+                vertexColors: true, 
+                sizeAttenuation: true 
+            });
+            const stars = new THREE.Points(geometry, material);
+            scene.add(stars);
+        }
+
+        // --- EVENT LISTENERS & INTERACTION ---
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        /**
+         * Toggles the active/inactive styling of a button.
+         * @param {HTMLElement} button - The button to toggle.
+         * @param {boolean} isActive - Whether the button should be active.
+         */
+        function setButtonActiveState(button, isActive) {
+            if (isActive) {
+                button.classList.remove('btn-inactive');
+                button.classList.add('btn-active');
+            } else {
+                button.classList.remove('btn-active');
+                button.classList.add('btn-inactive');
+            }
+        }
+        
+        // Initial button and scene state setup
+        function initializeSceneState() {
+            orbitLines.visible = visibilityState.solarSystem;
+            planetPivots.forEach(pivot => {
+                pivot.visible = visibilityState.solarSystem;
+            });
+            setButtonActiveState(solarSystemToggle, visibilityState.solarSystem);
+
+            asteroidsGroup.visible = visibilityState.asteroids;
+            constellationsGroup.visible = visibilityState.constellations;
+            setButtonActiveState(asteroidsToggle, visibilityState.asteroids);
+            setButtonActiveState(constellationsToggle, visibilityState.constellations);
+        }
+
+        solarSystemToggle.addEventListener('click', () => {
+            visibilityState.solarSystem = !visibilityState.solarSystem;
+            orbitLines.visible = visibilityState.solarSystem;
+            planetPivots.forEach(pivot => {
+                pivot.visible = visibilityState.solarSystem;
+            });
+            setButtonActiveState(solarSystemToggle, visibilityState.solarSystem);
+            deselectObject();
+            infoPanel.classList.remove('visible');
+            infoModal.classList.remove('visible');
+        });
+
+        asteroidsToggle.addEventListener('click', () => {
+            visibilityState.asteroids = !visibilityState.asteroids;
+            asteroidsGroup.visible = visibilityState.asteroids;
+            setButtonActiveState(asteroidsToggle, visibilityState.asteroids);
+            deselectObject();
+            infoPanel.classList.remove('visible');
+            infoModal.classList.remove('visible');
+        });
+
+        constellationsToggle.addEventListener('click', (e) => {
+            visibilityState.constellations = !visibilityState.constellations;
+            constellationsGroup.visible = visibilityState.constellations;
+            setButtonActiveState(constellationsToggle, visibilityState.constellations);
+            deselectObject();
+            infoPanel.classList.remove('visible');
+            infoModal.classList.remove('visible');
+        });
+
+        neoToggle.addEventListener('click', () => {
+            visibilityState.neos = !visibilityState.neos;
+            neoGroup.visible = visibilityState.neos;
+            setButtonActiveState(neoToggle, visibilityState.neos);
+            document.getElementById('neo-section').classList.toggle('hidden', !visibilityState.neos);
+
+            if (visibilityState.neos && neoMeshes.length === 0) {
+                createNEOAsteroids();
+            }
+
+            deselectObject();
+            infoPanel.classList.remove('visible');
+            infoModal.classList.remove('visible');
+        });
+
+        fetchNeoBtn.addEventListener('click', () => {
+            visibilityState.neos = true;
+            neoGroup.visible = true;
+            setButtonActiveState(neoToggle, true);
+            document.getElementById('neo-section').classList.remove('hidden');
+
+            createNEOAsteroids();
+        });
+        
+        speedSlider.addEventListener('input', (event) => {
+            timeScale = parseFloat(event.target.value);
+            speedValueDisplay.textContent = timeScale.toFixed(1);
+        });
+
+        pauseToggle.addEventListener('click', () => {
+            isPaused = !isPaused;
+            if (isPaused) {
+                pauseToggle.textContent = 'Play';
+                pauseToggle.classList.replace('bg-yellow-600', 'bg-green-600');
+                pauseToggle.classList.replace('hover:bg-yellow-700', 'hover:bg-green-700');
+            } else {
+                pauseToggle.textContent = 'Pause';
+                pauseToggle.classList.replace('bg-green-600', 'bg-yellow-600');
+                pauseToggle.classList.replace('hover:bg-green-700', 'hover:bg-yellow-700');
+                clock.getDelta();
+            }
+        });
+
+        jumpToDateBtn.addEventListener('click', () => {
+            const dateString = dateInput.value;
+            if (!dateString) return;
+
+            const targetDate = new Date(dateString + 'T00:00:00Z');
+            const timeDifference = targetDate.getTime() - simulationStartDate.getTime();
+            elapsedSimulationDays = timeDifference / (1000 * 60 * 60 * 24);
+
+            updateVisuals(); 
+            renderer.render(scene, camera);
+        });
+
+        collapseToggleBtn.addEventListener('click', () => {
+            isControlsCollapsed = !isControlsCollapsed;
+            if (isControlsCollapsed) {
+                collapseToggleBtn.innerHTML = '&#9660;';
+                collapsibleContent.style.maxHeight = '0px';
+                collapsibleContent.style.opacity = '0';
+                controlPanelHeader.classList.remove('mb-2');
+            } else {
+                collapseToggleBtn.innerHTML = '&#9650;';
+                collapsibleContent.style.maxHeight = collapsibleContent.scrollHeight + 'px';
+                collapsibleContent.style.opacity = '1';
+                controlPanelHeader.classList.add('mb-2');
+            }
+        });
+        
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        closePanelBtn.addEventListener('click', () => {
+            infoPanel.classList.remove('visible');
+            deselectObject();
+        });
+
+        modalCloseBtn.addEventListener('click', () => infoModal.classList.remove('visible'));
+        infoModal.addEventListener('click', (event) => {
+            if (event.target === infoModal) { 
+                infoModal.classList.remove('visible');
+            }
+        });
+
+        window.addEventListener('click', onObjectClick, false);
+
+        /**
+         * Handles click events on 3D objects.
+         * @param {MouseEvent} event - The click event.
+         */
+        function onObjectClick(event) {
+            if (event.target.closest('#control-panel') || event.target.closest('#info-panel') || event.target.closest('#info-modal')) {
+                return;
+            }
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            
+            const visibleCelestialBodies = celestialBodies.filter(b => b.parent && b.parent.visible);
+            
+            const intersects = raycaster.intersectObjects(visibleCelestialBodies, true);
+            if (intersects.length > 0) {
+                selectObject(intersects[0].object);
+                return;
+            }
+
+            if (visibilityState.constellations) {
+                raycaster.params.Line.threshold = 5; 
+                const intersectsConstellations = raycaster.intersectObjects(constellationClickables, true);
+                if (intersectsConstellations.length > 0) {
+                    selectObject(intersectsConstellations[0].object);
+                    return;
+                }
+            }
+
+            infoPanel.classList.remove('visible');
+            infoModal.classList.remove('visible');
+            deselectObject();
+        }
+
+        function selectObject(object) {
+            if (selectedObject === object) return;
+            deselectObject();
+            infoPanel.classList.remove('visible');
+            infoModal.classList.remove('visible');
+            selectedObject = object;
+
+            if (object.userData.type === 'neo') {
+                const neoInfo = object.userData.displayData;
+                if (neoInfo) {
+                    populateAndShowModal(neoInfo, object.userData.name);
+                }
+                return;
+            }
+
+            const info = detailedApiData[object.userData.name];
+
+            if (info) {
+                if (info.type === 'constellation') {
+                    highlightedConstellation = object;
+                    object.material = highlightedConstellationLineMaterial;
+                    const stars = constellationsGroup.children.find(child => 
+                        child.userData.type === 'constellation-stars' && 
+                        child.userData.name === object.userData.name
+                    );
+                    if (stars) {
+                        highlightedConstellationStars = stars;
+                        stars.material = highlightedConstellationStarMaterial;
+                    }
+                    displayInfo(info);
+                    infoPanel.classList.add('visible');
+                } else if (info.type === 'planet' || info.type === 'moon' || info.type === 'satellite') {
+                    populateAndShowModal(info, object.userData.name);
+                }
+            }
+        }
+
+        function deselectObject() {
+            if (highlightedConstellation) {
+                highlightedConstellation.material = defaultConstellationLineMaterial;
+                if (highlightedConstellationStars) {
+                    highlightedConstellationStars.material = defaultConstellationStarMaterial;
+                }
+                highlightedConstellation = null;
+                highlightedConstellationStars = null;
+            }
+            selectedObject = null;
+        }
+
+        function displayInfo(data) {
+            let html = '';
+            if (data) {
+                const name = data.fullname;
+                const description = data.des;
+                const image = data.image;
+
+                if (image) {
+                    html += `<img src="${image}" alt="Image of ${name}" class="w-full h-auto rounded-lg mb-4 bg-gray-800 border border-gray-600">`;
+                }
+                
+                const colorClass = data.type === 'constellation' ? 'text-cyan-300' : '';
+                html += `<h2 class="text-3xl font-bold mb-4 ${colorClass}">${name}</h2><p class="text-lg text-gray-300">${description}</p>`;
+            } else {
+                html = '<p class="text-gray-400">Select an object for more information.</p>';
+            }
+            infoContent.innerHTML = html;
+        }
+
+        function populateAndShowModal(data, name) {
+            document.getElementById('modal-title').textContent = data.fullname;
+            document.getElementById('modal-image').src = data.image || 'https://placehold.co/400x400/333333/FFFFFF?text=No+Image';
+            document.getElementById('modal-image').alt = `Image of ${data.fullname}`;
+            document.getElementById('modal-description').textContent = data.des;
+            document.getElementById('modal-mass').textContent = data.mass || 'N/A';
+            document.getElementById('modal-diameter').textContent = data.diameter || 'N/A';
+            document.getElementById('modal-gravity').textContent = data.gravity || 'N/A';
+            document.getElementById('modal-temp').textContent = data.avgTemp || 'N/A';
+            document.getElementById('modal-day').textContent = data.dayLength || 'N/A';
+            document.getElementById('modal-funfact').textContent = data.funFact || 'No fun fact available.';
+            
+            infoModal.classList.add('visible');
+        }
+
+        function updateVisuals() {
+            const currentDate = new Date(simulationStartDate.getTime() + elapsedSimulationDays * (1000 * 60 * 60 * 24));
+            simulationDateDisplay.textContent = currentDate.toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            celestialBodies.forEach(body => {
+                const data = body.userData;
+                body.rotation.y = (elapsedSimulationDays * (data.rotationSpeed || 0) * (Math.PI / 180));
+
+                if (data.pivot && data.orbitalPeriod !== undefined && data.orbitalPeriod !== 0) {
+                    const orbitalPeriodInDays = data.orbitalPeriod * 365.25; 
+                    const angle = (elapsedSimulationDays / orbitalPeriodInDays) * (2 * Math.PI);
+                    data.pivot.rotation.y = angle;
+                }
+            });
+
+            if (asteroidsGroup.visible) {
+                asteroidsGroup.rotation.y += 0.0001 * timeScale;
+            }
+
+            if (saturnRingsMesh) {
+                saturnRingsMesh.rotation.z += 0.002 * timeScale;
+            }
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (!isPaused) {
+                const delta = clock.getDelta();
+                elapsedSimulationDays += delta * daysPerSecondAt1x * timeScale;
+                updateVisuals();
+            }
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // --- NEO ASTEROID FUNCTIONS ---
+        function createNEOAsteroids() {
+            clearNEOAsteroids();
+
+            const mockNEOs = [
+                { name: '2024 YR4',   a: 1.2,  e: 0.32, i: 5.2,  omega: 135, w: 67,  M: 45,  diam: 340, hazardous: true  },
+                { name: '2023 DW',    a: 1.8,  e: 0.45, i: 3.8,  omega: 200, w: 120, M: 200, diam: 120, hazardous: true  },
+                { name: '2024 PN1',   a: 0.9,  e: 0.12, i: 2.1,  omega: 80,  w: 15,  M: 310, diam: 55,  hazardous: false },
+                { name: '2023 MU2',   a: 1.5,  e: 0.28, i: 8.5,  omega: 310, w: 45,  M: 180, diam: 80,  hazardous: false },
+                { name: '2024 EA1',   a: 2.1,  e: 0.55, i: 6.3,  omega: 45,  w: 200, M: 90,  diam: 200, hazardous: true  },
+                { name: '2023 NT1',   a: 0.8,  e: 0.15, i: 1.5,  omega: 170, w: 85,  M: 270, diam: 40,  hazardous: false },
+                { name: '2024 CA1',   a: 1.6,  e: 0.38, i: 4.7,  omega: 260, w: 160, M: 130, diam: 95,  hazardous: false },
+                { name: '2023 KE6',   a: 2.3,  e: 0.62, i: 9.1,  omega: 90,  w: 300, M: 15,  diam: 280, hazardous: true  },
+                { name: '2024 JA1',   a: 1.1,  e: 0.22, i: 3.2,  omega: 350, w: 40,  M: 220, diam: 65,  hazardous: false },
+                { name: '2023 VB2',   a: 1.9,  e: 0.48, i: 7.4,  omega: 150, w: 280, M: 340, diam: 160, hazardous: true  },
+                { name: '2024 DC1',   a: 0.7,  e: 0.08, i: 1.1,  omega: 220, w: 10,  M: 160, diam: 30,  hazardous: false },
+                { name: '2023 TE1',   a: 2.5,  e: 0.58, i: 10.3, omega: 40,  w: 190, M: 290, diam: 310, hazardous: true  },
+                { name: '2024 MG1',   a: 1.3,  e: 0.25, i: 4.0,  omega: 290, w: 95,  M: 80,  diam: 75,  hazardous: false },
+                { name: '2023 SA1',   a: 1.7,  e: 0.42, i: 6.8,  omega: 115, w: 230, M: 250, diam: 140, hazardous: false },
+                { name: '2024 XB1',   a: 2.0,  e: 0.52, i: 8.0,  omega: 180, w: 145, M: 105, diam: 220, hazardous: true  },
+                { name: '2023 NB1',   a: 0.6,  e: 0.10, i: 0.8,  omega: 70,  w: 55,  M: 195, diam: 25,  hazardous: false },
+                { name: '2024 RD1',   a: 1.4,  e: 0.30, i: 4.5,  omega: 235, w: 175, M: 320, diam: 85,  hazardous: false },
+                { name: '2023 LF1',   a: 2.2,  e: 0.60, i: 9.5,  omega: 195, w: 25,  M: 55,  diam: 260, hazardous: true  },
+                { name: '2024 KS1',   a: 0.5,  e: 0.05, i: 0.5,  omega: 310, w: 110, M: 140, diam: 20,  hazardous: false },
+                { name: '2023 WG1',   a: 1.0,  e: 0.18, i: 2.5,  omega: 140, w: 320, M: 235, diam: 50,  hazardous: false }
+            ];
+
+            const statusEl = document.getElementById('neo-status');
+            const scale = 90;
+            let loaded = 0;
+
+            mockNEOs.forEach((neo, idx) => {
+                const a_au = neo.a;
+                const e = neo.e;
+                const i_deg = neo.i;
+                const omega_deg = neo.omega;
+                const w_deg = neo.w;
+                const m_deg = neo.M;
+
+                const a = a_au * scale;
+                const i = i_deg * Math.PI / 180;
+                const omega = omega_deg * Math.PI / 180;
+                const w = w_deg * Math.PI / 180;
+                const M = m_deg * Math.PI / 180;
+
+                let E = M;
+                for (let iter = 0; iter < 100; iter++) {
+                    const dE = (M - E + e * Math.sin(E)) / (1 - e * Math.cos(E));
+                    E += dE;
+                    if (Math.abs(dE) < 1e-8) break;
+                }
+
+                const nu = 2 * Math.atan2(Math.sqrt(1 + e) * Math.sin(E / 2), Math.sqrt(1 - e) * Math.cos(E / 2));
+                const r = a * (1 - e * Math.cos(E));
+
+                const xo = r * Math.cos(nu);
+                const yo = r * Math.sin(nu);
+
+                const cO = Math.cos(omega), sO = Math.sin(omega);
+                const cw = Math.cos(w), sw = Math.sin(w);
+                const ci = Math.cos(i), si = Math.sin(i);
+
+                const px = (cO * cw - sO * sw * ci) * xo + (-cO * sw - sO * cw * ci) * yo;
+                const py = (sO * cw + cO * sw * ci) * xo + (-sO * sw + cO * cw * ci) * yo;
+                const pz = sw * si * xo + cw * si * yo;
+
+                const diameter = neo.diam;
+                const size = Math.max(0.5, Math.min(diameter / 60, 3.5));
+                const isHazardous = neo.hazardous;
+
+                const color = isHazardous ? 0xFF4444 : 0x44FF44;
+                const glowColor = isHazardous ? 0xFF2222 : 0x22FF22;
+
+                const geometry = new THREE.OctahedronGeometry(size, 0);
+                const material = new THREE.MeshStandardMaterial({
+                    color: color,
+                    emissive: glowColor,
+                    emissiveIntensity: 1.0,
+                    roughness: 0.2,
+                    metalness: 0.3
+                });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(px, py, pz);
+                mesh.rotation.set(Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2);
+
+                const glowCanvas = document.createElement('canvas');
+                glowCanvas.width = 128;
+                glowCanvas.height = 128;
+                const ctx = glowCanvas.getContext('2d');
+                const gradient = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+                gradient.addColorStop(0, isHazardous ? 'rgba(255,60,60,1)' : 'rgba(60,255,60,1)');
+                gradient.addColorStop(0.15, isHazardous ? 'rgba(255,30,30,0.7)' : 'rgba(30,255,30,0.7)');
+                gradient.addColorStop(0.4, isHazardous ? 'rgba(255,0,0,0.3)' : 'rgba(0,255,0,0.3)');
+                gradient.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 128, 128);
+                const glowTexture = new THREE.CanvasTexture(glowCanvas);
+                const glowMaterial = new THREE.SpriteMaterial({
+                    map: glowTexture,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true,
+                    depthWrite: false,
+                    opacity: 0.9
+                });
+                const glowSprite = new THREE.Sprite(glowMaterial);
+                glowSprite.scale.set(size * 12, size * 12, 1);
+                mesh.add(glowSprite);
+
+                const missDist = (100000 + Math.random() * 5000000).toFixed(0);
+                const relVel = (5 + Math.random() * 25).toFixed(2);
+                const approachDate = ['2025-06-15','2025-07-22','2025-08-10','2025-09-05','2025-10-18','2025-11-30','2026-01-12','2026-03-04','2026-04-19','2026-05-28'][idx % 10];
+                const orbitPeriod = (a_au * Math.sqrt(a_au) * 365.25).toFixed(1);
+
+                mesh.userData = {
+                    type: 'neo',
+                    neoId: `NEO-${1000 + idx}`,
+                    name: neo.name,
+                    isHazardous: isHazardous,
+                    diameter: diameter,
+                    displayData: {
+                        fullname: neo.name,
+                        des: `Near-Earth Asteroid | Diameter: ${diameter.toFixed(0)} m | Semi-major axis: ${a_au.toFixed(3)} AU | Eccentricity: ${e.toFixed(4)} | Inclination: ${i_deg.toFixed(2)}° | Closest approach: ${approachDate} | Miss distance: ${parseInt(missDist).toLocaleString()} km | Velocity: ${relVel} km/s`,
+                        image: isHazardous
+                            ? 'https://placehold.co/400x400/FF3333/FFFFFF?text=⚠+Hazardous+NEO&font=raleway'
+                            : 'https://placehold.co/400x400/33FF33/FFFFFF?text=✓+Safe+NEO&font=raleway',
+                        mass: `${(diameter * 800).toFixed(0)} tons (est.)`,
+                        diameter: `${diameter.toFixed(0)} m`,
+                        gravity: 'N/A',
+                        avgTemp: '-73 °C',
+                        dayLength: `${orbitPeriod} days`,
+                        funFact: isHazardous
+                            ? 'Potentially Hazardous Asteroid (PHA) — orbits that bring it within 0.05 AU of Earth.'
+                            : 'This near-Earth object is regularly monitored by NASA\'s CNEOS program.',
+                        type: 'neo'
+                    }
+                };
+
+                neoGroup.add(mesh);
+                neoMeshes.push(mesh);
+                celestialBodies.push(mesh);
+                loaded++;
+            });
+
+            statusEl.textContent = `Displaying ${loaded} near-Earth asteroids`;
+            neoGroup.visible = visibilityState.neos;
+        }
+
+        function clearNEOAsteroids() {
+            while (neoGroup.children.length > 0) {
+                neoGroup.remove(neoGroup.children[0]);
+            }
+            for (let i = celestialBodies.length - 1; i >= 0; i--) {
+                if (celestialBodies[i].userData?.type === 'neo') {
+                    celestialBodies.splice(i, 1);
+                }
+            }
+            neoMeshes = [];
+            neoDataMap = {};
+        }
+
+        function initializeApp() {
+            const today = new Date();
+            dateInput.value = today.toISOString().split('T')[0];
+
+            const sevenDaysLater = new Date(today);
+            sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+            neoStartDate.value = today.toISOString().split('T')[0];
+            neoEndDate.value = sevenDaysLater.toISOString().split('T')[0];
+
+            collapsibleContent.style.maxHeight = collapsibleContent.scrollHeight + 'px';
+            
+            solarSystemData.forEach(data => createCelestialBody(data, scene, 'planet'));
+            createConstellations();
+            createAsteroidBelt();
+            createStarfield();
+
+            initializeSceneState();
+            updateVisuals();
+            animate();
+        }
+
+        initializeApp();
+    </script>
+</body>
+</html>
