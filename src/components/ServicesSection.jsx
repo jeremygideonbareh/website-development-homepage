@@ -237,7 +237,7 @@ function TiltCard({ children }) {
 
 
 
-export default function ServicesSection({ isDay = true }) {
+export default function ServicesSection({ isDay = true, onShowExamples }) {
   const sectionRef = useRef(null)
   const [hoveredService, setHoveredService] = useState(null)
   const [selectedExample, setSelectedExample] = useState(null)
@@ -370,9 +370,27 @@ export default function ServicesSection({ isDay = true }) {
                             <p className="text-xs font-medium tracking-widest uppercase mb-1" style={{ color: isDay ? '#E85D3A' : '#FF6B4A' }}>
                               {s.subtitle}
                             </p>
-                            <h3 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}>
-                              {s.title}
-                            </h3>
+                            <div className="flex items-center gap-3 mb-4">
+                              <h3 className="text-2xl md:text-3xl font-bold" style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}>
+                                {s.title}
+                              </h3>
+                              {onShowExamples && (
+                                <motion.button
+                                  onClick={(e) => { e.stopPropagation(); onShowExamples() }}
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full border transition-all"
+                                  style={{
+                                    borderColor: isDay ? '#E85D3A' : '#FF6B4A',
+                                    color: isDay ? '#E85D3A' : '#FF6B4A',
+                                    background: isDay ? 'rgba(232,93,58,0.08)' : 'rgba(255,107,74,0.1)',
+                                  }}
+                                >
+                                  <ExternalLink className="size-3" />
+                                  Browse Examples
+                                </motion.button>
+                              )}
+                            </div>
                             <p className="text-sm leading-relaxed max-w-2xl mb-6" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
                               {s.desc}
                             </p>

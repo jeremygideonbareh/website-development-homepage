@@ -1,7 +1,8 @@
-# Session Handoff — June 21, 2026
+# Session Handoff — June 21, 2026 (Afternoon)
 
 ## Project
-Website Development Homepage — React + Vite + framer-motion + Tailwind CSS agency landing page
+Website Development Homepage — **rebranded to Rouge Code**
+React + Vite + framer-motion + Tailwind CSS agency landing page
 Git repo at `C:\Users\cloud\OneDrive\Desktop\Hybrid_Second_Brain\03_Active_Projects\websites\webistedevhompage`
 Site URL: `https://jeremygideonbareh.github.io/website-development-homepage/`
 
@@ -9,255 +10,134 @@ Site URL: `https://jeremygideonbareh.github.io/website-development-homepage/`
 - React 19, Vite 8, framer-motion 12.40, Tailwind CSS 3
 - lucide-react (icons), sonner (toasts)
 - Satoshi font (aliased as `fontFamily.aeonik` in tailwind.config.js, fallback Inter → system-ui → sans-serif)
-- Vite base: `"/website-development-homepage/"` (GitHub Pages subpath)
+- Vite base: `"/"` (Cloudflare root-level) — GitHub Pages needs manual base override
 - No TypeScript, no routing library, no testing framework
+- Package name: `rouge-code` (was `client-website`)
 
 ## Current Features
 
 ### Hero (`MountEverestScene.jsx`)
 - Looping fullscreen `<video>` background (`Moving_fog_and_shooting_stars_202606211510.mp4`) with gradient overlay
-- Video URL uses `import.meta.env.BASE_URL` prefix for GitHub Pages subpath
-- Text overlay: "Horizon Labs" / "Sky's the Limit" with accent-colored span
+- Video sharpening: `filter: contrast(1.08) brightness(1.02)` + `will-change: filter` — perceptual sharpening, avoids `translateZ(0)` GPU blur bug on Windows Chrome
+- Text overlay: "Rouge Code" / "Sky's the Limit" with accent-colored span
 - Fade-out on scroll via framer-motion `useScroll` / `useTransform` (0–500px)
 - Animated scroll indicator at bottom
 - Day/night palette switching
+- Reduced night overlay 12%→6%, day 6%→3%, removed noise grain
 
 ### Day/Night Palette System (`App.jsx`)
 - **Day:** bg `#F5F0EB`, accent `#E85D3A`, text `#1A1A1A`
-- **Night:** bg `#1A1817`, accent `#FF6B4A`, text `#F2F2F2`
+- **Night (default):** bg `#1A1817`, accent `#FF6B4A`, text `#F2F2F2`
 - Applied throughout all sections via inline styles from `palette[theme]` object
-- Toggle button in fixed navbar (Sun/Moon icon)
 
-### Brand Story Section (inline in `App.jsx`)
-- 3 motion cards: "Our Philosophy", "Our Approach", "Our Promise"
-- `whileInView` with `viewport={{ once: true, margin: '-120px' }}`
-- `SectionEyebrow`, `CharReveal`, `WordReveal` text animations
+### AboutUs (`AboutUs.jsx`) — Complete Rewrite
+- **Hero:** `KineticText` in `spring` mode for the main heading
+- **Mission:** `WordReveal` animated paragraph
+- **Stats:** 4 animated counters (50+ Projects, 3x Faster, 100% Ownership, 24/7 Support) using `useInView` + `useState` count-up
+- **Values:** 4 cards (Custom from scratch, Speed without sacrifice, AI-powered engineering, Total ownership) with lucide icons
+- **Team:** 2 cards with initials-avatar circles
+- **Blog "Our Story":** Drop cap intro, alternating image+text rows, pull quote with accent styling, closing paragraph with `— Rouge Code` attribution
+- **Project Showcase:** Horizontal scroll tracks per category (Websites, Mobile, AI), theme-aware colors, arrow nav
+- **CTA:** "Book a Free Call" button
 
-### Stats Banner (inline in `App.jsx`)
-- 3-column grid: "50+ Projects Delivered", "3x Faster Than In-House", "100% Code Ownership"
-- `whileInView` fade-in with surface-colored card background
+### KineticText (`RevealText.jsx`) — New Component
+4 animation modes:
+- **`spring`** — Each character scales from 0→1 with a spring and slight rotation
+- **`wave`** — Characters drop in from above with staggered delays
+- **`scatter`** — Characters fly in from random angles
+- **`typewriter`** — Characters reveal left-to-right with a cursor blink
+- `SectionEyebrow` now accepts optional `color` prop
 
 ### ServicesSection (`ServicesSection.jsx`)
 - 3 service cards: Web Development, AI Integration, Design & Brand
-- Each card has: `BrowserFrame` Awwwards preview grid (3 per card), tilt hover effect, floating dots, progress bar, related project list
-- `PreviewModal` component: full-screen overlay (z-50) with macOS browser chrome, 80vh iframe, keyboard Escape to close, backdrop click to close, spring scale animation via `AnimatePresence`
-- Clicking any `BrowserFrame` sets `selectedExample` state → renders `PreviewModal`
-- Handles blocked sites inside modal (favicon + "Open in new tab" button)
-
-### BrowserFrame (`BrowserFrame.jsx`)
-- macOS-style browser chrome (traffic lights, URL bar)
-- 9 Awwwards example links rendered inside:
-  - **6 sites:** live `<iframe>` (no `X-Frame-Options` restriction)
-  - **3 blocked sites** (faunarobotics.com, locomotive.ca, ponder.ai): favicon-based fallback via `https://www.google.com/s2/favicons?domain=X&sz=64` + domain name + "Visit site" button
-- Clicking a card opens a full-screen `PreviewModal` with 80vh iframe
-- Preview height increased from 360px → 480px (+33%)
-- `cursor-pointer` with stronger hover lift (`y: -4` → `y: -6`)
-- `onSelect` prop notifies parent; links within card use `stopPropagation`
+- `PreviewModal` with full-screen macOS chrome, 80vh iframe, keyboard Escape + backdrop close
+- `BrowserFrame` with 9 Awwwards examples (6 live iframe, 3 favicon fallback for blocked sites)
 
 ### AnimatedBeamTimeline (`AnimatedBeamTimeline.jsx`)
-- Self-contained 4-week execution blueprint
-- Desktop: 2×2 grid with SVG bezier paths connecting weeks 1→2→3→4
-- Animated gradient dash-offset beams + glowing particles
-- Mobile: vertical stack with gradient connecting lines
-- Each card: week number badge, icon, day range, description, accent top bar, right-side spring entry
+- Sticky horizontal scroll — 500vh scroll distance, 4 × 100vw cards slide via `useScroll` + `useTransform`
+- Liquid glass effect with progress indicators
+- Mobile vertical fallback
 
 ### WhyUsSection (`WhyUsSection.jsx`)
-- Horizontal scroll with native `overflow-x-auto` + `snap-x snap-mandatory`
-- Left/right arrow navigation buttons
-- Custom thin scrollbar (accent-colored thumb)
-- Scroll indicator dots
-- Dark background sweep-in animation
-
-### AboutUs (`AboutUs.jsx`)
-- Category rows as horizontal scrollable tracks with snap, arrow nav, custom thin scrollbar
-- 3 categories: Websites & Apps, Mobile Apps, AI & Automation
-- Extracted `ScrollableCategory` component with scroll-state tracking
+- Horizontal snap scroll with arrow nav + custom thin scrollbar
+- Three.js `NetworkParticles` background (uses `three` + `@react-three/fiber`)
 
 ### Other Components
 - `BookingModal` — booking call modal
 - `ContactPage` — contact form page (from shadcn/ui)
-- `ExamplesPage` — full Awwwards examples page
-- `RevealText` — `WordReveal`, `CharReveal`, `SectionEyebrow` text animation helpers
+- `ExamplesPage` — full Awwwards examples gallery
 - `Loader` — loading spinner (2s on mount)
-
-### Loading Flow
-1. App mounts → `isLoading=true`
-2. `Loader` shows for 2s (fixed position, z-50)
-3. After 2s → `isLoading=false`, content revealed with fade-in transition
-4. Hero + navbar visible, user can scroll through sections
 
 ## Pipeline
 
 ### Dev Workflow
 ```
 npm run dev         # Vite dev server at localhost:5173 with HMR
-npm run build       # Production build to dist/ (vite build)
+npm run build       # Production build (vite build — uses rolldown)
 npm run preview     # Serve dist/ locally
 ```
 
-### Deployment (GitHub Pages)
-`gh-pages` npm package fails on long Windows paths. Workaround:
-1. `npm run build` → produces `dist/`
-2. Copy `dist/` contents to a temp directory (short path like `C:\Users\cloud\AppData\Local\Temp\`)
-3. `git init`, `git add -A`, `git commit -m "deploy"`
-4. `git remote add origin <repo-url>`
-5. `git push --force origin main:gh-pages`
-6. Clean up temp directory
+### Deployment
+**Primary: Cloudflare Pages** — auto-deploys from `main` branch. Vite base: `"/"`.
+**Secondary: GitHub Pages** — manual push to `gh-pages` branch (temp-dir workaround for long Windows paths).
 
-GitHub Pages source set to `gh-pages` branch (configured via API).
+### Build Gotchas
+- **Linux native bindings must be explicit deps.** `npm install` on Windows won't include Linux x64 optionalDependencies in the lockfile. `@rolldown/binding-linux-x64-gnu` + `lightningcss-linux-x64-gnu` are added as explicit deps (installed with `--force` flag).
+- `scrollanimation/` directory tracked in .gitignore to prevent accidental commits of 240 JPG frames.
 
-### Build & Bundle
-- JS bundle: ~1,357 kB (index-*.js)
-- CSS: ~58 kB (index-*.css)
-- No code-splitting configured
-- No chunk size optimization
+### Bundle
+- JS: ~1,371 kB (index-*.js) — exceeds 500 kB chunk warning
+- CSS: ~49.89 kB (index-*.css)
 
-## Resources Available
+## Dependencies (package.json)
+| Category | Packages | Status |
+|----------|----------|--------|
+| Framework | `react`, `react-dom` v19 | Core |
+| Build | `vite` v8, `@vitejs/plugin-react` v6 | Active |
+| Animation | `framer-motion` v12.40 | Active — scroll, text, entry animations |
+| 3D | `three` v0.184, `@react-three/fiber` v9 | Active — NetworkParticles in WhyUsSection |
+| UI | `lucide-react`, `sonner` | Active — icons, toasts |
+| Styling | `tailwindcss` v3, `postcss`, `autoprefixer`, `tailwind-merge`, `clsx`, `class-variance-authority` | Active |
+| shadcn | `@radix-ui/react-slot`, `shadcn` CLI | Slot utility used by contact page |
+| Native bindings | `@rolldown/binding-linux-x64-gnu`, `@rolldown/binding-linux-x64-musl`, `lightningcss-linux-x64-gnu` | Required for Cloudflare build |
+| Deploy | `gh-pages` v6.3 | Broken on long Windows paths |
+| Lint | `eslint` v10, plugins | Not used |
 
-### Agents (Everything Claude Code)
-| Agent | Used? | Purpose |
-|-------|-------|---------|
-| **explore** | Yes | Traced scroll animation timing — calculated frame mapping vs `whileInView` trigger positions |
-| **planner** | Yes | Debugged why 240-frame scroll animation finished before content appeared |
-| code-reviewer | No | Code quality review before commits |
-| architect | No | System design decisions |
-| tdd-guide | No | Test-driven development |
-| security-reviewer | No | Security audit |
-| build-error-resolver | No | Build failure diagnosis |
-| refactor-cleaner | No | Dead code cleanup |
-| doc-updater | No | Documentation |
-| code-writer | No | Production code writing |
-| e2e-runner | No | End-to-end testing |
-| database-reviewer | No | Database/schema optimization |
-| rust-reviewer | No | Rust code review |
-| python-reviewer | No | Python code review |
-| java-reviewer | No | Java code review |
-| typescript-reviewer | No | TypeScript/JavaScript review |
-
-### MCP Servers (`.opencode/mcp.json`)
-| Server | Used? | What it does |
-|--------|-------|-------------|
-| **shadcn** | No | CLI for shadcn/ui component registry (`npx shadcn@latest mcp`) |
-| **magicuidesign-mcp** | No | `@magicuidesign/mcp@latest` — UI component generation |
-| **threejs** | No | `@modelcontextprotocol/server-threejs` — Three.js scene building |
-| **gemini** | No | Google Gemini models (API key embedded, script at `.opencode/scripts/gemini-mcp.mjs`) |
-| **apify** | No | `apify-mcp-server` — web scraping / Awwwards research research (APIFY_TOKEN configured, intended but never used) |
-
-### Agent Skills (`.agents/skills/`)
-| Skill | Used? | Purpose |
-|-------|-------|---------|
-| **21st.dev component builder** | Yes | Generated `BrowserFrame.jsx`, `AnimatedBeamTimeline.jsx`, and several UI components |
-| **21st.dev logo search** | No | Company logo search in JSX/TSX/SVG format |
-| **frontend-design** | No | Visual design guidance for distinctive, intentional UI |
-| **web-design-guidelines** | No | UI accessibility and UX audit |
-| **vercel-react-best-practices** | No | React/Next.js performance optimization guidelines |
-| **agent-browser** | No | Browser automation (Playwright, web testing, QA) |
-| **remotion-best-practices** | No | Video creation with Remotion |
-| **find-skills** | No | Skill discovery |
-| **customize-opencode** | No | Editing opencode's own configuration |
-
-### Third-Party Tools Used
-| Tool | Used in | Purpose |
-|------|---------|---------|
-| **21st.dev magic component builder** | Yes | Generated `BrowserFrame.jsx`, `AnimatedBeamTimeline.jsx` |
-| **Cursor AI (cursor-pro)** | Yes | Delegated complex component implementation |
-| **Web Search / Web Fetch** | Yes | Finding Unsplash images, researching Awwwards sites, favicon API patterns |
-
-### Dependencies (package.json)
-| Category | Packages | Used? |
-|----------|----------|-------|
-| **Framework** | `react`, `react-dom` v19 | Yes — core |
-| **Build** | `vite` v8, `@vitejs/plugin-react` v6 | Yes |
-| **Animation** | `framer-motion` v12.40 | Yes — scroll, text, entry animations |
-| **3D (unused)** | `three` v0.184, `@react-three/fiber` v9, `@react-three/drei` v10, `@splinetool/react-spline` v4 | No — 3D scene removed |
-| **Animation (unused)** | `gsap` v3.15 | No |
-| **UI** | `lucide-react`, `sonner` | Yes — icons, toasts |
-| **Styling** | `tailwindcss` v3, `postcss`, `autoprefixer`, `tailwind-merge`, `clsx`, `class-variance-authority` | Yes |
-| **shadcn/ui** | `@radix-ui/react-slot`, `shadcn` CLI | Partially — slot utility used by contact page |
-| **Deploy** | `gh-pages` v6.3 | No (broken on long Windows paths) |
-| **Lint** | `eslint` v10, plugins | No |
+### Dead deps removed this session
+- `@react-three/drei` (was for old 3D scenes)
+- `@splinetool/react-spline`, `@splinetool/runtime` (was for Spline 3D)
+- `gsap` (was for scroll animations, replaced by framer-motion)
 
 ## Commit History (latest first)
 ```
+d7f25e9 chore: ignore scrollanimation/ dir in git
+51025d3 feat: rebrand Horizon Labs to Rouge Code
+175debe fix: add lightningcss-linux-x64-gnu binding for Cloudflare Pages build
+e3e5fe6 fix: add @rolldown/binding-linux-x64 deps for Cloudflare Pages build
+6cea817 feat: rewrite AboutUs with Awwwards-inspired design and KineticText
+990ed43 feat: add KineticText (4 modes), SectionEyebrow color prop; fix ProjectCard colors
+ef6c042 feat: delete 19 orphaned components, 5 orphaned ui, 240 frames; rm 4 dead deps
+2ddf536 feat: fix blurry hero video with CSS filter + will-change
+7f62710 feat: add blog-style Our Story section with drop cap and pull quote
+ef032ad feat: add AnimatedBeamTimeline with sticky horizontal scroll; add AboutUs stat counters
 2a45260 feat: default night theme, preview modal, blocked sites, preconnect hints
-9d0dae1 fix: commit BrowserFrame and NetworkParticles for CI build
-95ac736 fix: commit untracked component files for CI build
-2cfc1fd feat: replace static mountain photo with looping video background
-54efb37 feat: replace scroll animation with high-res mountain photo hero
-ce816d6 fix: revert vite base to /website-development-homepage/ for GitHub Pages subpath
-7eb27e7 fix: set Vite base to / for root-level Cloudflare Workers deployment
-cc2d8d3 feat: deeper scroll-to-zoom (15→0.5) and day/night theme toggle with warm/sunrise palette
-61a7176 feat: add interactive Mount Everest 3D hero with procedural terrain, fog, and scroll-to-zoom
-d89f6f9 chore: gitignore .opencode/mcp.json to protect API keys
-d8d2af3 fix: remove _redirects conflicting with wrangler SPA config, add wrangler.jsonc
-c82ecc4 feat: ASCII art hero with Hyperstudio branding, kinetic typography, and scroll narrative
-405df2b fix: update vite base for Cloudflare and add _redirects for SPA routing
-76a155a Add FastAPI backend, SEO, security layers, and premium UI components
-ba58a7a feat: overhaul services to 3-tier model, update process to 30-day blueprint
-80f3cce chore: update contact info, remove nav brand, enhance loader
-d52a0be chore: setup github actions deployment for pages
-88aef5a feat: complete pivot to B2B web development agency with updated services and UI
+... (earlier history)
 ```
 
-## Key Decisions Made This Session (June 21)
-1. **240-frame scroll animation removed.** Replaced with static mountain photo, then swapped for looping video background. Video lives at `public/videos/`, URL constructed with `import.meta.env.BASE_URL`.
-2. **`whileInView` timing fix attempted and reverted.** Animation was completing at frame ~66 (27%) when content appeared due to `margin: '-120px'` on `viewport`. Fix stretched animation across 2 viewport heights + `paddingTop: 300vh`. User reverted entirely ("nvm undo").
-3. **No npm deploy script** — `gh-pages` npm package broken on long Windows paths. Manual temp-directory git push workaround used instead.
-4. **CI build failed twice** — `BrowserFrame.jsx`, `NetworkParticles.jsx`, `ServicesSection.jsx`, `WhyUsSection.jsx`, `AnimatedBeamTimeline.jsx`, `AboutUs.jsx` were all untracked files. CI had no reference of them. Fixed by committing all 6 files across two commits.
-5. **Created cross-project learning infrastructure.** Global `~/.config/opencode/AGENTS.md` updated with pipeline section. Global `opencode.jsonc` updated with knowledge base instruction, `web-designer` agent, and `/design` command. Knowledge directory created at `~/.config/opencode/knowledge/` with first entry.
-6. **Created shareable `opencode-skill-web-designer` repo** at `https://github.com/jeremygideonbareh/opencode-skill-web-designer` with SKILL.md, README.md, and knowledge/starter.md.
-7. **Upgraded GitHub profile** at `jeremygideonbareh/jeremygideonbareh` — replaced simple 16-line README with animated typing header, GitHub stats cards, trophy showcase, activity graph, contribution snake animation, tech stack badges, featured projects, and contact links.
-8. **Default theme changed to `'night'`** — `App.jsx:66` `useState(() => 'day')` → `useState(() => 'night')`. Site loads in dark mode by default; toggle still available.
-9. **Added 3 blocked Awwwards sites** to `blockedSites` array in `BrowserFrame.jsx` — `faunarobotics.com`, `locomotive.ca`, `ponder.ai` now use favicon fallback instead of broken iframes.
-10. **Full-screen PreviewModal added** — clicking any `BrowserFrame` opens a macOS-chromed modal (80vh iframe, Escape/backdrop to close, spring animation via AnimatePresence). Works for both iframeable and blocked sites.
-11. **Preview height +33%** — inline iframe height 360px → 480px.
-12. **Preconnect hints added** — `index.html` preconnects to `images.unsplash.com`, `picsum.photos`, `www.google.com` for faster resource loading.
-
-## Orphaned / Dead Files (no longer imported, safe to remove)
-- `src/components/ScrollAnimation.jsx` — 240-frame scroll animation component
-- `src/components/FogLayer.jsx` — R3F fog effect
-- `src/components/ui/radial-orbital-timeline.jsx` — Old orbital timeline component
-- `public/scrollanimation/` — 240 JPG frames (~12 MB)
-- `photos/` — Original video location (moved to `public/videos/`)
-
-**Note:** `BrowserFrame.jsx` and `NetworkParticles.jsx` are active imports but safe to review for dead code removal.
-
-## Dead Dependencies (safe to uninstall)
-- `three`, `@react-three/fiber`, `@react-three/drei`, `@splinetool/react-spline`, `@splinetool/runtime`
-- `gsap`
-
-## Global Learning Infrastructure (outside this project)
-
-### Files Created/Modified
-| File | Purpose |
-|------|---------|
-| `~/.config/opencode/AGENTS.md` | Appended Cross-Project Pipeline & Learning System section — enforces knowledge base read before every project, knowledge write after every session |
-| `~/.config/opencode/opencode.jsonc` | Added `"Read knowledge base"` to instructions, added `web-designer` agent, added `/design` command |
-| `~/.config/opencode/knowledge/website-development-homepage.md` | First knowledge entry — design patterns, build gotchas, reusable components, agent performance notes, mistakes to avoid |
-| `https://github.com/jeremygideonbareh/opencode-skill-web-designer` | Public skill repo with SKILL.md, README.md, knowledge/starter.md — anyone can install |
-
-### Learning Loop
-1. Before any project → AI reads `~/.config/opencode/knowledge/`
-2. During session → AI uses past patterns, avoids past mistakes
-3. After session → AI writes learnings back to knowledge/
-4. Over time → patterns compound, designs improve
-
-## External Repositories (outside this project)
-| Repo | What | Purpose |
-|------|------|---------|
-| `jeremygideonbareh/jeremygideonbareh` | GitHub Profile README | Animated profile with stats, trophies, activity graph, snake animation, tech stack badges |
-| `jeremygideonbareh/opencode-skill-web-designer` | opencode Skill | Shareable web-designer agent with knowledge base learning loop |
+## Key Decisions Made This Session
+1. **Rebranded Horizon Labs → Rouge Code** — 11 references across 4 files. Footer logo, copyright, hero overlay, AboutUs team card (initials: RC), project entry, blog story (4 mentions), section eyebrow, package name
+2. **Dead code deleted** — 19 orphaned component files, 5 orphaned ui components, 240 scrollanimation JPGs. Cleaned up old 3D/replaced components
+3. **Cloudflare build fixed** — rolldown + lightningcss both use Linux x64 native bindings that don't get included in lockfile when installing on Windows. Explicit deps with `--force` added
+4. **Video sharpen fix applied** — `filter: contrast(1.08) brightness(1.02)` + `will-change: filter` forces GPU compositing without the `translateZ(0)` blur bug on Windows Chrome. Reduced overlay opacity, removed grain
+5. **AboutUs.jsx completely rewritten** — from simple project showcase to full Awwwards-inspired hero-mission-stats-values-team-blog-cta layout
+6. **KineticText component created** — 4 animation modes for character-level reveals. Replaces CharReveal on major headings
+7. **scrollanimation/ gitignored** — 240 JPG frames (byproduct of old scroll animation) no longer tracked
 
 ## What Hasn't Been Done
-- Accessibility audit (web-design-guidelines skill available)
-- Visual design polish (frontend-design skill available)
-- Performance optimization / bundle splitting (1.36 MB JS, chunk size warning)
-- Code review (code-reviewer agent available)
-- Security audit (security-reviewer agent available)
-- Dead code cleanup (refactor-cleaner agent — orphaned files still in repo: ScrollAnimation.jsx, FogLayer.jsx, radial-orbital-timeline.jsx, scrollanimation/ frames)
-- Any testing
-- Responsive testing on real devices
-- Using Apify MCP for Awwwards research
-- Using Gemini MCP for AI-powered development
-- Using 21st.dev logo search for company logos
-- GitHub Actions / CI pipeline for this project
+- Accessibility / responsive testing
+- Bundle splitting / code-splitting (1.37 MB warning)
+- SEO audit / meta tags update for rebrand
+- GitHub Actions CI for this project
+- Using MCP servers (shadcn, threejs, gemini, apify — all configured, unused)
+- Code review (code-reviewer agent)
+- Security audit (security-reviewer agent)

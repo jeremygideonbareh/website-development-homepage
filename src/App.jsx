@@ -60,7 +60,7 @@ const stats = [
 const cinematicPhotos = [
   'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&q=85',
   'https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&q=85',
-  'https://images.unsplash.com/photo-1481833761824-86256f2ba5c4?w=800&q=85',
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=85',
   'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=85',
   'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=85',
   'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=85',
@@ -297,7 +297,7 @@ function App() {
                 </div>
               </section>
 
-              <ServicesSection isDay={theme === 'day'} />
+              <ServicesSection isDay={theme === 'day'} onShowExamples={() => setShowExamples(true)} />
 
               {/* Process + Why Us */}
               <section className="relative">
