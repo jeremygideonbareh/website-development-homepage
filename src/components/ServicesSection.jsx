@@ -152,9 +152,9 @@ const services = [
     icon: Code,
     decor: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80',
     examples: [
-      { name: 'Cuberto', url: 'https://cuberto.com', award: 'Awwwards Featured', img: 'https://picsum.photos/seed/cuberto/320/200' },
-      { name: 'Apechain', url: 'https://apechain.com', award: 'SOTD Jun 2026', img: 'https://picsum.photos/seed/apechain/320/200' },
-      { name: 'Monogrid', url: 'https://monogrid.com', award: 'SOTD Feb 2026', img: 'https://picsum.photos/seed/monogrid/320/200' },
+      { name: 'Indaba Coffee', url: 'https://www.indabacoffee.com/', award: 'Simple Coffee Shop', img: 'https://picsum.photos/seed/indaba-coffee/320/200' },
+      { name: 'TOAD Bakery', url: 'https://www.toadbakery.com/', award: 'Simple Product Site', img: 'https://picsum.photos/seed/toad-bakery/320/200' },
+      { name: 'John Kail', url: 'https://www.johnkail.com/', award: 'Personal Portfolio', img: 'https://picsum.photos/seed/john-kail/320/200' },
     ],
     projects: [
       { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers' },

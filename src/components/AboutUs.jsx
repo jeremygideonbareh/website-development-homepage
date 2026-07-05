@@ -138,6 +138,12 @@ function ScrollableCategory({ label, catProjects, catIdx, p }) {
   const trackRef = useRef(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
+  
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+  
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
@@ -204,6 +210,11 @@ function ProcessStep({ step, i, p }) {
 
 export default function AboutUs({ onBack, theme = 'night' }) {
   const p = themes[theme] ?? themes.night
+  
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const processSteps = [
     { title: 'Discovery & Strategy', desc: 'We learn your business, audience, and goals. Then map a technical roadmap tailored to your vision.' },
