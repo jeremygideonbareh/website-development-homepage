@@ -44,7 +44,7 @@ function PanelCard({ p, i, isDay }) {
       className="flex-shrink-0 w-[85vw] max-w-lg md:w-[40vw] snap-start"
     >
       <div
-        className="relative h-[320px] md:h-[400px] rounded-2xl border p-8 md:p-10 flex flex-col justify-between overflow-hidden group"
+        className="relative min-h-[320px] md:min-h-[400px] rounded-2xl border p-8 md:p-10 flex flex-col justify-between overflow-hidden group"
         style={{
           borderColor: `${p.accent}33`,
           background: isDay
@@ -180,10 +180,11 @@ export default function WhyUsSection({ isDay = true }) {
         {canScrollLeft && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 size-10 rounded-full flex items-center justify-center transition-opacity"
+            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-opacity"
             style={{
               background: isDay ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.6)',
               color: isDay ? '#1A1A1A' : '#F2F2F2',
+              touchAction: 'manipulation',
             }}
           >
             <ChevronLeft className="size-5" />
@@ -194,10 +195,11 @@ export default function WhyUsSection({ isDay = true }) {
         {canScrollRight && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 size-10 rounded-full flex items-center justify-center transition-opacity"
+            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-opacity"
             style={{
               background: isDay ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.6)',
               color: isDay ? '#1A1A1A' : '#F2F2F2',
+              touchAction: 'manipulation',
             }}
           >
             <ChevronRight className="size-5" />
@@ -241,9 +243,11 @@ export default function WhyUsSection({ isDay = true }) {
               const card = el.children[i]
               if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
             }}
-            className="size-2 rounded-full transition-all duration-300"
-            style={{ background: p.accent }}
-          />
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-all duration-300"
+            style={{ background: 'transparent', touchAction: 'manipulation' }}
+          >
+            <span className="size-2.5 rounded-full" style={{ background: p.accent }} />
+          </button>
         ))}
       </div>
 

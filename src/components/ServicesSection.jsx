@@ -74,15 +74,15 @@ function PreviewModal({ example, isDay, onClose }) {
           </div>
           <button
             onClick={onClose}
-            className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-black/10"
-            style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-colors hover:bg-black/10"
+            style={{ color: isDay ? '#1A1A1A' : '#F2F2F2', touchAction: 'manipulation' }}
           >
             <X className="size-4" />
           </button>
         </div>
 
         {/* Content — screenshot, falls back to favicon + open in new tab */}
-        <div className="relative overflow-hidden" style={{ height: '80vh', maxHeight: 800 }}>
+        <div className="relative overflow-hidden" style={{ height: '80dvh', maxHeight: 800 }}>
           {screenshotError ? (
             <div
               className="w-full h-full flex flex-col items-center justify-center gap-4"

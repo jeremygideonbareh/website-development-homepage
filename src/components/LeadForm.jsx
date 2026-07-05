@@ -187,7 +187,7 @@ export function LeadForm({ defaultTier = '', onSuccess }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="absolute -top-8 left-0 flex items-center gap-1.5 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-1.5 text-xs text-red-400 whitespace-nowrap"
+                        className="absolute -top-10 left-0 flex items-center gap-1.5 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-1.5 text-xs text-red-400 whitespace-nowrap"
             >
               <AlertCircle className="size-3 shrink-0" />
               <span>{fieldErrors[field]?.[0] ?? 'Invalid input'}</span>
@@ -318,7 +318,7 @@ export function LeadForm({ defaultTier = '', onSuccess }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
                         transition={{ duration: 0.25, ease: 'easeOut' }}
-                        className="absolute -top-8 left-0 flex items-center gap-1.5 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-1.5 text-xs text-red-400 whitespace-nowrap"
+              className="absolute -top-10 left-0 flex items-center gap-1.5 rounded-lg bg-red-500/10 border border-red-500/30 px-3 py-1.5 text-xs text-red-400 whitespace-nowrap"
                       >
                         <AlertCircle className="size-3 shrink-0" />
                         <span>{fieldErrors.project_tier[0]}</span>

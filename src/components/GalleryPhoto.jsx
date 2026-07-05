@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-export default function GalleryPhoto({ src, alt, className, rotate = 0, offsetX = 0, offsetY = 0, width = 'w-72', aspect = 'aspect-[4/3]', from = 'left', delay = 0 }) {
+export default function GalleryPhoto({ src, alt, className, rotate = 0, offsetX = 0, offsetY = 0, width = 'w-64 sm:w-72', aspect = 'aspect-[4/3]', from = 'left', delay = 0 }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: from === 'left' ? -120 : 120, y: 40, rotate: -rotate }}

@@ -26,7 +26,7 @@ export function ContactPage() {
   ]
 
   return (
-    <div className="min-h-screen w-full bg-black text-white">
+    <div className="min-h-screen w-full bg-black text-white overflow-hidden">
       <div className="mx-auto h-full max-w-6xl lg:border-x lg:border-white/10">
         <div
           aria-hidden
@@ -96,7 +96,7 @@ export function ContactPage() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-white/5 hover:bg-white/10 flex items-center gap-x-2 rounded-full border border-white/10 px-4 py-2"
+                    className="bg-white/5 hover:bg-white/10 flex items-center gap-x-2 rounded-full border border-white/10 px-4 py-2 min-h-[44px]"
                   >
                     <link.icon className="size-4" />
                     <span className="font-mono text-sm font-medium tracking-wide">
@@ -131,7 +131,7 @@ function Box({ title, description, className, children, icon: Icon, ...props }) 
         <h2 className="text-lg font-medium tracking-wider">{title}</h2>
       </div>
       <div className="flex items-center gap-x-2 p-4 py-12">{children}</div>
-      <div className="border-t border-white/10 p-4">
+      <div className="border-t border-white/10 p-4 py-6 md:py-12">
         <p className="text-zinc-400 text-sm">{description}</p>
       </div>
     </div>

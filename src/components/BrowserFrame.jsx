@@ -68,7 +68,7 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
       </div>
 
       {/* Browser body — iframe (live site, can't interact) or fallback */}
-      <div className="relative overflow-hidden" style={{ height: 480 }} ref={ref}>
+      <div ref={ref} className="relative overflow-hidden" style={{ height: 'clamp(160px, 40vw, 480px)' }}>
         {blocked || iframeError ? (
           /* Fallback: favicon + domain card */
           <div
@@ -120,7 +120,7 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
               onError={() => setIframeError(true)}
             />
             {/* Invisible overlay — site renders live but can't be interacted with */}
-            <div className="absolute inset-0 cursor-pointer" style={{ pointerEvents: 'none' }} />
+            <div className="absolute inset-0 cursor-pointer" style={{ pointerEvents: 'none', touchAction: 'none' }} />
             <div
               className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
               style={{

@@ -182,7 +182,7 @@ function ProjectCard({ proj, i, p }) {
                 style={{ background: '#fff', pointerEvents: 'none' }}
                 onError={() => setIframeError(true)}
               />
-              <div className="absolute inset-0" style={{ pointerEvents: 'none' }} />
+              <div className="absolute inset-0" style={{ pointerEvents: 'none', touchAction: 'none' }} />
             </>
           )}
           <div className="absolute top-3 right-3 size-2.5 rounded-full" style={{ backgroundColor: proj.color }} />
@@ -295,7 +295,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
   ]
 
   return (
-    <div className="min-h-screen pt-24 pb-32 overflow-hidden" style={{ backgroundColor: p.bg }}>
+    <div className="min-h-screen pt-24 pb-32 overflow-x-hidden" style={{ backgroundColor: p.bg }}>
       <div className="relative px-6 md:px-12 mx-auto max-w-6xl">
 
         {/* ─── HERO — Full personal intro ─── */}

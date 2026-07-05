@@ -123,7 +123,7 @@ function App() {
             exit={{ opacity: 0, transition: { duration: 0.4 } }}
           >
             <motion.h1
-              className="text-6xl sm:text-7xl lg:text-8xl font-bold tracking-[0.3em]"
+              className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-[0.15em] sm:tracking-[0.3em]"
               style={{ color: '#ffffff' }}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -155,10 +155,11 @@ function App() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setTheme(prev => prev === 'night' ? 'day' : 'night')}
-              className="flex items-center justify-center size-9 rounded-full border transition-colors"
+              className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full border transition-colors"
               style={{
                 borderColor: p.border,
                 color: p.text,
+                touchAction: 'manipulation',
               }}
               aria-label="Toggle theme"
             >
@@ -170,6 +171,7 @@ function App() {
               style={{
                 borderColor: p.border,
                 color: p.text,
+                touchAction: 'manipulation',
               }}
             >
               {showAbout && <ArrowLeft className="size-4" />}
@@ -181,6 +183,7 @@ function App() {
               style={{
                 backgroundColor: p.text,
                 color: p.bg,
+                touchAction: 'manipulation',
               }}
             >
               {showContact && <ArrowLeft className="size-4" />}
@@ -195,7 +198,7 @@ function App() {
           <AboutUs theme={theme} onBack={() => setShowAbout(false)} />
         ) : (
           <>
-            <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100vh' }}>
+            <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100dvh' }}>
               {/* Brand Story */}
               <section className="px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
                 <div className="mx-auto max-w-6xl space-y-48">

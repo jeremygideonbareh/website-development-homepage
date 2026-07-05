@@ -40,7 +40,7 @@ function SiteThumbnail({ url, name }) {
             style={{ background: '#fff', pointerEvents: 'none' }}
             onError={() => setError(true)}
           />
-          <div className="absolute inset-0" style={{ pointerEvents: 'none' }} />
+          <div className="absolute inset-0" style={{ pointerEvents: 'none', touchAction: 'none' }} />
         </>
       )}
     </div>
@@ -51,7 +51,7 @@ function SitePreview({ url, name }) {
   const [error, setError] = useState(false)
   const domain = getDomain(url)
   return (
-    <div className="relative overflow-hidden" style={{ height: '80vh', maxHeight: 800 }}>
+    <div className="relative overflow-hidden" style={{ height: '80dvh', maxHeight: 800 }}>
       {error ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-4" style={{ background: '#1A1817' }}>
           <img src={getFaviconUrl(url)} alt="" className="size-16 rounded-xl" style={{ background: 'rgba(255,255,255,0.05)' }}
@@ -397,7 +397,7 @@ function IframeModalPreview({ url, name }) {
   const blocked = isBlocked(url)
 
   return (
-    <div className="relative overflow-hidden" style={{ height: '80vh', maxHeight: 800 }}>
+    <div className="relative overflow-hidden" style={{ height: '80dvh', maxHeight: 800 }}>
       {blocked || error ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-4" style={{ background: '#1A1817' }}>
           <AlertCircle className="size-12" style={{ color: 'rgba(255,255,255,0.15)' }} />
@@ -522,7 +522,7 @@ export default function ExamplesPage({ onBack }) {
       </div>
 
       {/* Results */}
-      <div className="pt-36 pb-24 px-4 md:px-8 max-w-7xl mx-auto">
+      <div className="pt-44 sm:pt-36 pb-24 px-4 md:px-8 max-w-7xl mx-auto">
         {Object.keys(grouped).length === 0 ? (
           <div className="text-center py-32">
             <p className="text-lg font-medium" style={{ color: 'rgba(255,255,255,0.3)' }}>No examples found</p>
@@ -646,7 +646,9 @@ export default function ExamplesPage({ onBack }) {
               {/* Browser chrome */}
               <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)', background: '#222020' }}>
                 <div className="flex items-center gap-2">
-                  <button onClick={() => setSelectedItem(null)} className="size-3 rounded-full bg-[#FF5F57] hover:brightness-110 transition-all" />
+                  <button onClick={() => setSelectedItem(null)} className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ touchAction: 'manipulation' }}>
+                    <span className="size-3 rounded-full bg-[#FF5F57]" />
+                  </button>
                   <span className="size-3 rounded-full bg-[#FFBD2E]" />
                   <span className="size-3 rounded-full bg-[#28C840]" />
                 </div>
@@ -658,7 +660,7 @@ export default function ExamplesPage({ onBack }) {
                   <a href={selectedItem.url} target="_blank" rel="noopener noreferrer" className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2' }}>
                     <ExternalLink className="size-4" />
                   </a>
-                  <button onClick={() => setSelectedItem(null)} className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2' }}>
+                  <button onClick={() => setSelectedItem(null)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2', touchAction: 'manipulation' }}>
                     <X className="size-4" />
                   </button>
                 </div>
