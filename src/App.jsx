@@ -5,7 +5,7 @@ import {
   ArrowLeft, Sun, Moon,
 } from 'lucide-react'
 import Loader from './components/Loader'
-import MountEverestScene from './components/MountEverestScene'
+import PrismaHero from './components/ui/prisma-hero'
 import ServicesSection from './components/ServicesSection'
 import WhyUsSection from './components/WhyUsSection'
 import { ContactPage } from './components/ui/contact-page'
@@ -97,7 +97,7 @@ function App() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: p.bg }}>
-      {!showExamples && !showAbout && !showContact && <MountEverestScene theme={theme} />}
+      {!showExamples && !showAbout && !showContact && <PrismaHero />}
 
       <AnimatePresence>
         {isLoading && (
