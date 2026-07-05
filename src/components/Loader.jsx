@@ -1,21 +1,21 @@
-import { useEffect, useRef } from 'react'
-import 'ldrs/helix'
+import { useEffect } from 'react'
+import { cardio } from 'ldrs'
+cardio.register()
 
 export default function Loader() {
-  const ref = useRef(null)
-
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    el.setAttribute('size', '65')
-    el.setAttribute('color', '#FF6B4A')
-    el.setAttribute('speed', '1.75')
-    el.setAttribute('stroke', '12')
+    const els = document.querySelectorAll('l-cardio')
+    els.forEach(el => {
+      el.setAttribute('size', '50')
+      el.setAttribute('stroke', '4')
+      el.setAttribute('speed', '2')
+      el.setAttribute('color', '#FF6B4A')
+    })
   }, [])
 
   return (
     <div className="flex flex-col items-center justify-center gap-10">
-      <l-helix ref={ref} />
+      <l-cardio />
 
       <div className="w-full text-center">
         <h1
