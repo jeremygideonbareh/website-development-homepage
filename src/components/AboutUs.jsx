@@ -7,18 +7,26 @@ import {
 } from 'lucide-react'
 import { WordReveal, CharReveal, SectionEyebrow, KineticText } from './RevealText'
 import GalleryPhoto, { GalleryFrame } from './GalleryPhoto'
-import HorizontalScrollSection from './HorizontalScrollSection'
+
+function getDomain(url) {
+  try { return new URL(url).hostname.replace('www.', '') } catch { return url }
+}
+
+function getFaviconUrl(url) {
+  const domain = getDomain(url)
+  return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
+}
 
 const projects = [
-  { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers', tech: 'TypeScript, Next.js, Supabase', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/gods-creatures/400/280', result: 'Full-stack booking & e-commerce platform' },
-  { name: 'Pet Grooming Website', url: 'https://github.com/jeremygideonbareh/pet-grooming-website-', tech: 'HTML, JavaScript, TypeScript', category: 'websites', color: '#2B7A78', img: 'https://picsum.photos/seed/pet-grooming/400/280', result: 'Responsive service showcase site' },
-  { name: 'Be Kind Bakery', url: 'https://github.com/jeremygideonbareh/be-kind-bakery', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#FF6B4A', img: 'https://picsum.photos/seed/be-kind-bakery/400/280', result: 'Digital storefront with online ordering' },
-  { name: 'Crumbs Bakery', url: 'https://github.com/jeremygideonbareh/crumbs-bakery-', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/crumbs-bakery/400/280', result: 'Menu-driven bakery website' },
-  { name: 'Chelsea Man Spa Mobile', url: 'https://github.com/jeremygideonbareh/chelsea-man-spa-mobile', tech: 'JavaScript, Firebase, Google Auth', category: 'mobile', color: '#FF6B4A', img: 'https://picsum.photos/seed/chelsea-spa/400/280', result: 'Cross-platform booking app' },
-  { name: "Kiki's Portfolio", url: 'https://github.com/jeremygideonbareh/kiki-s-portfolio-website', tech: 'TypeScript, React', category: 'websites', color: '#2B7A78', img: 'https://picsum.photos/seed/kiki-portfolio/400/280', result: 'Personal brand showcase' },
-  { name: 'Trading Bot', url: 'https://github.com/jeremygideonbareh/trading-bot-', tech: 'Python, TypeScript, Docker', category: 'ai', color: '#FF6B4A', img: 'https://picsum.photos/seed/trading-bot/400/280', result: 'Automated trading pipeline' },
-  { name: 'Support Ticket Agent', url: 'https://github.com/jeremygideonbareh/support-ticket-agent', tech: 'Python, LangChain, LangGraph', category: 'ai', color: '#2B7A78', img: 'https://picsum.photos/seed/support-agent/400/280', result: 'AI-powered customer support' },
-  { name: 'Rogue Code (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', img: 'https://picsum.photos/seed/rogue-code/400/280', result: 'Interactive agency showcase' },
+  { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers', tech: 'TypeScript, Next.js, Supabase', category: 'websites', color: '#FF6B4A', result: 'Full-stack booking & e-commerce platform' },
+  { name: 'Pet Grooming Website', url: 'https://github.com/jeremygideonbareh/pet-grooming-website-', tech: 'HTML, JavaScript, TypeScript', category: 'websites', color: '#2B7A78', result: 'Responsive service showcase site' },
+  { name: 'Be Kind Bakery', url: 'https://github.com/jeremygideonbareh/be-kind-bakery', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#FF6B4A', result: 'Digital storefront with online ordering' },
+  { name: 'Crumbs Bakery', url: 'https://github.com/jeremygideonbareh/crumbs-bakery-', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#3B8A88', result: 'Menu-driven bakery website' },
+  { name: 'Chelsea Man Spa Mobile', url: 'https://github.com/jeremygideonbareh/chelsea-man-spa-mobile', tech: 'JavaScript, Firebase, Google Auth', category: 'mobile', color: '#FF6B4A', result: 'Cross-platform booking app' },
+  { name: "Kiki's Portfolio", url: 'https://github.com/jeremygideonbareh/kiki-s-portfolio-website', tech: 'TypeScript, React', category: 'websites', color: '#2B7A78', result: 'Personal brand showcase' },
+  { name: 'Trading Bot', url: 'https://github.com/jeremygideonbareh/trading-bot-', tech: 'Python, TypeScript, Docker', category: 'ai', color: '#FF6B4A', result: 'Automated trading pipeline' },
+  { name: 'Support Ticket Agent', url: 'https://github.com/jeremygideonbareh/support-ticket-agent', tech: 'Python, LangChain, LangGraph', category: 'ai', color: '#2B7A78', result: 'AI-powered customer support' },
+  { name: 'Rogue Code (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', result: 'Interactive agency showcase' },
 ]
 
 const categoryLabels = {
@@ -140,7 +148,8 @@ function SkillBar({ name, level, index }) {
 }
 
 function ProjectCard({ proj, i, p }) {
-  const [loaded, setLoaded] = useState(false)
+  const [iframeError, setIframeError] = useState(false)
+  const domain = getDomain(proj.url)
   return (
     <motion.div
       initial={{ x: 200, opacity: 0 }}
@@ -151,19 +160,31 @@ function ProjectCard({ proj, i, p }) {
     >
       <motion.a
         href={proj.url} target="_blank" rel="noopener noreferrer"
-        onViewportEnter={() => setTimeout(() => setLoaded(true), 200 + i * 50)}
         whileHover={{ y: -6, transition: { duration: 0.25 } }}
         className="group block rounded-2xl border overflow-hidden transition-shadow duration-300"
         style={{ borderColor: p.glassBorder, background: p.cardBg, backdropFilter: 'blur(8px)' }}
       >
-        <div className="relative h-40 overflow-hidden" style={{ background: p.surface2 }}>
-          {!loaded && (
-            <motion.div className="absolute inset-0" style={{ background: `linear-gradient(90deg, transparent 0%, ${p.text}08 50%, transparent 100%)` }}
-              animate={{ x: ['-100%', '100%'] }} transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }} />
+        <div className="relative overflow-hidden" style={{ height: 160, background: p.surface2 }}>
+          {iframeError ? (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+              <img src={getFaviconUrl(proj.url)} alt="" className="size-6 rounded"
+                onError={(e) => { e.target.style.display = 'none' }} />
+              <span className="text-[10px] font-medium" style={{ color: p.dim, opacity: 0.5 }}>{domain}</span>
+            </div>
+          ) : (
+            <>
+              <iframe
+                src={proj.url}
+                title={proj.name}
+                className="w-full h-full border-0"
+                loading="lazy"
+                sandbox="allow-scripts allow-same-origin allow-popups"
+                style={{ background: '#fff', pointerEvents: 'none' }}
+                onError={() => setIframeError(true)}
+              />
+              <div className="absolute inset-0" style={{ pointerEvents: 'none' }} />
+            </>
           )}
-          <motion.img src={proj.img} alt={proj.name} className="w-full h-full object-cover"
-            initial={{ opacity: 0, scale: 1.1 }} animate={loaded ? { opacity: 1, scale: 1 } : {}} transition={{ duration: 0.6 }} />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
           <div className="absolute top-3 right-3 size-2.5 rounded-full" style={{ backgroundColor: proj.color }} />
         </div>
         <div className="p-4 md:p-5">

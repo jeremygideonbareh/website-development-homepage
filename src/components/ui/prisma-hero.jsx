@@ -97,7 +97,7 @@ export default function PrismaHero({ onStartProject }) {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
 
         {/* Hero content */}
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-2 sm:px-6 md:px-10">
+        <div className="absolute inset-0 flex flex-col justify-end px-4 pb-16 sm:px-6 md:px-10 md:pb-24 lg:pb-28">
           <div className="grid grid-cols-12 items-end gap-4">
             
             <div className="col-span-12 lg:col-span-8">
@@ -109,7 +109,7 @@ export default function PrismaHero({ onStartProject }) {
               </h1>
             </div>
 
-            <div className="col-span-12 flex flex-col gap-5 pb-6 lg:col-span-4 lg:pb-10">
+            <div className="col-span-12 flex flex-col gap-5 lg:col-span-4">
               
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
