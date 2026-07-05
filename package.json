@@ -17,14 +17,15 @@
     "@rolldown/binding-linux-x64-musl": "^1.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "12.40.0",
+    "ldrs": "^1.1.9",
     "lightningcss-linux-x64-gnu": "^1.32.0",
     "lucide-react": "^1.16.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
-    "three": "^0.184.0",
-    "framer-motion": "12.40.0"
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

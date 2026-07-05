@@ -1,48 +1,45 @@
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import 'ldrs/helix'
 
 export default function Loader() {
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    el.setAttribute('size', '65')
+    el.setAttribute('color', '#FF6B4A')
+    el.setAttribute('speed', '1.75')
+    el.setAttribute('stroke', '12')
+  }, [])
+
   return (
-    <div className="flex flex-col items-center justify-center gap-12">
-      <div className="relative size-20">
-        <motion.div
-          className="absolute inset-0 rounded-full border-2"
-          style={{ borderColor: 'transparent', borderTopColor: '#ffffff', borderRightColor: '#ffffff' }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute inset-2 rounded-full border"
-          style={{ borderColor: 'transparent', borderBottomColor: 'rgba(255,255,255,0.4)', borderLeftColor: 'rgba(255,255,255,0.4)' }}
-          animate={{ rotate: -360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-        />
-        <motion.div
-          className="absolute inset-0 flex items-center justify-center"
-          animate={{ opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <div className="size-2 rounded-full bg-white" />
-        </motion.div>
-      </div>
+    <div className="flex flex-col items-center justify-center gap-10">
+      <l-helix ref={ref} />
 
       <div className="w-full text-center">
-        <motion.h1
-          className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-[0.2em] sm:tracking-[0.35em] text-white"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+        <h1
+          className="animate-fade-in text-2xl sm:text-4xl lg:text-5xl font-bold tracking-[0.2em] sm:tracking-[0.35em]"
+          style={{ color: '#ffffff' }}
         >
           ROGUE CODE
-        </motion.h1>
+        </h1>
       </div>
 
-      <motion.div
-        className="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"
-        style={{ width: 160 }}
-        initial={{ scaleX: 0, opacity: 0 }}
-        animate={{ scaleX: 1, opacity: 1 }}
-        transition={{ duration: 1, delay: 0.3, ease: 'easeOut' }}
+      <div
+        className="h-px animate-grow-line"
+        style={{
+          width: 160,
+          background: 'linear-gradient(to right, transparent, rgba(255,107,74,0.6), transparent)',
+        }}
       />
+
+      <p
+        className="animate-fade-in-delayed text-xs tracking-[0.15em] uppercase"
+        style={{ color: 'rgba(255,255,255,0.35)' }}
+      >
+        Loading&hellip;
+      </p>
     </div>
   )
 }
