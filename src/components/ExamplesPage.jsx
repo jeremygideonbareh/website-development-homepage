@@ -284,7 +284,7 @@ function SuggestModal({ open, onClose }) {
 }
 
 function getScreenshotUrl(url) {
-  return `https://api.miniature.io/screenshot?url=${encodeURIComponent(url)}&width=400&height=300`
+  return `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=400`
 }
 
 function ScreenshotThumbnail({ url, name }) {

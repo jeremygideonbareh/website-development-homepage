@@ -11,7 +11,7 @@ function getFaviconUrl(url) {
 }
 
 function getScreenshotUrl(url) {
-  return `https://api.miniature.io/screenshot?url=${encodeURIComponent(url)}&width=800&height=600`
+  return `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=800`
 }
 
 export default function BrowserFrame({ ex, isDay = true, onSelect }) {

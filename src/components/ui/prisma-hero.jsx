@@ -63,8 +63,8 @@ function WordsPullUpMultiStyle({ segments, className = "", style }) {
 }
 
 /* ---------------- PrismaHero ---------------- */
-export default function PrismaHero() {
-  const tagline = "We engineer brands that move.";
+export default function PrismaHero({ onStartProject }) {
+  const tagline = "We build the digital architecture.";
 
   return (
     <div
@@ -102,7 +102,7 @@ export default function PrismaHero() {
             
             <div className="col-span-12 lg:col-span-8">
               <h1
-                className="font-medium leading-[0.85] tracking-[-0.07em] text-[26vw] sm:text-[24vw] md:text-[22vw] lg:text-[20vw] xl:text-[19vw] 2xl:text-[20vw]"
+                className="font-medium leading-[0.9] tracking-[-0.05em] text-[clamp(2rem,5vw,4rem)]"
                 style={{ color: "#E1E0CC" }}
               >
                 <WordsPullUp text={tagline} />
@@ -118,10 +118,11 @@ export default function PrismaHero() {
                 className="text-xs sm:text-sm md:text-base"
                 style={{ lineHeight: 1.2, color: "rgba(225, 224, 204, 0.8)" }}
               >
-                Rogue Code is a digital architecture studio — we design and engineer premium web experiences, spatial interfaces, and milestone-focused products for brands that demand more.
+                Premium web engineering & spatial design agency — we craft custom digital experiences with no templates, no page builders, no compromises.
               </motion.p>
 
               <motion.button
+                onClick={onStartProject}
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}

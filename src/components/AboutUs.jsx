@@ -34,8 +34,8 @@ const values = [
 ]
 
 const teamData = [
-  { initials: 'JG', name: 'Jeremy Gideon Bareh', role: 'Founder & Lead Developer', bio: 'Architects the technical vision. Full-stack engineer with a passion for motion, performance, and pixel-perfect execution.' },
-  { initials: 'RC', name: 'Rogue Code', role: 'Design & Engineering', bio: 'A collective of designers, developers, and AI specialists who ship products that push the boundaries of what the web can do.' },
+  { initials: 'JG', name: 'Jeremy Gideon Bareh', role: 'Founder & Lead Developer', bio: 'Full-stack engineer and spatial design specialist. Builds premium web experiences with React, Three.js, and AI-native workflows. Every line of code is crafted — never templated.' },
+  { initials: 'RC', name: 'Rogue Code', role: 'Design & Engineering', bio: 'A lean, AI-augmented studio that ships production-grade websites and applications for clients around the world. Custom code, full ownership, zero compromise.' },
 ]
 
 const galleryPhotos = [
@@ -350,6 +350,75 @@ export default function AboutUs({ onBack, theme = 'night' }) {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </section>
+
+        {/* ─── FOUNDER — About Jeremy Gideon Bareh ─── */}
+        <section className="mb-32">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
+            <SectionEyebrow color={p.eyebrow}>The founder</SectionEyebrow>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
+              <KineticText mode="wave" delay={0.1}>Jeremy Gideon Bareh</KineticText>
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              <div className="relative">
+                <GalleryFrame width="w-full max-w-sm" rotate={-2} from="left" delay={0}>
+                  <img
+                    src={galleryPhotos[4]}
+                    alt="Jeremy Gideon Bareh"
+                    className="w-full h-56 md:h-72 object-cover"
+                  />
+                </GalleryFrame>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.3 }}
+                  className="absolute -bottom-3 -right-3 rounded-xl border px-4 py-3"
+                  style={{ borderColor: p.glassBorder, background: p.glassBg, backdropFilter: 'blur(12px)' }}
+                >
+                  <div className="text-xs font-semibold" style={{ color: p.text }}>Full-Stack</div>
+                  <div className="text-[10px]" style={{ color: p.dim }}>React · Three.js · AI</div>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 60 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              <p className="text-base leading-relaxed" style={{ color: p.muted }}>
+                <span className="float-left text-6xl font-bold leading-none mr-3 mt-1" style={{ color: p.accent }}>A</span>
+                <WordReveal delay={0.2}> full-stack engineer and spatial design enthusiast who believes the web deserves better than templates. Jeremy engineers premium digital experiences from scratch — React, Three.js, Framer Motion, and AI-native workflows are his tools of choice. Every project is built with obsessive attention to performance, motion, and craft.</WordReveal>
+              </p>
+              <p className="mt-4 text-base leading-relaxed" style={{ color: p.muted }}>
+                <WordReveal delay={0.4}>From AI agents and trading bots to full-stack web apps and interactive 3D websites — Jeremy has shipped across the stack. His portfolio includes pet grooming platforms, bakery sites, mobile apps, and the Rogue Code studio site you&apos;re browsing right now.</WordReveal>
+              </p>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.6 }}
+                className="mt-6 flex flex-wrap gap-2"
+              >
+                {['React', 'Three.js', 'TypeScript', 'Framer Motion', 'Next.js', 'Node.js', 'AI/ML', 'Python'].map((skill) => (
+                  <span key={skill} className="px-3 py-1 text-[11px] font-medium rounded-full border"
+                    style={{ borderColor: p.glassBorder, color: p.accent, background: `${p.accent}08` }}>
+                    {skill}
+                  </span>
+                ))}
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 

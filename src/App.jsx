@@ -97,7 +97,7 @@ function App() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: p.bg }}>
-      {!showExamples && !showAbout && !showContact && <PrismaHero />}
+      {!showExamples && !showAbout && !showContact && <PrismaHero onStartProject={() => setShowContact(true)} />}
 
       <AnimatePresence>
         {isLoading && (
@@ -129,7 +129,7 @@ function App() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             >
-              HORIZON
+              ROGUE CODE
             </motion.h1>
           </motion.div>
         )}
