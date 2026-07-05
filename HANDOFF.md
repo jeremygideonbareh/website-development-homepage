@@ -76,7 +76,33 @@ Build ✅ | Site rebranded from Horizon Labs → **Rogue Code** | Meta tags rebr
 
 ## What Hasn't Been Done
 - ASCII Creation of Adam hands hero (AdamHands.jsx + HyperstudioHero.jsx)
-- Accessibility / responsive testing
 - GitHub Actions CI
 - Using MCP servers (shadcn, threejs, gemini, apify — all configured, none used)
 - Lazy-loading Three.js/WhyUsSection for further bundle reduction
+
+## Session — 06 Jul 2026 — Hero Mobile Fix
+
+### Done
+- **Switched active hero** from `MountEverestScene` to `PrismaHero` (`src/components/ui/prisma-hero.jsx`) — fullscreen video background with noise overlay
+- **Fixed content positioning** (`prisma-hero.jsx:109`): `absolute bottom-[10%]` → `absolute inset-0 flex flex-col justify-end lg:justify-center pb-[15%] sm:pb-[10%] lg:pb-[5%]` — prevents content cramming at bottom on mobile
+- **Touch targets** (`prisma-hero.jsx:143`): icon container `h-9 w-9` → `h-11 w-11` (44px minimum, Apple HIG compliant)
+- **Description text** (`prisma-hero.jsx:128`): `text-xs` → `text-sm` (12px → 14px minimum)
+- **Video poster** (`prisma-hero.jsx:97`): added dark SVG data URI `poster` attribute for mobile browsers that block autoplay
+- **Reduced motion** (`prisma-hero.jsx:9,13-14,43,52-54`): wired `useReducedMotion()` into `WordsPullUp` and `WordsPullUpMultiStyle` — skips animations when `prefers-reduced-motion: reduce`
+- **Heading tracking** (`prisma-hero.jsx:115`): `tracking-[-0.05em]` → `tracking-[-0.05em] sm:tracking-[-0.03em]` — looser on mobile for readability
+- **CPH site** (`homepage3.html` hackathon): fixed section width inconsistencies (duplicated CSS, missing `w-full` on hero, missing `max-w-6xl mx-auto` on team grid, added `fade-in-section` to hero)
+- **CPH deployed** to GitHub Pages `gh-pages` branch: `https://jeremygideonbareh.github.io/website-development-homepage/`
+- **Rogue Code committed** `3825027` to `main`, auto-deploys via Cloudflare Pages
+
+### Unresolved
+- **Hero still broken on mobile** — user reports it "still not fixed". Need to investigate further. Possible remaining issues:
+  - `PrismaHero` uses `position: fixed` + `overflow: hidden` — may clip content on mobile Safari during address bar hide/show
+  - `WordsPullUp` animation may cause layout shift during initial load
+  - Video background may have wrong aspect ratio or z-index stacking issue with loader/logo-flash transition
+  - The `pb-[15%]` may still be too low on very short viewports (<600px height)
+  - Loader (`Loader.jsx`) → logo flash (`App.jsx` lines 115-136) → hero transition may have timing/opacity overlap that hides hero content initially
+  - Check if `showLogoFlash` state is blocking hero visibility during the 800ms flash
+
+### Branch
+- `main` — Rogue Code site
+- `gh-pages` — CPH homepage3.html deploy
