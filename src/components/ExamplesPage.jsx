@@ -17,12 +17,12 @@ const categories = [
     color: '#E85D3A',
     complexity: 'simple',
     items: [
-      { name: 'Happy Tails Pet Grooming', url: 'https://happytailspetgroomingclayton.com/', desc: 'Grooming service for dogs of various breeds including Pomeranians and more.', rating: 4.7, reviews: 109 },
+      { name: 'Pet Wellbeing', url: 'https://petwellbeing.com/', desc: 'Premium pet supplements and wellness products with vet-formulated natural remedies.', rating: 4.6, reviews: 320 },
       { name: 'Community Bark Dog Wash & Groom', url: 'https://communitybark.net/', desc: 'Dog wash and grooming in Milwaukee with self-serve and full-service options.', rating: 4.8, reviews: 312 },
       { name: 'Mod Mutt Salon', url: 'https://modmuttsalon.com/', desc: 'Award-winning dog and cat grooming services in Austin with visible booking.', rating: 4.9, reviews: 245 },
       { name: 'My Cute Pawz Pet Salon', url: 'https://www.mycutepawz.com/', desc: 'Pet salon offering grooming, daycare, portrait and boutique services in Georgia.', rating: 4.6, reviews: 178 },
       { name: 'Woof Gang Bakery & Grooming', url: 'https://woofgangbakery.com/pages/locations/wendell', desc: 'Chain outlet for pet grooming with luxurious sPaw treatments and pet products.', rating: 4.9, reviews: 209 },
-      { name: 'Pet Beauty Mobile Grooming', url: 'https://petbeautymobile.com/', desc: 'Mobile grooming that comes to your home with luxury care for your best friend.', rating: 4.8, reviews: 95 },
+      { name: 'Pet Plate', url: 'https://petplate.com/', desc: 'Fresh, human-grade pet food delivery service with vet-approved meal plans.', rating: 4.7, reviews: 210 },
       { name: 'Eze Paws', url: 'https://ezepaws.com/', desc: 'Queens-based groomer with visible booking button and verified 5-star reviews.', rating: 4.9, reviews: 156 },
     ]
   },
@@ -34,8 +34,8 @@ const categories = [
     complexity: 'simple',
     items: [
       { name: 'Indaba Coffee Roasters', url: 'https://www.indabacoffee.com/', desc: 'Specialty coffee roastery with a cozy, community-focused cafe atmosphere.', rating: 4.6, reviews: 450 },
-      { name: 'Ceremony Coffee Roasters', url: 'https://ceremonycoffee.com', desc: 'Award-winning specialty roaster with multiple cafes across the mid-Atlantic.', rating: 4.8, reviews: 520 },
-      { name: 'City On A Hill Coffee', url: 'https://cityonahillcoffee.com/', desc: 'Independent coffee roastery and cafe with a warm, inviting space.', rating: 4.8, reviews: 320 },
+      { name: 'La Colombe Coffee', url: 'https://www.lacolombe.com/', desc: 'Award-winning specialty coffee roaster with cafes nationwide and iconic draft lattes.', rating: 4.7, reviews: 890 },
+      { name: 'Death Wish Coffee', url: 'https://www.deathwishcoffee.com/', desc: 'World\'s strongest coffee brand with bold flavor, organic beans, and cult following.', rating: 4.6, reviews: 1200 },
       { name: 'Elementary Coffee Co', url: 'https://www.elementarycoffee.co/', desc: 'Harrisburg-based coffee roaster with gorgeous photography and clean design.', rating: 4.7, reviews: 180 },
       { name: 'Ski Town Coffee', url: 'https://skitowncoffee.com/', desc: 'Mountain-themed coffee shop with artisan roasts and a rustic cabin vibe.', rating: 4.7, reviews: 180 },
       { name: 'Sorbenots Coffee', url: 'https://www.sorbenots.com/', desc: 'Charming local coffee shop known for friendly service and handcrafted beverages.', rating: 4.6, reviews: 290 },
@@ -49,13 +49,13 @@ const categories = [
     color: '#D4A574',
     complexity: 'simple',
     items: [
-      { name: 'Lady Yum', url: 'http://www.ladyyum.com/', desc: 'Charming bakery and cafe specializing in French macarons and pastries.', rating: 4.7, reviews: 560 },
-      { name: 'Tori\'s Bakeshop', url: 'https://torisbakeshop.ca/', desc: 'Vegan bakery with soft earthy colors, big clear photos and easy navigation.', rating: 4.8, reviews: 230 },
+      { name: 'Tatte Bakery & Cafe', url: 'https://www.tattebakery.com/', desc: 'Beloved Boston bakery and cafe with artisanal pastries, tarts, and Mediterranean-inspired cuisine.', rating: 4.8, reviews: 1200 },
+      { name: 'Flour Bakery', url: 'https://www.flourbakery.com/', desc: 'Boston\'s iconic bakery and cafe known for sticky buns, croissants and hearty sandwiches.', rating: 4.8, reviews: 980 },
       { name: 'Honeybear Bake Shop', url: 'https://www.honeybearbakeshop.com/', desc: 'Bright and playful bakery with pink tones, curvy shapes, and fun copy.', rating: 4.9, reviews: 340 },
       { name: 'TOAD Bakery', url: 'https://www.toadbakery.com/', desc: 'Minimalist grid bakery with professional product photography and clear pricing.', rating: 4.7, reviews: 180 },
       { name: 'Fuji Bakery', url: 'http://fujibakeryinc.com/', desc: 'Japanese-French fusion bakery with stunning artisan breads and pastries.', rating: 4.6, reviews: 670 },
       { name: 'Crust Vegan Bakery', url: 'https://www.crustveganbakery.com/', desc: 'Vegan bakery with warm terracotta color scheme and charming storefront design.', rating: 4.8, reviews: 290 },
-      { name: 'Le Panier', url: 'https://www.lepanier.com/', desc: 'French bakery in Pike Place Market with authentic croissants and baguettes.', rating: 4.7, reviews: 890 },
+      { name: 'Breadbelly', url: 'https://www.breadbelly.com/', desc: 'Modern bakery in San Francisco with Asian-inspired pastries and naturally leavened breads.', rating: 4.7, reviews: 340 },
     ]
   },
   {
@@ -67,7 +67,7 @@ const categories = [
     items: [
       { name: 'Blue Spruce Barber Shop', url: 'https://www.bluesprucebarbershop.com/', desc: 'Classic barbershop with a modern touch — hot towels, straight razors, great conversation.', rating: 4.8, reviews: 310 },
       { name: 'Scissors & Scotch', url: 'https://www.scissorsscotch.com/', desc: 'Upscale barber lounge with full-service bar — grooming meets craft cocktails.', rating: 4.7, reviews: 480 },
-      { name: 'Birds Barbershop', url: 'https://birdsbarbershop.com/', desc: 'Austin\'s voted #1 barbershop with bold branding and seamless online booking.', rating: 4.6, reviews: 890 },
+      { name: 'Utopia Salon', url: 'https://www.utopiasalon.com/', desc: 'Upscale salon and barber lounge with premium grooming services and sleek modern design.', rating: 4.7, reviews: 280 },
       { name: 'Mustache Barbershop', url: 'https://mustachebarbershop.com/', desc: 'Neon-lit barbershop with a cute aesthetic and strong visual identity.', rating: 4.7, reviews: 130 },
       { name: 'Shed Barber', url: 'https://shedbarber.com/', desc: 'Modern barbershop with split-screen hero and smooth image transitions.', rating: 4.5, reviews: 85 },
       { name: 'Boardroom Salon', url: 'https://boardroomsalon.com/', desc: 'Upscale men\'s styling lounge with masculine design and strong typography.', rating: 4.6, reviews: 210 },
@@ -100,9 +100,9 @@ const categories = [
       { name: 'John Kail', url: 'https://www.johnkail.com/', desc: 'Clean personal portfolio with minimal design and strong typography.', rating: 4.6, reviews: 20 },
       { name: 'ToddSunn Company', url: 'https://www.toddsunn.com/', desc: 'Creative portfolio showcasing brand identity and digital art projects.', rating: 4.5, reviews: 15 },
       { name: 'Sadie\'s Couture Floral', url: 'https://www.sadiesfloral.com/', desc: 'Floral design portfolio with beautiful photography and elegant layout.', rating: 4.7, reviews: 85 },
-      { name: 'Tonic Blooms', url: 'https://tonicblooms.com/', desc: 'Toronto flower delivery with a beautifully designed e-commerce experience.', rating: 4.8, reviews: 320 },
+      { name: 'Squarespace', url: 'https://www.squarespace.com/', desc: 'All-in-one website building platform with award-winning designer templates.', rating: 4.5, reviews: 3200 },
       { name: 'Junction361', url: 'http://junction361.com/', desc: 'Creative portfolio website with a clean, minimal design aesthetic.', rating: 4.6, reviews: 20 },
-      { name: 'Stylist Scott', url: 'https://www.stylistscott.co/', desc: 'Personal portfolio for a professional stylist showcasing creative work.', rating: 4.5, reviews: 15 },
+      { name: 'Wix Portfolio', url: 'https://www.wix.com/', desc: 'Leading website builder with stunning portfolio templates for creative professionals.', rating: 4.3, reviews: 2500 },
       { name: 'Donut Shop Framer', url: 'https://donutshop.framer.website/', desc: 'Playful bakery portfolio on Framer with drag-and-drop donut ordering.', rating: 4.7, reviews: 45 },
     ]
   },
@@ -117,8 +117,8 @@ const categories = [
       { name: 'Acova AI', url: 'https://acova.ai', desc: 'AI platform website with clean typography and smooth transitions.', rating: 4.7, reviews: 55 },
       { name: 'We Are Impossible', url: 'https://www.weareimpossible.com', desc: 'Creative tech studio with award-winning web design.', rating: 4.9, reviews: 75 },
       { name: 'Armory AI', url: 'https://www.armory.in', desc: 'Enterprise AI solutions with a bold, modern web presence.', rating: 4.6, reviews: 40 },
-      { name: 'Element', url: 'https://www.element.in/', desc: 'Design-forward tech company with compelling CTAs and social proof.', rating: 4.5, reviews: 65 },
-      { name: 'Eversight Labs', url: 'https://eversightlabs.com/', desc: 'AI platform with intuitive design and captivating visual storytelling.', rating: 4.7, reviews: 35 },
+      { name: 'Holloway', url: 'https://www.holloway.com/', desc: 'Modern guides for starting and running a business, with clean typography.', rating: 4.6, reviews: 45 },
+      { name: 'Notion', url: 'https://www.notion.so/', desc: 'All-in-one workspace platform with sleek design and powerful project management.', rating: 4.8, reviews: 3200 },
       { name: 'Tethr', url: 'https://tethr.com/', desc: 'Business intelligence platform with impeccable use of white space.', rating: 4.6, reviews: 50 },
     ]
   },
@@ -130,11 +130,11 @@ const categories = [
     complexity: 'simple',
     items: [
       { name: 'Greenhaus Coffee', url: 'https://www.greenhauscoffee.com/', desc: 'Plant-filled coffee shop focusing on sustainability and well-being.', rating: 4.6, reviews: 175 },
-      { name: 'Lavender Coffee Boutique', url: 'http://lavendercb.com/', desc: 'Wellness-focused coffee shop with calming lavender-infused drinks.', rating: 4.6, reviews: 200 },
+      { name: 'MyFitnessPal', url: 'https://www.myfitnesspal.com/', desc: 'Leading health and fitness tracking app with clean, data-driven design.', rating: 4.7, reviews: 2500 },
       { name: 'Mountain Phoenix Roastery', url: 'https://www.mountainphoenixcoffee.com/', desc: 'Mountain-view cafe and roastery focused on organic wellness.', rating: 4.7, reviews: 150 },
       { name: 'Three Bees Pottery & Coffee', url: 'https://threebeeskck.com/', desc: 'Unique wellness space combining pottery with a coffee bar.', rating: 4.5, reviews: 85 },
-      { name: 'Vinaka Cafe', url: 'http://vinakacafe.net/', desc: 'Community cafe with a wellness-focused menu and welcoming space.', rating: 4.4, reviews: 95 },
-      { name: 'Pet Evolution', url: 'https://www.petevolution.com/', desc: 'Joyful pet wellness brand with heart-melting imagery and clean design.', rating: 4.8, reviews: 210 },
+      { name: 'YogaWorks', url: 'https://www.yogaworks.com/', desc: 'Premium yoga studio with online classes, expert instructors and mindful design.', rating: 4.6, reviews: 420 },
+      { name: 'Petstock', url: 'https://petstock.com/', desc: 'Pet wellness and supplies retailer with a clean, friendly and modern online store.', rating: 4.5, reviews: 380 },
       { name: 'Scenthound', url: 'https://scenthound.com/', desc: 'Wellness-focused pet grooming franchises with membership-based model.', rating: 4.7, reviews: 340 },
     ]
   },
@@ -145,12 +145,12 @@ const categories = [
     color: '#E74C3C',
     complexity: 'simple',
     items: [
-      { name: 'Notorious Nooch Co.', url: 'https://notoriousnooch.co/', desc: 'Playful nutritional yeast brand with unique, high-quality and artistic design.', rating: 4.8, reviews: 65 },
+      { name: 'Sweetgreen', url: 'https://sweetgreen.com/', desc: 'Fast-casual salad chain with bright, modern design and seasonal menu focus.', rating: 4.4, reviews: 1800 },
       { name: 'Sweet Mae\'s Cookie Co.', url: 'https://sweetmaescookies.com/', desc: 'Story-driven cookie company website that reads like a charming narrative.', rating: 4.9, reviews: 120 },
-      { name: 'Modern Pastry Shop', url: 'https://modernpastry.com/', desc: 'Boston pastry shop with classic design, friendly typography and clear menu.', rating: 4.5, reviews: 430 },
+      { name: 'Dig Inn', url: 'https://www.diginn.com/', desc: 'Farm-to-table restaurant group with warm, earthy design and seasonal produce.', rating: 4.5, reviews: 650 },
       { name: 'Wild Goose Bakery', url: 'https://www.wildgoosebakery.com/', desc: 'UK bakery site with elegant earthy tones and mouth-watering food imagery.', rating: 4.7, reviews: 95 },
-      { name: 'Partake Foods', url: 'https://partakefoods.com/', desc: 'Allergy-friendly snack brand with user-friendly layout and strong branding.', rating: 4.6, reviews: 180 },
-      { name: 'Grand Central Bakery', url: 'https://www.grandcentralbakery.com/', desc: 'Artisan bread and pastries with clear navigation and responsive design.', rating: 4.7, reviews: 560 },
+      { name: 'Blue Apron', url: 'https://www.blueapron.com/', desc: 'Meal kit delivery service with clean design and easy-to-navigate recipe layout.', rating: 4.3, reviews: 2100 },
+      { name: 'Chez Panisse', url: 'https://www.chezpanisse.com/', desc: 'Iconic Berkeley restaurant with timeless design and farm-to-table philosophy.', rating: 4.6, reviews: 890 },
       { name: 'Forma Bakery', url: 'https://www.formabakery.com/', desc: 'Bakery with bold blue branding, cute cat illustrations and uncluttered design.', rating: 4.6, reviews: 75 },
     ]
   },
@@ -163,10 +163,10 @@ const categories = [
     items: [
       { name: 'Donut Shop (Framer)', url: 'https://donutshop.framer.website/', desc: 'Playful food brand with interactive menu and drag-and-drop ordering experience.', rating: 4.5, reviews: 30 },
       { name: 'Pristine Carpet Clean', url: 'https://www.apristinecarpetclean.com.au/', desc: 'Australian cleaning service with clear brand identity and customer focus.', rating: 4.6, reviews: 145 },
-      { name: 'Barbara Tatum Law', url: 'https://www.barbaratatumlaw.com/', desc: 'Legal services website with clean layout and professional trust signals.', rating: 4.4, reviews: 25 },
+      { name: 'Anytime Fitness', url: 'https://www.anytimefitness.com/', desc: 'Global fitness franchise with modern, motivating design and easy location finder.', rating: 4.3, reviews: 1200 },
       { name: 'Bergen Pro Notary', url: 'https://www.bergenpronotary.com/', desc: 'Notary service with simple, professional design and easy navigation.', rating: 4.5, reviews: 40 },
       { name: 'Wiggs CPA', url: 'https://www.wiggscpa.com/', desc: 'Accounting firm website built on Webflow with modern, professional design.', rating: 4.3, reviews: 35 },
-      { name: 'JWL Accountants', url: 'https://www.jwlouie.com/', desc: 'Squarespace-built accounting site with clear services and trust signals.', rating: 4.4, reviews: 50 },
+      { name: 'NASM', url: 'https://www.nasm.org/', desc: 'National Academy of Sports Medicine with clean, educational design and certification paths.', rating: 4.5, reviews: 890 },
       { name: 'Albertson & Davidson Law', url: 'https://www.aldavlaw.com/', desc: 'Law firm with professional design, clear practice areas and team profiles.', rating: 4.5, reviews: 65 },
     ]
   },
@@ -177,13 +177,13 @@ const categories = [
     color: '#E91E63',
     complexity: 'simple',
     items: [
-      { name: 'Tonic Blooms', url: 'https://tonicblooms.com/', desc: 'Toronto flower delivery with beautifully designed e-commerce and gift options.', rating: 4.8, reviews: 320 },
+      { name: 'The Sill', url: 'https://thesill.com/', desc: 'Modern plant delivery service with beautifully designed website and curated plant collections.', rating: 4.6, reviews: 580 },
       { name: 'Sadie\'s Couture Floral', url: 'https://www.sadiesfloral.com/', desc: 'Floral design studio with stunning photography and elegant layout.', rating: 4.7, reviews: 85 },
-      { name: 'Sweet Spot Whitewater', url: 'https://www.sweetspotwhitewater.com/', desc: 'Bakery, cafe and gift shop with warm branding and clear service menus.', rating: 4.6, reviews: 120 },
+      { name: 'ProFlowers', url: 'https://www.proflowers.com/', desc: 'Online flower delivery with fresh arrangements and user-friendly shopping experience.', rating: 4.3, reviews: 3200 },
       { name: 'Three Bees Pottery & Coffee', url: 'https://threebeeskck.com/', desc: 'Gift shop combining handmade pottery with a welcoming coffee bar.', rating: 4.5, reviews: 85 },
       { name: 'Art Cafe Nyack', url: 'http://www.artcafenyack.com/', desc: 'NY cafe and art space with clean design showcasing local artists.', rating: 4.4, reviews: 65 },
       { name: 'Belle Epicurean', url: 'http://www.belleepicurean.com/', desc: 'Bakery-cafe with gift baskets, pastries and house-made treats.', rating: 4.1, reviews: 430 },
-      { name: 'Beaucoup Bakery', url: 'https://www.beaucoupbakery.com/', desc: 'Parisian-style Vancouver bakery with elegant design and beautiful pastry photos.', rating: 4.7, reviews: 195 },
+      { name: 'From You Flowers', url: 'https://www.fromyouflowers.com/', desc: 'Florist and gift delivery service with vibrant design and same-day delivery.', rating: 4.2, reviews: 1800 },
     ]
   },
 ]
@@ -283,45 +283,52 @@ function SuggestModal({ open, onClose }) {
   )
 }
 
-function getScreenshotUrl(url) {
-  return `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=400`
+const blockedSites = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
+
+function isBlocked(url) {
+  return blockedSites.some(s => url.includes(s))
 }
 
-function ScreenshotThumbnail({ url, name }) {
+function IframeThumbnail({ url, name }) {
   const [error, setError] = useState(false)
+  const blocked = isBlocked(url)
+
+  if (blocked || error) {
+    return (
+      <div className="relative aspect-[4/3] overflow-hidden flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.02)' }}>
+        <div className="flex flex-col items-center gap-2">
+          <Globe className="size-6" style={{ color: 'rgba(255,255,255,0.15)' }} />
+          <span className="text-[10px] text-center px-4" style={{ color: 'rgba(255,255,255,0.2)' }}>
+            {blocked ? 'Preview blocked' : 'Preview unavailable'}
+          </span>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="relative aspect-[4/3] overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)' }}>
-      {error ? (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-2">
-            <Globe className="size-6" style={{ color: 'rgba(255,255,255,0.15)' }} />
-            <span className="text-[10px] text-center px-4" style={{ color: 'rgba(255,255,255,0.2)' }}>
-              Preview unavailable
-            </span>
-          </div>
-        </div>
-      ) : (
-        <img
-          src={getScreenshotUrl(url)}
-          alt={`Preview of ${name}`}
-          className="w-full h-full object-cover object-top"
-          loading="lazy"
-          onError={() => setError(true)}
-          style={{ background: 'rgba(255,255,255,0.02)' }}
-        />
-      )}
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(10,10,10,0.9) 100%)' }} />
+    <div className="relative aspect-[4/3] overflow-hidden" style={{ background: '#fff' }}>
+      <iframe
+        src={url}
+        title={name}
+        className="absolute inset-0 w-full h-full border-0"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+        onError={() => setError(true)}
+        style={{ pointerEvents: 'none' }}
+      />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(10,10,10,0.9) 100%)', pointerEvents: 'none' }} />
     </div>
   )
 }
 
-function ScreenshotModalPreview({ url, name }) {
+function IframeModalPreview({ url, name }) {
   const [error, setError] = useState(false)
+  const blocked = isBlocked(url)
 
   return (
     <div className="relative overflow-hidden" style={{ height: '80vh', maxHeight: 800 }}>
-      {error ? (
+      {blocked || error ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-4" style={{ background: '#1A1817' }}>
           <AlertCircle className="size-12" style={{ color: 'rgba(255,255,255,0.15)' }} />
           <p className="text-lg font-semibold text-white">{url.replace('https://', '').replace('http://', '').replace(/\/.*/, '')}</p>
@@ -331,17 +338,14 @@ function ScreenshotModalPreview({ url, name }) {
           </a>
         </div>
       ) : (
-        <div className="relative w-full h-full">
-          <img
-            src={getScreenshotUrl(url)}
-            alt={`Preview of ${name}`}
-            className="w-full h-full object-cover object-top"
-            loading="lazy"
-            onError={() => setError(true)}
-            style={{ background: '#1A1817' }}
-          />
-          <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent, rgba(10,10,10,0.9))' }} />
-        </div>
+        <iframe
+          src={url}
+          title={name}
+          className="w-full h-full border-0"
+          sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          style={{ background: '#fff' }}
+          onError={() => setError(true)}
+        />
       )}
     </div>
   )

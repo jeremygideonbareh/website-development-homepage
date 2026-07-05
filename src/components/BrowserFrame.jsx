@@ -1,6 +1,12 @@
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
+const blockedSites = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
+
+function isBlocked(url) {
+  return blockedSites.some(s => url.includes(s))
+}
+
 function getDomain(url) {
   return url.replace(/https?:\/\//, '').replace(/\/.*/, '')
 }
@@ -10,12 +16,9 @@ function getFaviconUrl(url) {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
 }
 
-function getScreenshotUrl(url) {
-  return `https://s0.wp.com/mshots/v1/${encodeURIComponent(url)}?w=800`
-}
-
 export default function BrowserFrame({ ex, isDay = true, onSelect }) {
-  const [screenshotError, setScreenshotError] = useState(false)
+  const blocked = isBlocked(ex.url)
+  const [iframeError, setIframeError] = useState(false)
   const ref = useRef(null)
   const domain = getDomain(ex.url)
 
@@ -64,9 +67,9 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
         </div>
       </div>
 
-      {/* Browser body — screenshot thumbnail, falls back to favicon card */}
+      {/* Browser body — iframe (live site, can't interact) or fallback */}
       <div className="relative overflow-hidden" style={{ height: 480 }} ref={ref}>
-        {screenshotError ? (
+        {blocked || iframeError ? (
           /* Fallback: favicon + domain card */
           <div
             className="w-full h-full flex flex-col items-center justify-center gap-2 px-4"
@@ -85,6 +88,11 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
             >
               {domain}
             </span>
+            {blocked && (
+              <span className="text-[10px] opacity-50" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
+                Preview blocked — click to expand
+              </span>
+            )}
             <motion.a
               href={ex.url}
               target="_blank"
@@ -102,18 +110,21 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
           </div>
         ) : (
           <>
-            <img
-              src={getScreenshotUrl(ex.url)}
-              alt={`Preview of ${ex.name}`}
-              className="w-full h-full object-cover object-top"
+            <iframe
+              src={ex.url}
+              title={ex.name}
+              className="w-full h-full border-0"
               loading="lazy"
-              onError={() => setScreenshotError(true)}
-              style={{ background: isDay ? '#f0eeeb' : '#222020' }}
+              sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+              style={{ background: '#fff' }}
+              onError={() => setIframeError(true)}
             />
+            {/* Invisible overlay — site renders live but can't be interacted with */}
+            <div className="absolute inset-0 cursor-pointer" style={{ pointerEvents: 'none' }} />
             <div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
               style={{
-                background: 'linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3) 100%)',
+                background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.15))',
               }}
             />
           </>
