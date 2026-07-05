@@ -5,7 +5,7 @@ import {
   Store, Coffee, Scissors, Dog, Cake, Palette, Briefcase,
   Monitor, Sparkles, ChevronDown, X, Star, Plus, Globe,
   UtensilsCrossed, Dumbbell, Flower2, AlertCircle,
-  Loader2, Lightbulb, Send
+  Lightbulb, Send
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -283,20 +283,15 @@ function SuggestModal({ open, onClose }) {
   )
 }
 
-function IframePreview({ url, name }) {
-  const [loading, setLoading] = useState(true)
+function getScreenshotUrl(url) {
+  return `https://api.miniature.io/screenshot?url=${encodeURIComponent(url)}&width=400&height=300`
+}
+
+function ScreenshotThumbnail({ url, name }) {
   const [error, setError] = useState(false)
 
   return (
     <div className="relative aspect-[4/3] overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)' }}>
-      {loading && !error && (
-        <div className="absolute inset-0 flex items-center justify-center z-10">
-          <div className="flex flex-col items-center gap-2">
-            <Loader2 className="size-5 animate-spin" style={{ color: 'rgba(255,255,255,0.2)' }} />
-            <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.15)' }}>Loading preview...</span>
-          </div>
-        </div>
-      )}
       {error ? (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex flex-col items-center gap-2">
@@ -307,15 +302,13 @@ function IframePreview({ url, name }) {
           </div>
         </div>
       ) : (
-        <iframe
-          src={url}
-          title={name}
-          className="w-full h-full border-0 pointer-events-none"
-          style={{ transform: 'scale(0.4)', transformOrigin: 'top left', width: '250%', height: '250%', opacity: 0.8 }}
-          sandbox="allow-scripts allow-same-origin"
+        <img
+          src={getScreenshotUrl(url)}
+          alt={`Preview of ${name}`}
+          className="w-full h-full object-cover object-top"
           loading="lazy"
-          onLoad={() => setLoading(false)}
-          onError={() => { setLoading(false); setError(true) }}
+          onError={() => setError(true)}
+          style={{ background: 'rgba(255,255,255,0.02)' }}
         />
       )}
       <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(10,10,10,0.9) 100%)' }} />
@@ -323,42 +316,32 @@ function IframePreview({ url, name }) {
   )
 }
 
-function IframeModalPreview({ url, name, onLoad }) {
-  const [loading, setLoading] = useState(true)
+function ScreenshotModalPreview({ url, name }) {
   const [error, setError] = useState(false)
 
   return (
-    <div className="relative" style={{ height: '80vh', maxHeight: 800 }}>
-      {loading && !error && (
-        <div className="absolute inset-0 flex items-center justify-center z-10" style={{ background: '#1A1817' }}>
-          <div className="flex flex-col items-center gap-3">
-            <Loader2 className="size-8 animate-spin" style={{ color: 'rgba(255,255,255,0.2)' }} />
-            <span className="text-sm" style={{ color: 'rgba(255,255,255,0.3)' }}>Loading website...</span>
-          </div>
-        </div>
-      )}
+    <div className="relative overflow-hidden" style={{ height: '80vh', maxHeight: 800 }}>
       {error ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-4" style={{ background: '#1A1817' }}>
           <AlertCircle className="size-12" style={{ color: 'rgba(255,255,255,0.15)' }} />
           <p className="text-lg font-semibold text-white">{url.replace('https://', '').replace('http://', '').replace(/\/.*/, '')}</p>
-          <p className="text-sm" style={{ color: '#8A8A8A' }}>This site blocks iframe embedding</p>
+          <p className="text-sm" style={{ color: '#8A8A8A' }}>Preview unavailable — open in new tab</p>
           <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-medium text-white transition-all hover:brightness-110" style={{ background: '#FF6B4A' }}>
             <ExternalLink className="size-4" /> Open in new tab
           </a>
         </div>
       ) : (
-        <>
-          <iframe
-            src={url}
-            title={name}
-            className="w-full h-full border-0"
-            sandbox="allow-scripts allow-same-origin allow-popups"
-            style={{ background: '#fff' }}
-            onLoad={() => { setLoading(false); onLoad?.() }}
-            onError={() => { setLoading(false); setError(true) }}
+        <div className="relative w-full h-full">
+          <img
+            src={getScreenshotUrl(url)}
+            alt={`Preview of ${name}`}
+            className="w-full h-full object-cover object-top"
+            loading="lazy"
+            onError={() => setError(true)}
+            style={{ background: '#1A1817' }}
           />
           <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none" style={{ background: 'linear-gradient(to bottom, transparent, rgba(10,10,10,0.9))' }} />
-        </>
+        </div>
       )}
     </div>
   )
@@ -400,11 +383,6 @@ export default function ExamplesPage({ onBack }) {
 
   function getDomain(url) {
     try { return new URL(url).hostname.replace('www.', '') } catch { return url }
-  }
-
-  function isBlocked(url) {
-    const blocked = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
-    return blocked.some(s => url.includes(s))
   }
 
   return (
@@ -509,7 +487,7 @@ export default function ExamplesPage({ onBack }) {
                       className="group relative rounded-xl border overflow-hidden cursor-pointer transition-all duration-300"
                       style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)' }}
                     >
-                      <IframePreview url={item.url} name={item.name} />
+                      <ScreenshotThumbnail url={item.url} name={item.name} />
                       <div className="absolute top-2 right-2 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium" style={{ background: 'rgba(0,0,0,0.6)', color: group.color }}>
                         {item.complexity}
                       </div>
@@ -616,7 +594,7 @@ export default function ExamplesPage({ onBack }) {
                 </div>
               </div>
 
-              <IframeModalPreview url={selectedItem.url} name={selectedItem.name} />
+              <ScreenshotModalPreview url={selectedItem.url} name={selectedItem.name} />
               {/* Info overlay at bottom */}
               <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
                 <div className="flex items-center gap-3">

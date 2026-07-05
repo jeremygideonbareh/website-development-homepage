@@ -3,12 +3,6 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Code, Cpu, Palette, ArrowUpRight, X, ExternalLink } from 'lucide-react'
 import BrowserFrame from './BrowserFrame'
 
-const blockedSites = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
-
-function isBlocked(url) {
-  return blockedSites.some(s => url.includes(s))
-}
-
 function getDomain(url) {
   return url.replace(/https?:\/\//, '').replace(/\/.*/, '')
 }
@@ -18,14 +12,19 @@ function getFaviconUrl(url) {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
 }
 
+function getScreenshotUrl(url) {
+  return `https://api.miniature.io/screenshot?url=${encodeURIComponent(url)}&width=800&height=600`
+}
+
 function PreviewModal({ example, isDay, onClose }) {
+  const [screenshotError, setScreenshotError] = useState(false)
+
   useEffect(() => {
     const handleKey = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
   }, [onClose])
 
-  const blocked = isBlocked(example.url)
   const domain = getDomain(example.url)
 
   return (
@@ -82,9 +81,9 @@ function PreviewModal({ example, isDay, onClose }) {
           </button>
         </div>
 
-        {/* Content */}
-        <div className="relative" style={{ height: '80vh', maxHeight: 800 }}>
-          {blocked ? (
+        {/* Content — screenshot, falls back to favicon + open in new tab */}
+        <div className="relative overflow-hidden" style={{ height: '80vh', maxHeight: 800 }}>
+          {screenshotError ? (
             <div
               className="w-full h-full flex flex-col items-center justify-center gap-4"
               style={{ background: isDay ? '#F9F6F2' : '#1A1817' }}
@@ -100,7 +99,7 @@ function PreviewModal({ example, isDay, onClose }) {
                 {domain}
               </p>
               <p className="text-sm opacity-60" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
-                This site blocks iframe embedding
+                Preview unavailable — open in new tab
               </p>
               <div className="flex items-center gap-3 mt-2">
                 <motion.a
@@ -120,13 +119,14 @@ function PreviewModal({ example, isDay, onClose }) {
               </div>
             </div>
           ) : (
-            <>
-              <iframe
-                src={example.url}
-                title={example.name}
-                className="w-full h-full border-0"
-                sandbox="allow-scripts allow-same-origin allow-popups"
-                style={{ background: '#fff' }}
+            <div className="relative w-full h-full">
+              <img
+                src={getScreenshotUrl(example.url)}
+                alt={`Preview of ${example.name}`}
+                className="w-full h-full object-cover object-top"
+                loading="lazy"
+                onError={() => setScreenshotError(true)}
+                style={{ background: isDay ? '#f0eeeb' : '#222020' }}
               />
               <div
                 className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
@@ -136,7 +136,7 @@ function PreviewModal({ example, isDay, onClose }) {
                     : 'linear-gradient(to bottom, transparent, rgba(26,24,23,0.9))',
                 }}
               />
-            </>
+            </div>
           )}
         </div>
       </motion.div>

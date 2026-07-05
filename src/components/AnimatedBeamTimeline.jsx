@@ -23,7 +23,7 @@ const weeks = [
     id: 3,
     title: 'Interactive & 3D Integration',
     days: 'Days 15–21',
-    desc: 'We weave in Three.js environments, GSAP animations, and custom features to establish the ApexAI vibe.',
+    desc: 'We weave in Three.js environments, GSAP animations, and custom features to establish the Rogue Code vibe.',
     accent: '#FF6B4A',
   },
   {

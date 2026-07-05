@@ -16,7 +16,7 @@ const themes = {
     overlay: 'rgba(0,0,0,0.03)',
     title: '#FFFFFF',
     accent: '#E85D3A',
-    subtitle: '#DDDDDD',
+    subtitle: '#A09080',
   },
 }
 
@@ -87,34 +87,35 @@ export default function MountEverestScene({ theme = 'day' }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             style={{
-              fontSize: 'clamp(3rem, 10vw, 8rem)',
-              fontWeight: 900,
+              fontSize: 'clamp(2rem, 4.5vw, 4rem)',
+              fontWeight: 800,
               color: palette.title,
-              lineHeight: 1,
-              letterSpacing: '0.02em',
+              lineHeight: 1.15,
+              letterSpacing: '0.01em',
               margin: 0,
               textShadow: '0 2px 20px rgba(0,0,0,0.3)',
             }}
           >
-            Sky's the<br />
-            <span style={{ color: palette.accent }}>Limit</span>
+            You focus on your<br />
+            <span style={{ color: palette.accent }}>business.</span> We build the<br />
+            digital architecture.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
             style={{
-              marginTop: '28px',
+              marginTop: '24px',
               fontSize: 'clamp(0.9rem, 1.5vw, 1.2rem)',
               color: palette.subtitle,
-              maxWidth: '480px',
+              maxWidth: '520px',
               lineHeight: 1.6,
               marginLeft: 'auto',
               marginRight: 'auto',
               textShadow: '0 1px 12px rgba(0,0,0,0.2)',
             }}
           >
-            Scroll to explore the peaks of what's possible
+            Premium web engineering &amp; spatial design agency
           </motion.p>
         </div>
       </motion.div>

@@ -10,7 +10,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  optimizeDeps: {
-    include: ['@splinetool/react-spline', '@splinetool/runtime'],
+  build: {
+    chunkSizeWarningLimit: 600,
+    rolldownOptions: {
+      output: {
+        codeSplitting: true,
+        manualChunks(id) {
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) return 'vendor-react'
+          if (id.includes('node_modules/framer-motion')) return 'vendor-motion'
+          if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) return 'vendor-three'
+          if (id.includes('node_modules/lucide-react')) return 'vendor-icons'
+        },
+      },
+    },
   },
 })

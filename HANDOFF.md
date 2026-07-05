@@ -44,9 +44,39 @@ Build ✅ | Site rebranded from Horizon Labs → **Rogue Code** | Meta tags rebr
 4. **No Three.js for hands** — 2D canvas approach using Wikimedia painting reference (not implemented yet)
 5. **Dead code cleanup** — Deleted HorizonHeroSection.jsx, AsciiRevealBox.jsx, removed ASCII rain/decorations from main page
 
+## Latest Changes (05 Jul 2026) — Orchestrated Fixes
+1. **🔧 Websites Not Loading FIXED** — Replaced all iframe-based previews with screenshot thumbnails via `api.miniature.io`:
+   - `BrowserFrame.jsx`: iframe → `<img>` screenshot with favicon/domain fallback
+   - `ServicesSection.jsx` PreviewModal: iframe → screenshot with "Open in new tab" fallback
+   - `ExamplesPage.jsx` `IframePreview`/`IframeModalPreview`: renamed to `ScreenshotThumbnail`/`ScreenshotModalPreview`, iframes replaced with screenshots
+   - Removed `blockedSites`/`isBlocked` dead code
+   - Multi-layer fallback: screenshot → favicon + domain → "Visit site" button
+
+2. **🎨 Brand Consistency FIXED** — All remaining Horizon Labs → Rogue Code artifacts:
+   - `App.jsx` line 132: Logo flash "HORIZON" → "ROGUE CODE"
+   - `Loader.jsx` line 35: "HORIZON" → "ROGUE CODE"
+   - `AnimatedBeamTimeline.jsx`: "ApexAI vibe" → "Rogue Code vibe"
+   - `package.json`: `"rouge-code"` → `"rogue-code"`
+
+3. **⚡ Interactivity ADDED**:
+   - `CursorGlow.jsx` — Custom cursor follower with mix-blend-mode dot + glow ring, expands on hoverable elements
+   - `NoiseOverlay.jsx` — Canvas-based animated grain texture (~4fps) for visual depth
+   - `useMouseParallax.js` — Custom hook for parallax mouse tracking on elements
+   - Integrated into `App.jsx` root layout
+
+4. **📦 Build Config FIXED**:
+   - `vite.config.js`: Removed dead `optimizeDeps.include` for splinetool packages
+   - `vite.config.js`: Added code chunk splitting (vendor-react, vendor-motion, vendor-three, vendor-icons)
+   - `package.json`: `framer-motion` moved from devDependencies → dependencies
+   - **Bundle now split**: vendor-three (879 kB), vendor-react (182 kB), vendor-motion (136 kB), index (194 kB), vendor-icons (20 kB)
+   - Build time improved: 3.90s → 2.52s
+
+5. **🧹 Dead Code Removed**:
+   - `ExamplesPage.jsx`: Removed unused `isBlocked()` function, removed unused `Loader2` import
+
 ## What Hasn't Been Done
 - ASCII Creation of Adam hands hero (AdamHands.jsx + HyperstudioHero.jsx)
 - Accessibility / responsive testing
-- Bundle splitting / code-splitting (1.37 MB warning)
 - GitHub Actions CI
 - Using MCP servers (shadcn, threejs, gemini, apify — all configured, none used)
+- Lazy-loading Three.js/WhyUsSection for further bundle reduction

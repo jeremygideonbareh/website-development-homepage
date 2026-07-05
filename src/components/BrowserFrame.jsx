@@ -1,11 +1,5 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-
-const blockedSites = ['faunarobotics.com', 'locomotive.ca', 'ponder.ai']
-
-function isBlocked(url) {
-  return blockedSites.some(s => url.includes(s))
-}
 
 function getDomain(url) {
   return url.replace(/https?:\/\//, '').replace(/\/.*/, '')
@@ -16,8 +10,12 @@ function getFaviconUrl(url) {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`
 }
 
+function getScreenshotUrl(url) {
+  return `https://api.miniature.io/screenshot?url=${encodeURIComponent(url)}&width=800&height=600`
+}
+
 export default function BrowserFrame({ ex, isDay = true, onSelect }) {
-  const blocked = isBlocked(ex.url)
+  const [screenshotError, setScreenshotError] = useState(false)
   const ref = useRef(null)
   const domain = getDomain(ex.url)
 
@@ -66,10 +64,10 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
         </div>
       </div>
 
-      {/* Browser body */}
-      <div className="relative" style={{ height: 480 }} ref={ref}>
-        {blocked ? (
-          /* Enhanced blocked fallback with favicon */
+      {/* Browser body — screenshot thumbnail, falls back to favicon card */}
+      <div className="relative overflow-hidden" style={{ height: 480 }} ref={ref}>
+        {screenshotError ? (
+          /* Fallback: favicon + domain card */
           <div
             className="w-full h-full flex flex-col items-center justify-center gap-2 px-4"
             style={{ background: isDay ? '#F9F6F2' : '#1A1817' }}
@@ -87,13 +85,6 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
             >
               {domain}
             </span>
-            <div className="flex items-center gap-1.5 text-[10px] opacity-50" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="2" y="2" width="20" height="20" rx="2" />
-                <path d="M12 8v8" /><path d="M8 12h8" />
-              </svg>
-              <span>iframe embedding blocked</span>
-            </div>
             <motion.a
               href={ex.url}
               target="_blank"
@@ -111,18 +102,18 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
           </div>
         ) : (
           <>
-            <iframe
-              src={ex.url}
-              title={ex.name}
-              className="w-full h-full border-0"
+            <img
+              src={getScreenshotUrl(ex.url)}
+              alt={`Preview of ${ex.name}`}
+              className="w-full h-full object-cover object-top"
               loading="lazy"
-              sandbox="allow-scripts allow-same-origin allow-popups"
-              style={{ background: '#fff' }}
+              onError={() => setScreenshotError(true)}
+              style={{ background: isDay ? '#f0eeeb' : '#222020' }}
             />
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: 'linear-gradient(to bottom, transparent 60%, rgba(255,255,255,0.8) 100%)',
+                background: 'linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.3) 100%)',
               }}
             />
           </>
