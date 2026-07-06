@@ -94,8 +94,14 @@ Build ✅ | Site rebranded from Horizon Labs → **Rogue Code** | Meta tags rebr
 - **CPH deployed** to GitHub Pages `gh-pages` branch: `https://jeremygideonbareh.github.io/website-development-homepage/`
 - **Rogue Code committed** `3825027` to `main`, auto-deploys via Cloudflare Pages
 
+### Fixed (07 Jul 2026)
+- **Hero text overflow** — Removed `overflow-hidden rounded-2xl` from inner hero div (clipped text at rounded corners). Reduced `pb-[15%]`→`pb-[10%]`, changed heading `leading-[0.9]`→`leading-[1.1]` (descender overlap), `text-[clamp(2rem,5vw,4rem)]`→`text-[clamp(1.5rem,4vw,4rem)]` (smaller min size)
+- **Philosophy section alignment** — Added `overflowX: 'hidden'` to scrollable wrapper, `py-32`→`py-24` for tighter mobile padding, `w-full` to all `max-w-xl` text containers, `gap-12`→`gap-8` on grids
+- **WordReveal overflow** — Added `overflowWrap: 'break-word', wordBreak: 'break-word'` to `WordReveal` component
+- All pushed in `29db136`
+
 ### Unresolved
-- **Hero still broken on mobile** — user reports it "still not fixed". Need to investigate further. Possible remaining issues:
+- Verify on physical mobile devices
   - `PrismaHero` uses `position: fixed` + `overflow: hidden` — may clip content on mobile Safari during address bar hide/show
   - `WordsPullUp` animation may cause layout shift during initial load
   - Video background may have wrong aspect ratio or z-index stacking issue with loader/logo-flash transition
