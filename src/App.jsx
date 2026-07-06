@@ -139,6 +139,7 @@ function App() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { duration: 1 } }}
         key={theme}
+        style={{ position: 'relative', zIndex: 1 }}
       >
         <motion.nav
           variants={navVariants}

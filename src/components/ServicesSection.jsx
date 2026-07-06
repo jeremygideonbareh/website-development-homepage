@@ -251,7 +251,7 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
 
   return (
-    <section ref={sectionRef} className="relative z-10 overflow-hidden">
+    <section ref={sectionRef} className="relative z-10 overflow-hidden" style={{ backgroundColor: isDay ? '#F5F0EB' : '#1A1817' }}>
       <motion.div
         className="fixed top-0 left-0 h-0.5 z-[60]"
         style={{
@@ -338,9 +338,7 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
                       className="group rounded-2xl border overflow-hidden transition-shadow duration-500 relative"
                       style={{
                         borderColor: isDay ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)',
-                        background: isDay
-                          ? 'linear-gradient(135deg, rgba(255,255,255,0.85), rgba(255,255,255,0.45))'
-                          : 'linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))',
+                        background: isDay ? '#F5F0EB' : '#2A2827',
                         backdropFilter: 'blur(12px)',
                         WebkitBackdropFilter: 'blur(12px)',
                         boxShadow: isDay ? '0 4px 24px rgba(0,0,0,0.04)' : '0 4px 24px rgba(0,0,0,0.2)',
