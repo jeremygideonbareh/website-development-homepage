@@ -198,9 +198,9 @@ function App() {
           <AboutUs theme={theme} onBack={() => setShowAbout(false)} />
         ) : (
           <>
-            <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100dvh' }}>
+            <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100dvh', overflowX: 'hidden' }}>
               {/* Brand Story */}
-              <section className="px-4 sm:px-6 py-32 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
+              <section className="px-4 sm:px-6 py-24 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
                 <div className="mx-auto max-w-6xl space-y-48">
 
                   {/* Philosophy — text left, photo right */}
@@ -209,9 +209,9 @@ function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-120px' }}
                     transition={{ duration: 0.8 }}
-                    className="grid md:grid-cols-2 gap-12 md:gap-20 items-center"
+                    className="grid md:grid-cols-2 gap-8 md:gap-20 items-center"
                   >
-                    <div className="max-w-xl">
+                    <div className="max-w-xl w-full">
                       <SectionEyebrow>Our Philosophy</SectionEyebrow>
                       <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
                         <CharReveal delay={0.2}>
@@ -236,7 +236,7 @@ function App() {
                     className="grid md:grid-cols-2 gap-12 md:gap-20 items-center"
                   >
                     <GalleryPhoto src={cinematicPhotos[1]} alt="" width="w-full" rotate={3} offsetX={0} offsetY={0} from="left" delay={0.3} />
-                    <div className="max-w-xl md:ml-auto md:text-right">
+                    <div className="max-w-xl w-full md:ml-auto md:text-right">
                       <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
                         <CharReveal delay={0.3}>
                           Speed without sacrifice.
@@ -258,7 +258,7 @@ function App() {
                     transition={{ duration: 0.8 }}
                     className="grid md:grid-cols-2 gap-12 md:gap-20 items-center"
                   >
-                    <div className="max-w-xl">
+                    <div className="max-w-xl w-full">
                       <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
                         <CharReveal delay={0.3}>
                           You focus on your business. We build the digital architecture.

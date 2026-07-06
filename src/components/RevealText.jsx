@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 export function WordReveal({ children, className, delay = 0 }) {
   const words = children.split(' ')
   return (
-    <span className={className}>
+    <span className={className} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
       {words.map((word, i) => (
         <span key={i} className="inline">
           <motion.span

@@ -86,7 +86,7 @@ export default function PrismaHero({ onStartProject }) {
         overflow: 'hidden',
       }}
     >
-      <div className="relative h-full w-full overflow-hidden rounded-2xl md:rounded-[2rem]">
+      <div className="relative h-full w-full">
         
         {/* Background video */}
         <video
@@ -106,13 +106,13 @@ export default function PrismaHero({ onStartProject }) {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
 
         {/* Hero content */}
-        <div className="absolute inset-0 flex flex-col justify-end sm:justify-end lg:justify-center px-4 sm:px-6 md:px-10 pb-[15%] sm:pb-[10%] lg:pb-[5%]">
+        <div className="absolute inset-0 flex flex-col justify-end sm:justify-end lg:justify-center px-4 sm:px-8 md:px-10 pb-[10%] sm:pb-[10%] lg:pb-[5%]">
           <div className="max-w-5xl">
           <div className="grid grid-cols-12 items-end gap-4">
             
             <div className="col-span-12 lg:col-span-8">
               <h1
-                className="font-medium leading-[0.9] tracking-[-0.05em] sm:tracking-[-0.03em] text-[clamp(2rem,5vw,4rem)]"
+                className="font-medium leading-[1.1] tracking-[-0.05em] sm:tracking-[-0.03em] text-[clamp(1.5rem,4vw,4rem)]"
                 style={{ color: "#E1E0CC" }}
               >
                 <WordsPullUp text={tagline} />
