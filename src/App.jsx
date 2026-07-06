@@ -198,7 +198,7 @@ function App() {
           <AboutUs theme={theme} onBack={() => setShowAbout(false)} />
         ) : (
           <>
-            <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100dvh', overflowX: 'hidden' }}>
+            <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100dvh' }}>
               {/* Brand Story */}
               <section className="px-4 sm:px-6 py-24 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
                 <div className="mx-auto max-w-6xl space-y-48">
