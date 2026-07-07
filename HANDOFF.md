@@ -109,6 +109,25 @@ Build ✅ | Site rebranded from Horizon Labs → **Rogue Code** | Meta tags rebr
   - Loader (`Loader.jsx`) → logo flash (`App.jsx` lines 115-136) → hero transition may have timing/opacity overlap that hides hero content initially
   - Check if `showLogoFlash` state is blocking hero visibility during the 800ms flash
 
+## Session — 07 Jul 2026 — Stacking Context Fix + Team Section
+
+### Fixed
+- **ServicesSection invisible on mobile** — `motion.div` wrapper at `App.jsx:138` had `will-change: transform` injected by framer-motion, creating a CSS stacking context that trapped `z-index: 10` inside it. PrismaHero (`position: fixed; z-index: 0`) painted at step 6 of the root context — above the section. **Fix:** added `style={{ position: 'relative', zIndex: 1 }}` to the `motion.div` to bring it to the same stacking step as PrismaHero.
+- **ServicesSection no background** — Added `style={{ backgroundColor: isDay ? '#F5F0EB' : '#1A1817' }}` to section element so hero doesn't show through transparent section.
+- **Card backgrounds near-transparent on night mode** — Replaced `rgba(255,255,255,0.06)` gradients with solid `#2A2827` fallback. `backdrop-filter: blur(12px)` still layered on top for supporting browsers.
+- **overflow-x:hidden moved from wrapper to html/body** — Previously on wrapper div (broke sticky sections like AnimatedBeamTimeline). Moved to `html, body { overflow-x: hidden }` which prevents horizontal scrollbar without creating scroll containers.
+- Commits: `d9aebbd`, `2bdb8ba`
+
+### Added
+- **TeamSection** (`src/components/TeamSection.jsx`) — New section on main page after WhyUsSection, before CTA. Glass-morphism cards with photo, role, bio, social icons. Stagger-reveal animations.
+  - Jeremy Gideon Bareh — Lead Developer
+  - Aaron Jaison — Co-Developer
+  - Ashba Merim Francis — Sales
+- Commit: `a362264`
+
+### Project URL
+- **Rogue Code (main site):** `https://rogue.codes` (Cloudflare Pages, auto-deploys from `main`)
+
 ### Branch
 - `main` — Rogue Code site
 - `gh-pages` — CPH homepage3.html deploy
