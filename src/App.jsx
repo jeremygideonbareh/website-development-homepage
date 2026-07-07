@@ -7,6 +7,7 @@ import {
 import Loader from './components/Loader'
 import PrismaHero from './components/ui/prisma-hero'
 import ServicesSection from './components/ServicesSection'
+import TeamSection from './components/TeamSection'
 import WhyUsSection from './components/WhyUsSection'
 import { ContactPage } from './components/ui/contact-page'
 import { BookingModal } from './components/BookingModal'
@@ -364,6 +365,8 @@ function App() {
                   <WhyUsSection isDay={theme === 'day'} />
                 </div>
               </section>
+
+              <TeamSection isDay={theme === 'day'} />
 
               {/* CTA — Full-bleed photo */}
               <section className="px-4 sm:px-6 py-32 md:px-12 relative z-10">
