@@ -9,18 +9,18 @@ const team = [
     social: { github: '#', linkedin: '#' },
   },
   {
-    name: 'Alex Morgan',
-    role: 'Sales Lead',
-    bio: 'Helping businesses find the right digital solution. From first contact to project kickoff — seamless and transparent.',
-    photo: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&q=85',
-    social: { linkedin: '#', twitter: '#' },
+    name: 'Aaron Jaison',
+    role: 'Co-Developer',
+    bio: 'Full-stack developer building premium digital experiences. React, TypeScript, and modern web technologies.',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=85',
+    social: { github: '#', linkedin: '#' },
   },
   {
-    name: 'Sarah Chen',
-    role: 'UI/UX Designer',
-    bio: 'Crafting intuitive interfaces and cohesive brand systems. Every pixel intentional, every interaction delightful.',
-    photo: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=85',
-    social: { twitter: '#', linkedin: '#' },
+    name: 'Ashba Merim Francis',
+    role: 'Sales',
+    bio: 'Helping businesses find the right digital solution. From first contact to project kickoff — seamless and transparent.',
+    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=85',
+    social: { linkedin: '#', twitter: '#' },
   },
 ]
 
