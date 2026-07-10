@@ -125,25 +125,21 @@ Build ✅ | Site rebranded from Horizon Labs → **Rogue Code** | Meta tags rebr
   - Ashba Merim Francis — Sales
 - Commit: `a362264`
 
-## Session — 10 Jul 2026 — Gap Between 30-Day Sprint & Why Choose Us FIXED
+## Session — 10 Jul 2026 — Sticky Horizontal Scroll Fixed (Real Root Cause)
 
-### Root Cause — Same Pattern as ServicesSection (07 Jul)
-The "Process + Why Us" wrapper (`App.jsx:308`) and `AnimatedBeamTimeline` component had NO explicit background color. This allowed the PrismaHero (`position: fixed; z-index: 0`) to bleed through transparent areas because:
-- The hero paints at z-index 0 in the root stacking context
-- The motion.div wrapper at `z-index: 1` has no background of its own
-- ServicesSection was previously fixed (07 Jul) with explicit `backgroundColor` — same fix applied here
+### Root Cause — `overflow-x: hidden` on `html, body` Breaks `position: sticky`
+The previous background/bridge fix was a symptom patch. The **real root cause**: `overflow-x: hidden` on `html, body` (`index.css:5-7`) creates a **CSS scroll container** on the viewport, causing `position: sticky` to anchor to `html` instead of the viewport. In Chrome, this silently breaks ALL sticky behavior — `AnimatedBeamTimeline`'s sticky horizontal track never sticks, so the 500vh section scrolls past like normal content, showing a 500vh gap of empty background before hitting WhyUsSection.
 
 ### Fixes
-1. **`App.jsx:308`** — Added `style={{ backgroundColor: p.bg }}` to Process + Why Us wrapper so hero can't show through during the 500vh sticky scroll
-2. **`AnimatedBeamTimeline.jsx:230,253`** — Added `bgColor` variable + `style={{ backgroundColor: bgColor }}` to the section element for same reason
-3. **`App.jsx:365-377`** — Added gradient-pulse bridge element between the timeline and WhyUsSection: a thin horizontal accent line that fades in on scroll, creating visual continuity instead of an abrupt section jump
+1. **`src/index.css:5-7`** — `overflow-x: hidden` → `overflow-x: clip`. `clip` is visually identical (clips horizontal overflow) but **does not create a scroll container**, preserving sticky behavior. Supported in Chrome 90+, Firefox 81+, Safari 16+, Edge 90+.
+2. **`src/App.jsx:365-377`** — Removed bridge element (symptom patch, unnecessary now)
 
 ### Files Changed
-- `src/App.jsx` (wrapper background + bridge element)
-- `src/components/AnimatedBeamTimeline.jsx` (section background)
+- `src/index.css` (overflow-x: hidden → clip)
+- `src/App.jsx` (removed bridge element)
 
 ### Build
-✅ `npm run build` passes (2.17s)
+✅ `npm run build` passes (1.77s)
 
 ### Project URL
 - **Rogue Code (main site):** `https://rogue.codes` (Cloudflare Pages, auto-deploys from `main`)

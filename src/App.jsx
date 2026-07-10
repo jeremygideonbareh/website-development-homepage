@@ -362,20 +362,6 @@ function App() {
 
                   <AnimatedBeamTimeline isDay={theme === 'day'} />
 
-                  {/* Bridge/transition between 30-Day Sprint and Why Choose Us */}
-                  <motion.div
-                    initial={{ opacity: 0, scaleX: 0 }}
-                    whileInView={{ opacity: 1, scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="h-px mx-auto"
-                    style={{
-                      width: 'clamp(120px, 30vw, 360px)',
-                      transformOrigin: 'center',
-                      background: `linear-gradient(to right, transparent, ${p.accent}, transparent)`,
-                    }}
-                  />
-
                   <WhyUsSection isDay={theme === 'day'} />
                 </div>
               </section>
