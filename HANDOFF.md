@@ -125,6 +125,26 @@ Build ✅ | Site rebranded from Horizon Labs → **Rogue Code** | Meta tags rebr
   - Ashba Merim Francis — Sales
 - Commit: `a362264`
 
+## Session — 10 Jul 2026 — Gap Between 30-Day Sprint & Why Choose Us FIXED
+
+### Root Cause — Same Pattern as ServicesSection (07 Jul)
+The "Process + Why Us" wrapper (`App.jsx:308`) and `AnimatedBeamTimeline` component had NO explicit background color. This allowed the PrismaHero (`position: fixed; z-index: 0`) to bleed through transparent areas because:
+- The hero paints at z-index 0 in the root stacking context
+- The motion.div wrapper at `z-index: 1` has no background of its own
+- ServicesSection was previously fixed (07 Jul) with explicit `backgroundColor` — same fix applied here
+
+### Fixes
+1. **`App.jsx:308`** — Added `style={{ backgroundColor: p.bg }}` to Process + Why Us wrapper so hero can't show through during the 500vh sticky scroll
+2. **`AnimatedBeamTimeline.jsx:230,253`** — Added `bgColor` variable + `style={{ backgroundColor: bgColor }}` to the section element for same reason
+3. **`App.jsx:365-377`** — Added gradient-pulse bridge element between the timeline and WhyUsSection: a thin horizontal accent line that fades in on scroll, creating visual continuity instead of an abrupt section jump
+
+### Files Changed
+- `src/App.jsx` (wrapper background + bridge element)
+- `src/components/AnimatedBeamTimeline.jsx` (section background)
+
+### Build
+✅ `npm run build` passes (2.17s)
+
 ### Project URL
 - **Rogue Code (main site):** `https://rogue.codes` (Cloudflare Pages, auto-deploys from `main`)
 

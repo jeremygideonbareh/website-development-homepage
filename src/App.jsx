@@ -304,8 +304,8 @@ function App() {
 
               <ServicesSection isDay={theme === 'day'} onShowExamples={() => setShowExamples(true)} />
 
-              {/* Process + Why Us */}
-              <section className="relative">
+              {/* Process + Why Us — explicit background prevents hero video bleed-through (same fix as ServicesSection) */}
+              <section className="relative" style={{ backgroundColor: p.bg }}>
                 <div className="relative z-10">
                     <section className="px-4 sm:px-6 py-32 md:px-12 text-center relative">
                     <motion.h2
@@ -361,6 +361,20 @@ function App() {
                   </section>
 
                   <AnimatedBeamTimeline isDay={theme === 'day'} />
+
+                  {/* Bridge/transition between 30-Day Sprint and Why Choose Us */}
+                  <motion.div
+                    initial={{ opacity: 0, scaleX: 0 }}
+                    whileInView={{ opacity: 1, scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="h-px mx-auto"
+                    style={{
+                      width: 'clamp(120px, 30vw, 360px)',
+                      transformOrigin: 'center',
+                      background: `linear-gradient(to right, transparent, ${p.accent}, transparent)`,
+                    }}
+                  />
 
                   <WhyUsSection isDay={theme === 'day'} />
                 </div>

@@ -227,6 +227,7 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
   const [activeWeek, setActiveWeek] = useState(0)
   const [phaseText, setPhaseText] = useState(phaseLabels[0])
   const sectionRef = useRef(null)
+  const bgColor = isDay ? '#F5F0EB' : '#1A1817'
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
@@ -249,7 +250,7 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
   })
 
   return (
-    <section ref={sectionRef} className="relative">
+    <section ref={sectionRef} className="relative" style={{ backgroundColor: bgColor }}>
       {/* Desktop: sticky horizontal scroll */}
       {!isMobile && (
         <div className="relative" style={{ height: '500vh' }}>
