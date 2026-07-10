@@ -144,6 +144,39 @@ The previous background/bridge fix was a symptom patch. The **real root cause**:
 ### Project URL
 - **Rogue Code (main site):** `https://rogue.codes` (Cloudflare Pages, auto-deploys from `main`)
 
+## Session — 10 Jul 2026 — Full Agency Redesign
+
+### Changes
+1. **Hero** (`prisma-hero.jsx`) — New headline: "We build websites, AI agents, and mobile apps that grow your business." New subtitle positioning as full-service agency. Removed abstract "digital architecture" language.
+2. **Removed logo flash** — Deleted `showLogoFlash` state + JSX block (the "ROGUE CODE" black overlay flash between loader and hero). Transition now goes loader → hero cleanly.
+3. **ServicesSection** — Rewritten from 3 services (Web Dev, AI Integration, Design & Brand) to 4 services (Web Development, AI & Automation, Mobile Apps, UI/UX Design). Each card shows a "from $X" pricing pill. Outcome-focused descriptions. Removed Awwwards Inspirations + PreviewModal (replaced with past project tags).
+4. **CaseStudiesSection** (NEW) — 6 real projects from GitHub (Paws for Change India, Chelsea Man Spa, Support Ticket Agent, JMJ Events, Crumbs Bakery, Trading Bot). Filterable by category tabs (All, Web Dev, AI/Automation, Mobile Apps). Each card has screenshot, description, result metric, tags, GitHub link.
+5. **AnimatedBeamTimeline** — Converted from "30-Day Sprint" (4 weeks) to "Our Process" (5 steps: Discovery, Design, Develop, Deploy, Support). Updated all content to general agency workflow language. Height changed from 500vh to 600vh (5 cards × 100vw = -400vw transform).
+6. **WhyUsSection** — Updated panels from "AI-Native Team, 3x Faster Delivery, One Point of Contact, Global Talent" to "Full Ownership, Ship in Weeks, One Point of Contact, End-to-End Service".
+7. **PricingSection** (NEW) — 3 package cards (Starter $2.5K+, Growth $5K+, Enterprise $15K+) with feature lists and "Most Popular" highlight. Per-service starting rates table below (Web Dev, AI, Mobile, UI/UX). CTA to book a call.
+8. **FAQSection** (NEW) — 7 accordion questions about timeline, process, tech stack, support, satisfaction, and getting started.
+9. **Removed abstract content** — Deleted "AI meets infrastructure" heading section and cinematic photo strip (both too abstract for agency positioning).
+10. **SEO/JSON-LD** — Updated index.html title, meta descriptions, Open Graph, Twitter cards, and structured data to reflect agency positioning (web dev, AI automation, mobile apps).
+
+### New Section Order (Homepage)
+Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Process → Why Us → Pricing → FAQ → Team → CTA → Footer
+
+### New Files
+- `src/components/CaseStudiesSection.jsx` (226 lines)
+- `src/components/PricingSection.jsx` (219 lines)
+- `src/components/FAQSection.jsx` (125 lines)
+
+### Modified Files
+- `src/App.jsx` — Section restructure, removed flash, added 3 new imports
+- `src/components/ui/prisma-hero.jsx` — New hero copy
+- `src/components/ServicesSection.jsx` — 4 services, pricing pills, cleaned up
+- `src/components/AnimatedBeamTimeline.jsx` — 5-step process
+- `src/components/WhyUsSection.jsx` — New panel copy
+- `index.html` — SEO/JSON-LD rewrite
+
+### Build
+✅ `npm run build` passes (2.02s)
+
 ### Branch
 - `main` — Rogue Code site
 - `gh-pages` — CPH homepage3.html deploy
