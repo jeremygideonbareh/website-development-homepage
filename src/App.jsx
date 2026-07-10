@@ -13,8 +13,11 @@ import { ContactPage } from './components/ui/contact-page'
 import { BookingModal } from './components/BookingModal'
 import AnimatedBeamTimeline from './components/AnimatedBeamTimeline'
 import { WordReveal, CharReveal, SectionEyebrow } from './components/RevealText'
-import GalleryPhoto, { GalleryFrame } from './components/GalleryPhoto'
+import GalleryPhoto from './components/GalleryPhoto'
 
+import CaseStudiesSection from './components/CaseStudiesSection'
+import PricingSection from './components/PricingSection'
+import FAQSection from './components/FAQSection'
 import ExamplesPage from './components/ExamplesPage'
 import AboutUs from './components/AboutUs'
 
@@ -73,7 +76,6 @@ const cinematicPhotos = [
 
 function App() {
   const [isLoading, setIsLoading] = useState(() => true)
-  const [showLogoFlash, setShowLogoFlash] = useState(() => false)
   const [showContact, setShowContact] = useState(false)
   const [showBooking, setShowBooking] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
@@ -81,18 +83,9 @@ function App() {
   const [theme, setTheme] = useState(() => 'night')
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-      setShowLogoFlash(true)
-    }, 2000)
+    const timer = setTimeout(() => setIsLoading(false), 2000)
     return () => clearTimeout(timer)
   }, [])
-
-  useEffect(() => {
-    if (!showLogoFlash) return
-    const timer = setTimeout(() => setShowLogoFlash(false), 800)
-    return () => clearTimeout(timer)
-  }, [showLogoFlash])
 
   const p = palette[theme]
 
@@ -109,29 +102,6 @@ function App() {
             exit={{ opacity: 0, transition: { duration: 0.5 } }}
           >
             <Loader />
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {showLogoFlash && (
-          <motion.div
-            key="logo-flash"
-            className="fixed inset-0 z-40 flex items-center justify-center"
-            style={{ backgroundColor: '#000000' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.4 } }}
-          >
-            <motion.h1
-              className="text-4xl sm:text-6xl lg:text-8xl font-bold tracking-[0.15em] sm:tracking-[0.3em]"
-              style={{ color: '#ffffff' }}
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
-            >
-              ROGUE CODE
-            </motion.h1>
           </motion.div>
         )}
       </AnimatePresence>
@@ -302,69 +272,17 @@ function App() {
                 </div>
               </section>
 
-              <ServicesSection isDay={theme === 'day'} onShowExamples={() => setShowExamples(true)} />
+              <ServicesSection isDay={theme === 'day'} />
 
-              {/* Process + Why Us — explicit background prevents hero video bleed-through (same fix as ServicesSection) */}
-              <section className="relative" style={{ backgroundColor: p.bg }}>
-                <div className="relative z-10">
-                    <section className="px-4 sm:px-6 py-32 md:px-12 text-center relative">
-                    <motion.h2
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6 }}
-                      className="text-3xl md:text-4xl lg:text-5xl font-bold"
-                      style={{ color: p.text }}
-                    >
-                      AI meets infrastructure
-                    </motion.h2>
-                    <motion.p
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.2 }}
-                      className="mt-4 text-base"
-                      style={{ color: p.muted }}
-                    >
-                      Intelligent agents. Real-time pipelines. Production-ready.
-                    </motion.p>
-                  </section>
+              <CaseStudiesSection isDay={theme === 'day'} />
 
-                  {/* Photo interlude — cinematic strip */}
-                  <section className="px-4 sm:px-6 md:px-12 py-24 relative">
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.7 }}
-                      className="flex gap-5 overflow-x-auto pb-4 -mx-6 md:-mx-12 px-6 md:px-12"
-                      style={{ scrollbarWidth: 'none' }}
-                    >
-                      {cinematicPhotos.slice(4, 9).map((src, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, y: 30 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: i * 0.08 }}
-                          className="flex-shrink-0 overflow-hidden rounded-sm"
-                          style={{
-                            rotate: i % 2 === 0 ? `${i - 1}deg` : `${i + 1}deg`,
-                            width: i === 2 ? '300px' : '240px',
-                            height: i === 2 ? '220px' : '180px',
-                          }}
-                        >
-                          <img src={src} alt="" className="w-full h-full object-cover" />
-                        </motion.div>
-                      ))}
-                    </motion.div>
-                  </section>
+              <AnimatedBeamTimeline isDay={theme === 'day'} />
 
-                  <AnimatedBeamTimeline isDay={theme === 'day'} />
+              <WhyUsSection isDay={theme === 'day'} />
 
-                  <WhyUsSection isDay={theme === 'day'} />
-                </div>
-              </section>
+              <PricingSection isDay={theme === 'day'} onBook={() => setShowBooking(true)} />
+
+              <FAQSection isDay={theme === 'day'} />
 
               <TeamSection isDay={theme === 'day'} />
 

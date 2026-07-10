@@ -72,7 +72,7 @@ function WordsPullUpMultiStyle({ segments, className = "", style }) {
 
 /* ---------------- PrismaHero ---------------- */
 export default function PrismaHero({ onStartProject }) {
-  const tagline = "We build the digital architecture.";
+  const tagline = "We build websites, AI agents, and mobile apps that grow your business.";
 
   return (
     <div
@@ -128,7 +128,7 @@ export default function PrismaHero({ onStartProject }) {
                 className="text-sm sm:text-sm md:text-base"
                 style={{ lineHeight: 1.2, color: "rgba(225, 224, 204, 0.8)" }}
               >
-                Premium web engineering & spatial design agency — we craft custom digital experiences with no templates, no page builders, no compromises.
+                A full-service web development & AI automation agency — we ship custom websites, intelligent AI workflows, and mobile apps for businesses that demand more than templates.
               </motion.p>
 
               <motion.button

@@ -5,27 +5,27 @@ import NetworkParticles from './NetworkParticles'
 
 const panels = [
   {
-    title: 'AI-Native Team',
+    title: 'Full Ownership',
     tag: '01',
-    desc: "We don't bolt AI on. We build with it from day zero — agents, pipelines, and models are core to every project.",
+    desc: 'You own 100% of the code and assets. No lock-in, no hidden licences, no monthly fees for something that should be yours.',
     accent: '#FF6B4A',
   },
   {
-    title: '3x Faster Delivery',
+    title: 'Ship in Weeks',
     tag: '02',
-    desc: 'Our workflows and AI tooling slash dev time without cutting corners. You ship in weeks, not months.',
+    desc: 'While traditional agencies take months, our AI-native workflows and lean process deliver production-grade products in 2-4 weeks.',
     accent: '#2B7A78',
   },
   {
     title: 'One Point of Contact',
     tag: '03',
-    desc: 'A dedicated project manager handles everything — communication, timelines, changes. No runaround.',
+    desc: 'A dedicated project manager handles everything — communication, timelines, feedback, changes. No runaround, no bureaucracy.',
     accent: '#E85D3A',
   },
   {
-    title: 'Global Talent',
+    title: 'End-to-End Service',
     tag: '04',
-    desc: 'Hand-picked engineers across time zones keep your project moving around the clock.',
+    desc: 'From strategy and design to development, deployment, and ongoing support — we handle the entire lifecycle of your digital product.',
     accent: '#3B8A88',
   },
 ]
