@@ -1,6 +1,7 @@
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
+import ScrambleText from "./ScrambleText";
 
 /* ---------------- WordsPullUp ---------------- */
 function WordsPullUp({ text, className = "", style }) {
@@ -70,6 +71,9 @@ function WordsPullUpMultiStyle({ segments, className = "", style }) {
 /* ---------------- PrismaHero ---------------- */
 export default function PrismaHero({ onStartProject }) {
   const tagline = "We build websites, AI agents, and mobile apps that grow your business.";
+  const { scrollY } = useScroll()
+  const videoY = useTransform(scrollY, [0, 500], [0, 80])
+  const contentY = useTransform(scrollY, [0, 500], [0, -40])
 
   return (
     <div
@@ -85,16 +89,18 @@ export default function PrismaHero({ onStartProject }) {
     >
       <div className="relative h-full w-full">
         
-        {/* Background video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%230a0a0a' width='1280' height='720'/%3E%3C/svg%3E"
-          className="absolute inset-0 h-full w-full object-cover"
-          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
-        />
+        {/* Background video with parallax */}
+        <motion.div style={{ y: videoY }} className="absolute inset-0">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%230a0a0a' width='1280' height='720'/%3E%3C/svg%3E"
+            className="h-full w-full object-cover"
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
+          />
+        </motion.div>
 
         {/* Noise overlay */}
         <div className="noise-overlay pointer-events-none absolute inset-0 opacity-[0.7] mix-blend-overlay" />
@@ -103,7 +109,7 @@ export default function PrismaHero({ onStartProject }) {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
 
         {/* Hero content - vertical stack */}
-        <div className="absolute inset-0 flex flex-col justify-center px-4 sm:px-8 md:px-10 pb-[5%]">
+        <motion.div style={{ y: contentY }} className="absolute inset-0 flex flex-col justify-center px-4 sm:px-8 md:px-10 pb-[5%]">
           <div className="max-w-4xl mx-auto w-full">
             <h1
               className="text-[clamp(1.75rem,5vw,4.5rem)] leading-[1.1] tracking-tight"
@@ -123,7 +129,10 @@ export default function PrismaHero({ onStartProject }) {
               className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl"
               style={{ color: "rgba(225, 224, 204, 0.8)" }}
             >
-              A full-service web development & AI automation agency — we ship custom websites, intelligent AI workflows, and mobile apps for businesses that demand more than templates.
+              <ScrambleText
+                text="A full-service web development & AI automation agency — we ship custom websites, intelligent AI workflows, and mobile apps for businesses that demand more than templates."
+                delay={0.8}
+              />
             </motion.p>
 
             <motion.button
@@ -142,7 +151,7 @@ export default function PrismaHero({ onStartProject }) {
               </span>
             </motion.button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

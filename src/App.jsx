@@ -16,6 +16,8 @@ import { WordReveal, CharReveal, SectionEyebrow } from './components/RevealText'
 import GalleryPhoto from './components/GalleryPhoto'
 
 import CaseStudiesSection from './components/CaseStudiesSection'
+import ScrambleText from './components/ui/ScrambleText'
+import Marquee from './components/Marquee'
 import PricingSection from './components/PricingSection'
 import FAQSection from './components/FAQSection'
 import ExamplesPage from './components/ExamplesPage'
@@ -183,7 +185,7 @@ function App() {
                     className="grid md:grid-cols-2 gap-8 md:gap-20 items-center"
                   >
                     <div className="max-w-xl w-full">
-                      <SectionEyebrow>Our Philosophy</SectionEyebrow>
+                      <SectionEyebrow><ScrambleText text="Our Philosophy" delay={0.3} /></SectionEyebrow>
                       <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
                         <CharReveal delay={0.2}>
                           We believe the web deserves better than templates.
@@ -337,6 +339,11 @@ function App() {
                   </div>
                 </motion.div>
               </section>
+
+              {/* Tech Stack Marquee */}
+              <div className="py-12 relative z-10 overflow-hidden" style={{ backgroundColor: p.bg }}>
+                <Marquee speed={45} />
+              </div>
 
               {/* Footer */}
               <footer className="border-t px-4 sm:px-6 py-16 md:px-12 relative z-10" style={{ borderColor: p.border }}>

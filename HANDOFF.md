@@ -227,3 +227,11 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 
 ### Build
 ✅ `npm run build` passes (2.53s) | `npm run lint` — pre-existing errors unchanged
+
+### Deploy Fix (11 Jul 2026)
+- `rogue.codes` was NXDOMAIN — no A/AAAA/CNAME records despite zone being active on Cloudflare
+- **Root cause:** Worker was deployed but no custom domain route was configured; `wrangler.jsonc` had no `routes` array
+- **Fix:** Added `routes: [{ pattern: "rogue.codes", custom_domain: true }, { pattern: "www.rogue.codes", custom_domain: true }]` to `wrangler.jsonc`
+- Old `www.rogue.codes` CNAME → `rogue-codes.pages.dev` was blocking www domain creation — deleted and re-deployed
+- Both domains now return HTTP 200. Committed as `b4edccd`, deployed to Workers version `7e1c3a30`
+- DNS records auto-created by Cloudflare: `rogue.codes` AAAA → `100::`, A → Cloudflare proxy IPs

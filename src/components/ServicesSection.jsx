@@ -254,8 +254,8 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 40, scale: 0.95, filter: 'blur(4px)' }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       className={`group relative ${hero ? 'min-h-screen' : 'min-w-[80vw] md:min-w-0 flex-shrink-0 snap-center'}`}
