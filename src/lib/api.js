@@ -1,9 +1,13 @@
 const PROXY_URL = import.meta.env.VITE_API_URL || '/api/leads'
+const API_SECRET = import.meta.env.VITE_INTERNAL_API_SECRET || ''
 
 export async function submitLead(formData) {
+  const headers = { 'Content-Type': 'application/json' }
+  if (API_SECRET) headers['Authorization'] = `Bearer ${API_SECRET}`
+
   const res = await fetch(PROXY_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(formData),
   })
 

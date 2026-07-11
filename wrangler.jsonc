@@ -1,13 +1,14 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "website-development-homepage",
+  "main": "src/worker.js",
   "compatibility_date": "2026-06-21",
   "observability": {
     "enabled": true
   },
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "none"
   },
   "compatibility_flags": [
     "nodejs_compat"
@@ -15,5 +16,21 @@
   "routes": [
     { "pattern": "rogue.codes", "custom_domain": true },
     { "pattern": "www.rogue.codes", "custom_domain": true }
-  ]
+  ],
+  "vars": {
+    "INTERNAL_API_SECRET": "",
+    "CORS_ORIGINS": "https://rogue.codes,https://www.rogue.codes"
+  }
+  // To add persistent D1 storage:
+  // 1. Create database via Cloudflare Dashboard: Dashboard → Workers & Pages → D1 → Create
+  // 2. Run: npx wrangler d1 execute rogue-code-leads --file=src/schema.sql --remote
+  // 3. Uncomment below with the database_id from step 1:
+  //
+  // "d1_databases": [
+  //   {
+  //     "binding": "DB",
+  //     "database_name": "rogue-code-leads",
+  //     "database_id": "<id-from-dashboard>"
+  //   }
+  // ]
 }
