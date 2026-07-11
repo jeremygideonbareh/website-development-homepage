@@ -17,7 +17,6 @@ import GalleryPhoto from './components/GalleryPhoto'
 
 import CaseStudiesSection from './components/CaseStudiesSection'
 import ScrambleText from './components/ui/ScrambleText'
-import Marquee from './components/Marquee'
 import PricingSection from './components/PricingSection'
 import FAQSection from './components/FAQSection'
 import ExamplesPage from './components/ExamplesPage'
@@ -285,7 +284,9 @@ function App() {
 
               <FAQSection isDay={theme === 'day'} />
 
-              <TeamShowcase isDay={theme === 'day'} />
+              <section style={{ backgroundColor: '#0A0A0A' }}>
+                <TeamShowcase isDay={theme === 'day'} />
+              </section>
 
               {/* CTA — Full-bleed photo */}
               <section className="px-4 sm:px-6 py-32 md:px-12 relative z-10">
@@ -339,11 +340,6 @@ function App() {
                   </div>
                 </motion.div>
               </section>
-
-              {/* Tech Stack Marquee */}
-              <div className="py-12 relative z-10 overflow-hidden" style={{ backgroundColor: p.bg }}>
-                <Marquee speed={45} />
-              </div>
 
               {/* Footer */}
               <footer className="border-t px-4 sm:px-6 py-16 md:px-12 relative z-10" style={{ borderColor: p.border }}>

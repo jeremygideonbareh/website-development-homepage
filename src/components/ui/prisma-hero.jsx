@@ -1,72 +1,8 @@
-import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ScrambleText from "./ScrambleText";
-
-/* ---------------- WordsPullUp ---------------- */
-function WordsPullUp({ text, className = "", style }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const shouldReduce = useReducedMotion();
-  const words = text.split(" ");
-
-  const animProps = shouldReduce
-    ? { initial: {}, animate: {} }
-    : { initial: { y: 20, opacity: 0 }, animate: isInView ? { y: 0, opacity: 1 } : {} };
-
-  return (
-    <div ref={ref} className={`inline-flex flex-wrap ${className}`} style={style}>
-      {words.map((word, i) => {
-        const isLast = i === words.length - 1;
-        return (
-          <motion.span
-            key={i}
-            {...animProps}
-            transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-block relative"
-            style={{ marginRight: isLast ? 0 : "0.25em" }}
-          >
-            {word}
-          </motion.span>
-        );
-      })}
-    </div>
-  );
-}
-
-/* ---------------- WordsPullUpMultiStyle ---------------- */
-function WordsPullUpMultiStyle({ segments, className = "", style }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  const shouldReduce = useReducedMotion();
-
-  const words = [];
-  segments.forEach((seg) => {
-    seg.text.split(" ").forEach((w) => {
-      if (w) words.push({ word: w, className: seg.className });
-    });
-  });
-
-  const animProps = shouldReduce
-    ? { initial: {}, animate: {} }
-    : { initial: { y: 20, opacity: 0 }, animate: isInView ? { y: 0, opacity: 1 } : {} };
-
-  return (
-    <div ref={ref} className={`inline-flex flex-wrap justify-center ${className}`} style={style}>
-      {words.map((w, i) => (
-        <motion.span
-          key={i}
-          {...animProps}
-          transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
-          className={`inline-block ${w.className ?? ""}`}
-          style={{ marginRight: "0.25em" }}
-        >
-          {w.word}
-        </motion.span>
-      ))}
-    </div>
-  );
-}
+import VariableFontCursorProximity from "./VariableFontCursorProximity";
 
 /* ---------------- PrismaHero ---------------- */
 export default function PrismaHero({ onStartProject }) {
@@ -126,16 +62,16 @@ export default function PrismaHero({ onStartProject }) {
         {/* Hero content - vertical stack */}
         <motion.div style={{ y: contentY }} className="absolute inset-0 flex flex-col justify-center px-4 sm:px-8 md:px-10 pb-[5%]">
           <div className="max-w-4xl mx-auto w-full">
-            <h1
-              className="text-[clamp(1.75rem,5vw,4.5rem)] leading-[1.1] tracking-tight"
-              style={{
-                color: "#E1E0CC",
-                fontFamily: "'Clash Display', sans-serif",
-                fontWeight: 700,
-              }}
-            >
-              <WordsPullUp text={tagline} />
-            </h1>
+            <VariableFontCursorProximity
+              label={tagline}
+              fontSize="clamp(1.75rem,5vw,4.5rem)"
+              color="#E1E0CC"
+              fromWeight={400}
+              toWeight={900}
+              strength={25}
+              transition={{ type: "tween", duration: 0.3, ease: "easeOut" }}
+              style={{ textAlign: "center", width: "100%" }}
+            />
 
             <motion.p
               initial={{ y: 20, opacity: 0 }}
@@ -172,4 +108,4 @@ export default function PrismaHero({ onStartProject }) {
   );
 }
 
-export { WordsPullUp, WordsPullUpMultiStyle };
+
