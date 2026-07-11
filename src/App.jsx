@@ -322,7 +322,17 @@ function App() {
                       className="mt-6 text-lg max-w-xl mx-auto"
                       style={{ color: p.muted }}
                     >
-                      Stop burning time on agencies that over-promise and under-deliver. Let&apos;s ship something real.
+                      Stop burning time on agencies that over-promise and under-deliver. Let&apos;s build something real — together.
+                    </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.25 }}
+                      className="mt-3 text-sm sm:text-base"
+                      style={{ color: p.dim }}
+                    >
+                      — Jeremy Gideon Bareh
                     </motion.p>
                     <motion.button
                       onClick={() => setShowBooking(true)}
@@ -331,11 +341,11 @@ function App() {
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: 0.3 }}
+                      transition={{ duration: 0.6, delay: 0.35 }}
                       className="mt-10 px-10 py-4 text-base font-semibold rounded-full transition-colors shadow-lg"
                       style={{ backgroundColor: p.accent, color: '#FFFFFF' }}
                     >
-                      Book a Free Call
+                      Start your project
                     </motion.button>
                   </div>
                 </motion.div>
