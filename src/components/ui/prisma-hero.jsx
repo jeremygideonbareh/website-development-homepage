@@ -1,6 +1,6 @@
 import { motion, useInView, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ScrambleText from "./ScrambleText";
 
 /* ---------------- WordsPullUp ---------------- */
@@ -74,6 +74,7 @@ export default function PrismaHero({ onStartProject }) {
   const { scrollY } = useScroll()
   const videoY = useTransform(scrollY, [0, 500], [0, 80])
   const contentY = useTransform(scrollY, [0, 500], [0, -40])
+  const [videoFailed, setVideoFailed] = useState(false)
 
   return (
     <div
@@ -91,15 +92,29 @@ export default function PrismaHero({ onStartProject }) {
         
         {/* Background video with parallax */}
         <motion.div style={{ y: videoY }} className="absolute inset-0">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%230a0a0a' width='1280' height='720'/%3E%3C/svg%3E"
-            className="h-full w-full object-cover"
-            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
-          />
+          {!videoFailed && (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1280' height='720'%3E%3Crect fill='%230a0a0a' width='1280' height='720'/%3E%3C/svg%3E"
+              className="h-full w-full object-cover"
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
+              onError={() => setVideoFailed(true)}
+            />
+          )}
+          {videoFailed && (
+            <div
+              className="absolute inset-0"
+              style={{
+                background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1817 30%, #2B1A17 60%, #0A0A0A 100%)',
+                backgroundSize: '400% 400%',
+                animation: 'gradientShift 8s ease infinite',
+              }}
+            />
+          )}
         </motion.div>
 
         {/* Noise overlay */}

@@ -224,17 +224,20 @@ function VerticalStepCard({ step, index, isDay }) {
 }
 
 export default function AnimatedBeamTimeline({ isDay = true }) {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+  const [isMobile, setIsMobile] = useState(null)
   const [activeStep, setActiveStep] = useState(0)
   const [phaseText, setPhaseText] = useState(phaseLabels[0])
   const sectionRef = useRef(null)
   const bgColor = isDay ? '#F5F0EB' : '#1A1817'
 
   useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
     const check = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  if (isMobile === null) return null
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -365,8 +368,10 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
               <div key={step.id} className="relative">
                 {i < steps.length - 1 && (
                   <div
-                    className="absolute left-6 top-16 w-0.5 h-8"
+                    className="absolute left-6 w-0.5"
                     style={{
+                      top: 68,
+                      bottom: 0,
                       background: `linear-gradient(to bottom, ${step.accent}, ${steps[i + 1].accent})`,
                     }}
                   />

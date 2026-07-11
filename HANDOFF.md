@@ -235,3 +235,14 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 - Old `www.rogue.codes` CNAME → `rogue-codes.pages.dev` was blocking www domain creation — deleted and re-deployed
 - Both domains now return HTTP 200. Committed as `b4edccd`, deployed to Workers version `7e1c3a30`
 - DNS records auto-created by Cloudflare: `rogue.codes` AAAA → `100::`, A → Cloudflare proxy IPs
+
+## Session — 11 Jul 2026 — Mobile Bugfixes: Hero Black Screen, Timeline Path, PreviewModal
+
+### Done
+- **Hero video black screen** (`prisma-hero.jsx`): added `preload="auto"`, `onError` handler + `videoFailed` state, animated gradient fallback when video fails to load
+- **AnimatedBeamTimeline mobile path** (`AnimatedBeamTimeline.jsx`): fixed mobile detection (`useState(null)` + `useEffect` guard instead of `useState(() => window.innerWidth < 768)`); connector line changed from `h-8` to full-span via `top:68; bottom:0`
+- **SitePreviewModal** (`ServicesSection.jsx`): wired `onSelectSite` to all 3 non-hero service cards; converted `ExampleRow` from `<a target="_blank">` to `<button onClick={...}>` opening modal; enlarged from `max-w-6xl` to `max-width: min(90vw, 1400px)`, `maxHeight: 800` → `85dvh`; added iframe loading spinner state
+- Vercel CLI installed (`v55.0.0`)
+
+### Build
+✅ `npm run build` passes (3.09s)

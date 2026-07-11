@@ -98,7 +98,7 @@ const services = [
   },
 ]
 
-function ExampleRow({ examples, isDay }) {
+function ExampleRow({ examples, isDay, onSelectSite }) {
   return (
     <div>
       <p className="text-xs font-semibold tracking-wider uppercase mb-2" style={{ color: isDay ? '#8A7A6A' : 'rgba(255,255,255,0.35)' }}>
@@ -106,12 +106,10 @@ function ExampleRow({ examples, isDay }) {
       </p>
       <div className="grid grid-cols-2 gap-1.5">
         {examples.map((ex) => (
-          <a
+          <button
             key={ex.url}
-            href={ex.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all hover:bg-black/5 group/link"
+            onClick={() => onSelectSite?.(ex)}
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg transition-all hover:bg-black/5 group/link w-full text-left"
             style={{ background: isDay ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.03)' }}
           >
             <img
@@ -126,8 +124,7 @@ function ExampleRow({ examples, isDay }) {
             <span className="flex items-center gap-0.5 text-[10px] shrink-0" style={{ color: '#FFD700' }}>
               <Star className="size-2.5" /> {ex.rating}
             </span>
-            <ExternalLink className="size-2.5 shrink-0 opacity-0 group-hover/link:opacity-100 transition-opacity" style={{ color: isDay ? '#8A7A6A' : 'rgba(255,255,255,0.25)' }} />
-          </a>
+          </button>
         ))}
       </div>
     </div>
@@ -163,6 +160,8 @@ function SitePreviewThumbnail({ url, name }) {
 }
 
 function SitePreviewModal({ site, onClose }) {
+  const [iframeLoading, setIframeLoading] = useState(true)
+
   useEffect(() => {
     function onKeyDown(e) { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKeyDown)
@@ -175,7 +174,7 @@ function SitePreviewModal({ site, onClose }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-8"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-2 md:p-6 lg:p-8"
       style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)' }}
     >
       <motion.div
@@ -184,8 +183,8 @@ function SitePreviewModal({ site, onClose }) {
         exit={{ scale: 0.92, opacity: 0, y: 20 }}
         transition={{ type: 'spring', stiffness: 300, damping: 28 }}
         onClick={e => e.stopPropagation()}
-        className="w-full max-w-6xl rounded-2xl overflow-hidden shadow-2xl"
-        style={{ background: '#1A1817' }}
+        className="w-full rounded-2xl overflow-hidden shadow-2xl"
+        style={{ maxWidth: 'min(90vw, 1400px)', background: '#1A1817' }}
       >
         {/* Browser chrome */}
         <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)', background: '#222020' }}>
@@ -210,13 +209,22 @@ function SitePreviewModal({ site, onClose }) {
           </div>
         </div>
 
-        <div className="relative overflow-hidden" style={{ height: '80dvh', maxHeight: 800 }}>
+        <div className="relative overflow-hidden" style={{ height: '85dvh', maxHeight: '90vh' }}>
+          {iframeLoading && (
+            <div className="absolute inset-0 flex items-center justify-center" style={{ background: '#fff' }}>
+              <div className="flex flex-col items-center gap-3">
+                <div className="size-8 rounded-full border-2 border-t-transparent animate-spin" style={{ borderColor: '#E85D3A', borderTopColor: 'transparent' }} />
+                <span className="text-xs text-zinc-500">Loading preview...</span>
+              </div>
+            </div>
+          )}
           <iframe
             src={site.url}
             title={site.name}
             className="absolute inset-0 w-full h-full border-0"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
             style={{ background: '#fff' }}
+            onLoad={() => setIframeLoading(false)}
           />
         </div>
       </motion.div>
@@ -412,7 +420,7 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
 
                 {examples && service.title !== 'Web Development' && (
                   <div className="mt-4">
-                    <ExampleRow examples={examples} isDay={isDay} />
+                    <ExampleRow examples={examples} isDay={isDay} onSelectSite={onSelectSite} />
                   </div>
                 )}
 
@@ -520,7 +528,7 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
           {/* Remaining services */}
           <div className="mt-12 md:mt-24">
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 hide-scrollbar">
-              {services.slice(1).map((s, i) => (
+                {services.slice(1).map((s, i) => (
                 <ServiceCard
                   key={s.title}
                   service={s}
@@ -529,6 +537,7 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
                   hoveredService={hoveredService}
                   setHoveredService={setHoveredService}
                   onShowExamples={onShowExamples}
+                  onSelectSite={setSelectedSite}
                 />
               ))}
             </div>
