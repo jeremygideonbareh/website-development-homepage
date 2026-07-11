@@ -6,19 +6,19 @@ const defaultMembers = [
   {
     name: 'Jeremy Gideon Bareh',
     role: 'Lead Developer',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400&q=85',
+    image: '/images/team/jeremy.jpeg',
     social: { twitter: '#', linkedin: '#', behance: '#' },
   },
   {
     name: 'Aaron Jaison',
     role: 'Co-Developer',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=85',
+    image: '/images/team/aaron.jpeg',
     social: { twitter: '#', linkedin: '#' },
   },
   {
     name: 'Ashba Merim Francis',
     role: 'Sales',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=85',
+    image: '/images/team/ashba.jpeg',
     social: { linkedin: '#' },
   },
   {

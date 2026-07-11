@@ -259,3 +259,118 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 ### Build
 ✅ `npm run build` passes (1.52s)
 ✅ deployed to Workers `973bdc7d` | committed `a6b1821`, `0b50d03`
+
+## Session — 11 Jul 2026 — TeamMemberCard, Variable Font Hero, Marquee Removal, CTA Polish, Team Bg
+
+### Done
+
+#### 1. TeamMemberCard — `src/components/ui/team-member-card.tsx`
+- **Source:** Emerald UI v2.0.0 (MIT) — editorial-style team member card
+- **Dependencies:** All already installed (`clsx`, `tailwind-merge`, `lucide-react`, `framer-motion`)
+- **Structure:** Overlapping portrait image (left) + info block (right) via negative margin (`-left-8`), with staggered entrance animations
+- **Props:** `position` ('left'|'right'), `jobPosition`, `firstName`, `lastName`, `imageUrl`, `description`, `className`
+- **Animations:** 4 staggered framer-motion blocks — outer container (opacity 0→1, 0.6s), jobPosition label (x: -20→0, 0.5s, delay 0.1s), portrait (opacity 0→1, scale 0.95→1, y: 30→0, 0.7s, delay 0.15s), info block (x: 40→0, 0.6s, delay 0.3s)
+- **CTA:** Circular button (h-20 w-20) with `ArrowRight` icon, hover rotates -45deg, group pulse scale 1.1
+- **Grain overlay:** `bg-linear-to-t from-black/20 via-transparent to-transparent` over portrait for texture
+- **Responsive:** Fixed image width h-125 w-90, info block width `calc(100%-350px)`. Bio copy constrained to `w-[40%]`. On small viewports, `flex-col` stack would be needed — currently unchanged from source
+- **Custom `cn` utility:** Defined inline using `clsx` + `tailwind-merge` (15 lines), avoids importing from `src/lib/utils.js`
+- **TypeScript:** Full interface typing with optional props + defaults
+
+#### 2. About Us — Hero Section Rewrite
+- **Replaced:** Old hero block (lines ~301-356) consisting of:
+  - `GalleryFrame`-wrapped photo with "Available for work" badge overlay
+  - Right column: `SectionEyebrow`, 3-line name headline, `WordReveal` description, 4 skill pills (React, Three.js, TypeScript, AI/ML)
+- **Replaced with:** Single `<TeamMemberCard position="left" jobPosition="Founder & Lead Developer" firstName="Jeremy" lastName="Gideon Bareh" imageUrl={galleryPhotos[4]} description="Full-stack engineer building premium digital experiences..." />`
+- **Cleanup:**
+  - Removed unused `GalleryFrame` import (was only used in this section)
+  - Removed unused `heroY` TransformMotion value (was used by old photo column scrolling animation)
+  - Kept `heroRef` + `heroOpacity` scroll transform on outer wrapper (fades entire hero on scroll)
+  - Kept "Back to home" button with ArrowLeft icon
+  - `SectionEyewbrow`, `WordReveal`, `KineticText` imports still used elsewhere in AboutUs
+- **Image placeholder:** Still uses `galleryPhotos[4]` Unsplash URL. When user adds photo to `public/images/team/`, change `imageUrl` to `/images/team/filename.jpg`
+
+#### 3. Variable Font Cursor Proximity — `src/components/ui/VariableFontCursorProximity.jsx`
+- **Purpose:** Text whose individual letters morph `wght` (font-variation-settings) based on cursor proximity — interpolates between `fromWeight` (resting) and `toWeight` (at cursor center)
+- **TSX→JSX conversion:** Removed TypeScript annotations, removed `useIsStaticRenderer` (no SSR in this Vite project), removed `motion.span` → plain `<span>` (rAF loop handles all DOM mutations directly, framer-motion span added nothing)
+- **Bundled font:** Injects `@font-face` for Inter Variable from `rsms.me` (normal + italic) with unique family name "InterVariableFramer" to avoid conflicts with user-installed Inter
+- **Default props:** label="Variable Font Proximity", fontSize=48, color="#FFFFFF", fromWeight=400, toWeight=900, strength=25, transition={duration:0.3, ease:"easeOut"}
+- **Reach mapping:** strength (1-100) maps linearly to 1-800px proximity radius
+- **Per-frame loop:** `useAnimationFrame` computes distance from each letter center to cursor → linear proximity target → exponential smoothing toward target (tau from transition.duration) → stamps `fontVariationSettings: 'wght' <interpolated>` directly on DOM nodes (60fps, bypasses React reconciliation)
+- **Accessibility:** Visually hidden `<span>` with full text (sr-only styles) covers all letters + proper aria-hidden on individual spans
+- **Hero integration:**
+  - Replaced `<h1>` with `<WordsPullUp>` at `prisma-hero.jsx:65-74`
+  - Uses original tagline, fontSize="clamp(1.75rem,5vw,4.5rem)", color="#E1E0CC", fromWeight=400 → toWeight=900
+  - style={textAlign:"center", width:"100%"} for alignment
+  - Removed Clash Display font-family from this element (bundled Inter Variable used instead)
+
+#### 4. WordsPullUp/WordsPullUpMultiStyle Removed
+- Both functions (60 lines combined) and their `export` statement deleted from `prisma-hero.jsx`
+- Framer-motion imports cleaned up: removed `useInView`, `useReducedMotion` (no longer needed)
+- `useRef` import also removed (was only used by WordsPullUp functions)
+- `useState` kept for `videoFailed` state
+- **No other file imports WordsPullUp** — confirmed via grep, safe removal
+
+#### 5. Marquee Tech Stack Carousel Removed
+- **Deleted:** `src/components/Marquee.jsx` (38 lines, imported framer-motion `useMotionValue`, `animate`, `motion`)
+- **App.jsx cleanup:**
+  - Removed `import Marquee from './components/Marquee'` (line 20)
+  - Removed Tech Stack Marquee JSX block (lines 343-346):
+    ```jsx
+    {/* Tech Stack Marquee */}
+    <div className="py-12 relative z-10 overflow-hidden" style={{ backgroundColor: p.bg }}>
+      <Marquee speed={45} />
+    </div>
+    ```
+  - Footer now directly follows CTA section
+
+#### 6. TeamShowcase Black Background
+- **App.jsx line 287-289:** Wrapped `<TeamShowcase>` in `<section style={{ backgroundColor: '#0A0A0A' }}>`
+- This replaces the previous design where team section used same background as rest of page (night: #1A1817, day: #F5F0EB)
+- The `.dark` class within TeamShowcase handles day/night text color variables independently of the black wrapper
+
+#### 7. CTA Section — Copy Update
+- **Paragraph text:** `Let&apos;s ship something real.` → `Let&apos;s build something real — together.`
+- **Attribution added:** New `<motion.p>` block after paragraph: `— Jeremy Gideon Bareh` (staggered entrance: delay 0.25s, opacity 0→1, y:20→0)
+- **Button text:** `Book a Free Call` → `Start your project` (delay adjusted from 0.3s → 0.35s to accommodate attribution line)
+- **Section structure:** Still uses full-bleed cinematic photo background (`cinematicPhotos[9]`) with gradient overlay
+
+#### 8. Team Photos Folder
+- Created `public/images/team/` — static assets directory (same pattern as `public/videos/`, `public/models/`)
+- Placeholder Unsplash URLs in TeamShowcase and AboutUs should be replaced with `/images/team/filename.jpg` once photos are pasted
+
+#### 9. demo.tsx
+- `src/components/ui/demo.tsx` — Standalone preview page rendering `<TeamMemberCard />` with defaults
+- For local testing: swap `App.jsx` `<PrismaHero />` with `<Demo />` to preview component
+
+### New Files
+- `src/components/ui/VariableFontCursorProximity.jsx` (226 lines — rAF-driven variable font proximity effect)
+- `src/components/ui/team-member-card.tsx` (142 lines — editorial-style team card with TypeScript interface)
+- `src/components/ui/demo.tsx` (8 lines — TeamMemberCard standalone preview)
+
+### Deleted Files
+- `src/components/Marquee.jsx` (38 lines — tech stack infinite scroll carousel)
+
+### Modified Files
+- `src/App.jsx` — Removed Marquee import + JSX block, wrapped TeamShowcase in `#0A0A0A` section, updated CTA copy (paragraph, attribution line, button text)
+- `src/components/ui/prisma-hero.jsx` — Replaced WordsPullUp/export with VariableFontCursorProximity import + usage, removed 60 lines of deprecated word-animation functions
+- `src/components/AboutUs.jsx` — Replaced old hero section with TeamMemberCard, removed unused GalleryFrame import, removed unused heroY transform, added TeamMemberCard import
+
+### Cleanup Details
+- Removed `useInView`, `useReducedMotion`, `useRef` from prisma-hero.jsx imports
+- Removed `GalleryFrame` from AboutUs.jsx import (GalleryPhoto still imported for elsewhere)
+- Removed `heroY` TransformMotion (heroOpacity kept for scroll fade)
+- All dependency-originated imports (clsx, twMerge, ArrowRight, etc.) were pre-installed — zero new npm packages
+
+### Deployed Commits
+- `a720b1d` — feat: VariableFontCursorProximity hero heading, rm Marquee, TeamShowcase black bg
+- `cfe8138` — fix: CTA copy — paragraph, attribution, button text
+- `9bc2ecb` — feat: TeamMemberCard editorial component for About Us hero
+
+### Build
+✅ `npm run build` passes (1.87s)
+✅ Deployed to Workers `26f3a923` → `rogue.codes`, `www.rogue.codes`
+
+### Next Steps
+- User needs to paste team photos into `public/images/team/`
+- Update `imageUrl` in TeamShowcase.jsx and AboutUs.jsx to local paths
+- Consider responsive layout of TeamMemberCard on mobile (currently uses fixed image widths that may overflow on small screens)

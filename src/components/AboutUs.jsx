@@ -312,7 +312,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
             jobPosition="Founder & Lead Developer"
             firstName="Jeremy"
             lastName="Gideon Bareh"
-            imageUrl={galleryPhotos[4]}
+            imageUrl="/images/team/jeremy.jpeg"
             description="Full-stack engineer building premium digital experiences from scratch. No templates. No compromises. Just code that works."
           />
         </motion.div>
