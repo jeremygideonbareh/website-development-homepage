@@ -246,3 +246,16 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 
 ### Build
 ✅ `npm run build` passes (3.09s)
+
+### Fixes (11 Jul 2026, batch 2)
+- **React error #310** (`AnimatedBeamTimeline.jsx`): early return `if (isMobile === null) return null` before 4 framer-motion hooks caused hooks-count mismatch on re-render. Replaced `useState(null)` → `useState(() => window.innerWidth < 768)` lazy initializer, removed guard.
+
+### Done (11 Jul 2026, batch 3)
+- **ScrambleText** (`ScrambleText.jsx`): added `duration` prop (default 1000ms) — reveals full text after 1s regardless of scramble progress
+- **Hero previews** (`ServicesSection.jsx`): hero card changed from side-by-side to stacked layout; 4 previews → 2 featured previews at full width; aspect ratio `4/3` → `16/10`; added hover lift + "Click to preview" affordance
+- **TeamShowcase** (NEW `TeamShowcase.jsx`): replaced old `TeamSection.jsx` with bento photo grid + name list. Converted from TSX to JSX. Uses `react-icons/fa` for social icons. Added touch/tap support for mobile hover states. Day/night mode via `.dark` CSS variable wrapper.
+- **Dependencies**: added `react-icons` (`--force` due to platform-specific lockfile packages)
+
+### Build
+✅ `npm run build` passes (1.52s)
+✅ deployed to Workers `973bdc7d` | committed `a6b1821`, `0b50d03`
