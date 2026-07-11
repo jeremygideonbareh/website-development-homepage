@@ -1,9 +1,24 @@
+@import url('https://fonts.fontshare.com/css?family=Clash+Display:700,600,500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html, body {
-  overflow-x: clip;
+  overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 @layer base {
@@ -53,263 +68,8 @@ html, body {
   }
 }
 
-.hero-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  background: #000;
-  overflow: hidden;
-}
-
-.hero-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.side-menu {
-  position: fixed;
-  left: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  pointer-events: none;
-}
-
-.menu-icon {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-}
-
-.menu-icon span {
-  width: 24px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.6);
-  transition: background 0.3s;
-}
-
-.menu-icon:hover span {
-  background: rgba(255, 255, 255, 1);
-}
-
-.vertical-text {
-  writing-mode: vertical-rl;
-  font-size: 12px;
-  letter-spacing: 4px;
-  color: rgba(255, 255, 255, 0.4);
-  font-weight: 500;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.hero-title {
-  font-size: clamp(4rem, 12vw, 12rem);
-  font-weight: 900;
-  line-height: 1;
-  color: #fff;
-  letter-spacing: 0.05em;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.title-char {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-.hero-subtitle {
-  margin-top: 24px;
-  max-width: 600px;
-}
-
-.subtitle-line {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
-  margin: 4px 0;
-  will-change: transform, opacity;
-}
-
-.scroll-progress {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  pointer-events: none;
-}
-
-.scroll-text {
-  font-size: 11px;
-  letter-spacing: 3px;
-  color: rgba(255, 255, 255, 0.4);
-  font-weight: 500;
-}
-
-.progress-track {
-  width: 120px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  background: rgba(255, 255, 255, 0.6);
-  transition: width 0.1s linear;
-}
-
-.section-counter {
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 2px;
-  font-variant-numeric: tabular-nums;
-}
-
-@keyframes fade-in {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-in-delayed {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes grow-line {
-  from { transform: scaleX(0); opacity: 0; }
-  to { transform: scaleX(1); opacity: 1; }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.8s ease-out forwards;
-}
-
-.animate-fade-in-delayed {
-  animation: fade-in-delayed 0.6s ease-out 0.3s forwards;
-  opacity: 0;
-}
-
-.animate-grow-line {
-  animation: grow-line 1s ease-out 0.3s forwards;
-  transform-origin: center;
-  opacity: 0;
-}
-
 .noise-overlay {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
-}
-
-.scroll-sections {
-  position: relative;
-  z-index: 5;
-}
-
-.content-section {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 20px;
-}
-
-.parallax {
-  position: relative;
-}
-
-.parallax__header {
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-}
-
-.parallax__visuals {
-  position: absolute;
-  inset: 0;
-}
-
-.parallax__black-line-overflow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.parallax__layers {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  will-change: transform;
-}
-
-.parallax__layer-img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  will-change: transform;
-}
-
-.parallax__layer-title {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  will-change: transform;
-}
-
-.parallax__title {
-  font-size: clamp(3rem, 10vw, 8rem);
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  text-shadow: 0 4px 40px rgba(0, 0, 0, 0.8);
-}
-
-.parallax__fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40%;
-  background: linear-gradient(to top, #000, transparent);
-  pointer-events: none;
-  z-index: 3;
 }

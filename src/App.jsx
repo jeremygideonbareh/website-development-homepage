@@ -91,7 +91,7 @@ function App() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: p.bg }}>
-      {!showExamples && !showAbout && !showContact && <PrismaHero onStartProject={() => setShowContact(true)} />}
+      {!showExamples && !showAbout && !showContact && <PrismaHero onStartProject={() => setShowBooking(true)} />}
 
       <AnimatePresence>
         {isLoading && (
@@ -109,7 +109,6 @@ function App() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { duration: 1 } }}
-        key={theme}
         style={{ position: 'relative', zIndex: 1 }}
       >
         <motion.nav
@@ -272,7 +271,7 @@ function App() {
                 </div>
               </section>
 
-              <ServicesSection isDay={theme === 'day'} />
+              <ServicesSection isDay={theme === 'day'} onShowExamples={() => setShowExamples(true)} />
 
               <CaseStudiesSection isDay={theme === 'day'} />
 

@@ -521,8 +521,18 @@ export default function ExamplesPage({ onBack }) {
         </div>
       </div>
 
+      {/* Disclaimer */}
+      <div className="pt-44 sm:pt-36 pb-0 px-4 md:px-8 max-w-7xl mx-auto">
+        <div className="flex items-start gap-3 p-4 rounded-xl border mb-6" style={{ background: 'rgba(255,107,74,0.06)', borderColor: 'rgba(255,107,74,0.15)' }}>
+          <AlertCircle className="size-5 shrink-0 mt-0.5" style={{ color: '#FF6B4A' }} />
+          <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+            <strong style={{ color: 'rgba(255,255,255,0.75)' }}>Inspiration Gallery</strong> — These websites are real examples from around the web, provided for inspiration and reference only. They are <strong style={{ color: 'rgba(255,255,255,0.75)' }}>not</strong> projects built by Rogue Code. Browse the <a href="#case-studies" className="underline hover:no-underline" style={{ color: '#FF6B4A' }}>Case Studies section</a> below for examples of our actual work.
+          </p>
+        </div>
+      </div>
+
       {/* Results */}
-      <div className="pt-44 sm:pt-36 pb-24 px-4 md:px-8 max-w-7xl mx-auto">
+      <div className="pb-24 px-4 md:px-8 max-w-7xl mx-auto">
         {Object.keys(grouped).length === 0 ? (
           <div className="text-center py-32">
             <p className="text-lg font-medium" style={{ color: 'rgba(255,255,255,0.3)' }}>No examples found</p>

@@ -180,3 +180,50 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 ### Branch
 - `main` — Rogue Code site
 - `gh-pages` — CPH homepage3.html deploy
+
+## Session — 10 Jul 2026 — Pricing INR Tiers + Services Mobile Fix
+
+### Changes
+1. **PricingSection** — Replaced 3 USD packages (Starter $2.5K, Growth $5K, Enterprise $15K) with 4 INR tiers: Basic ₹7K+, Business ₹14K+, Enterprise ₹25K+, Custom Animated ₹3L+. Added example tags per tier. Removed Per-Service table. Added 3D tilt + spotlight hover animation.
+2. **ServicesSection mobile** — Fixed `overflow-hidden` on cards (text clipping). Cards now scroll horizontally on mobile (`flex overflow-x-auto snap-x`), stays `md:grid md:grid-cols-3` on desktop. Added `hide-scrollbar` utility.
+3. **Hero layout** — Removed 12-column grid → vertical stacked layout. Changed font to **Clash Display** (Fontshare). Removed negative tracking that clipped glyphs. Wired "Start a project" → BookingModal.
+4. **TeamSection** — Enhanced with 3D tilt + spotlight hover, image scale animation + social icon overlay on hover, mobile horizontal scroll.
+5. **BookingModal** — Upgraded with animated gradient border glow, backdrop blur, Clash Display heading.
+6. **Deploy** — Moved from Cloudflare Pages to **Cloudflare Workers** (static assets). Custom domain `rogue.codes` routed via Worker route. `wrangler.toml` added for config.
+
+### Files Changed
+- `src/components/PricingSection.jsx` (rewritten)
+- `src/components/ServicesSection.jsx` (overflow & scroll fixes)
+- `src/components/ui/prisma-hero.jsx` (vertical stack, Clash Display)
+- `src/components/TeamSection.jsx` (3D tilt, hover animations)
+- `src/components/BookingModal.jsx` (gradient border, glow)
+- `src/index.css` (Clash Display import, `overflow-x:clip`→`hidden`, hide-scrollbar, gradientShift keyframes)
+- `src/App.jsx` (hero → BookingModal wiring)
+- `wrangler.toml` (new)
+
+### Domain
+- `https://rogue.codes` — Workers, custom domain route
+
+### Build
+✅ `npm run build` passes (2.4s) | `npm run lint` — pre-existing errors only
+
+## Session — 11 Jul 2026 — Security & Code Review Fixes
+
+### Completed
+1. **🔐 Token hygiene** — `CLOUDFLARE_API_TOKEN` saved to `.env` (gitignored). Verified no leak in PowerShell history.
+2. **♿ BookingModal a11y** — Added `role="dialog"`, `aria-modal="true"`, focus trap on Tab, Escape key handler, close button enlarged to 44×44px.
+3. **🔄 LeadForm "Submit Another"** — No longer calls `onClose`/modal-dismiss on reset. Removed unused `onSuccess` prop from both LeadForm and BookingModal.
+4. **🌐 API URL** — Hardcoded `http://localhost:3001/api/leads` → `import.meta.env.VITE_API_URL || '/api/leads'`. Added Vite proxy `/api` → `localhost:3001` for dev compat.
+5. **🎬 AnimatePresence exit animation** — Moved `<AnimatePresence>` from inside `SitePreviewModal` to parent call site so exit animations fire on close.
+6. **⚡ Instant theme toggle** — Removed `key={theme}` from App.jsx main motion.div (was causing full remount/re-animation on each theme switch).
+7. **🧹 Dead CSS** — Removed ~260 lines of unused classes (`.hero-container`, `.hero-canvas`, `.parallax*`, `.side-menu`, `.scroll-progress`, `.animate-fade-in*`, `.content-section`, etc.) from `index.css`.
+8. **🧹 Dead code** — Removed unused `showAsterisk` prop + conditional from `WordsPullUp`.
+9. **♻️ Tilt hook extracted** — Created `src/hooks/useTiltEffect.js` shared hook. Refactored `PricingCard`, `TeamCard`, `ServiceCard` to use it (eliminated triplicated tilt/spotlight logic).
+10. **🗑️ Config cleanup** — Removed empty/duplicate `wrangler.toml` (config lives in `wrangler.jsonc`).
+
+### Still Blocked
+- **Gemini API key + Apify token** in `.opencode/mcp.json` — CRITICAL, needs rotation with new credentials
+- **CSRF/CSP/Redis rate limiting** — deferred, requires backend coordination
+
+### Build
+✅ `npm run build` passes (2.53s) | `npm run lint` — pre-existing errors unchanged

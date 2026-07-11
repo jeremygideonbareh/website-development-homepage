@@ -1,4 +1,4 @@
-const PROXY_URL = 'http://localhost:3001/api/leads'
+const PROXY_URL = import.meta.env.VITE_API_URL || '/api/leads'
 
 export async function submitLead(formData) {
   const res = await fetch(PROXY_URL, {

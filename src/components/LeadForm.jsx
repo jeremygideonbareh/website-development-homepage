@@ -82,7 +82,7 @@ function CooldownRing({ remaining, total }) {
   )
 }
 
-export function LeadForm({ defaultTier = '', onSuccess }) {
+export function LeadForm({ defaultTier = '' }) {
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -243,7 +243,6 @@ export function LeadForm({ defaultTier = '', onSuccess }) {
               onClick={() => {
                 setSuccess(false)
                 setForm({ name: '', email: '', company: '', project_tier: '', message: '' })
-                onSuccess?.()
               }}
               className="mt-8 flex items-center gap-2 rounded-full border border-zinc-700/60 px-5 py-2 text-sm text-zinc-300 hover:bg-white/5 transition-colors"
             >

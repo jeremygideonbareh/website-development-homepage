@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 
 /* ---------------- WordsPullUp ---------------- */
-function WordsPullUp({ text, className = "", showAsterisk = false, style }) {
+function WordsPullUp({ text, className = "", style }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const shouldReduce = useReducedMotion();
@@ -26,9 +26,6 @@ function WordsPullUp({ text, className = "", showAsterisk = false, style }) {
             style={{ marginRight: isLast ? 0 : "0.25em" }}
           >
             {word}
-            {showAsterisk && isLast && (
-              <span className="absolute top-[0.65em] -right-[0.3em] text-[0.31em]">*</span>
-            )}
           </motion.span>
         );
       })}
@@ -105,50 +102,45 @@ export default function PrismaHero({ onStartProject }) {
         {/* Gradient overlay */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
 
-        {/* Hero content */}
-        <div className="absolute inset-0 flex flex-col justify-end sm:justify-end lg:justify-center px-4 sm:px-8 md:px-10 pb-[10%] sm:pb-[10%] lg:pb-[5%]">
-          <div className="max-w-5xl">
-          <div className="grid grid-cols-12 items-end gap-4">
-            
-            <div className="col-span-12 lg:col-span-8">
-              <h1
-                className="font-medium leading-[1.1] tracking-[-0.05em] sm:tracking-[-0.03em] text-[clamp(1.5rem,4vw,4rem)]"
-                style={{ color: "#E1E0CC" }}
-              >
-                <WordsPullUp text={tagline} />
-              </h1>
-            </div>
+        {/* Hero content - vertical stack */}
+        <div className="absolute inset-0 flex flex-col justify-center px-4 sm:px-8 md:px-10 pb-[5%]">
+          <div className="max-w-4xl mx-auto w-full">
+            <h1
+              className="text-[clamp(1.75rem,5vw,4.5rem)] leading-[1.1] tracking-tight"
+              style={{
+                color: "#E1E0CC",
+                fontFamily: "'Clash Display', sans-serif",
+                fontWeight: 700,
+              }}
+            >
+              <WordsPullUp text={tagline} />
+            </h1>
 
-            <div className="col-span-12 flex flex-col gap-5 lg:col-span-4">
-              
-              <motion.p
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="text-sm sm:text-sm md:text-base"
-                style={{ lineHeight: 1.2, color: "rgba(225, 224, 204, 0.8)" }}
-              >
-                A full-service web development & AI automation agency — we ship custom websites, intelligent AI workflows, and mobile apps for businesses that demand more than templates.
-              </motion.p>
+            <motion.p
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl"
+              style={{ color: "rgba(225, 224, 204, 0.8)" }}
+            >
+              A full-service web development & AI automation agency — we ship custom websites, intelligent AI workflows, and mobile apps for businesses that demand more than templates.
+            </motion.p>
 
-              <motion.button
-                onClick={onStartProject}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="group inline-flex items-center gap-2 self-start rounded-full py-1 pl-5 pr-1 text-sm font-medium transition-all hover:gap-3 sm:text-base"
-                style={{ backgroundColor: "#E1E0CC", color: "#0A0A0A" }}
+            <motion.button
+              onClick={onStartProject}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="group inline-flex items-center gap-2 rounded-full py-1 pl-5 pr-1 text-sm font-medium transition-all hover:gap-3 sm:text-base mt-8"
+              style={{ backgroundColor: "#E1E0CC", color: "#0A0A0A" }}
+            >
+              Start a project
+              <span className="flex h-11 w-11 items-center justify-center rounded-full transition-transform group-hover:scale-110"
+                style={{ backgroundColor: "#0A0A0A" }}
               >
-                Start a project
-                <span className="flex h-11 w-11 items-center justify-center rounded-full transition-transform group-hover:scale-110"
-                  style={{ backgroundColor: "#0A0A0A" }}
-                >
-                  <ArrowRight className="h-4 w-4" style={{ color: "#E1E0CC" }} />
-                </span>
-              </motion.button>
-
-            </div>
-          </div>
+                <ArrowRight className="h-4 w-4" style={{ color: "#E1E0CC" }} />
+              </span>
+            </motion.button>
           </div>
         </div>
       </div>

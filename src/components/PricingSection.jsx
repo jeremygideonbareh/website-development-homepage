@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion'
-import { Check, ArrowRight } from 'lucide-react'
+import { Check } from 'lucide-react'
+import { useTiltEffect } from '../hooks/useTiltEffect'
 
 const packages = [
   {
-    name: 'Starter',
-    price: '$2,500',
+    name: 'Basic',
+    price: '₹7,000',
     priceLabel: 'starting from',
-    desc: 'Perfect for small businesses ready to establish a strong online presence.',
+    desc: 'A clean, responsive website that gets your business online fast.',
     features: [
       '5-page responsive website',
       'Mobile-first design',
@@ -15,13 +16,14 @@ const packages = [
       '1 revision round',
       '1 month hosting support',
     ],
+    examples: ['Portfolio / Showcase', 'Landing Page', 'Small Business Site'],
     accent: '#E85D3A',
   },
   {
-    name: 'Growth',
-    price: '$5,000',
+    name: 'Business',
+    price: '₹14,000',
     priceLabel: 'starting from',
-    desc: 'For growing businesses needing custom functionality and AI automation.',
+    desc: 'Custom functionality, CMS, and automation to scale your operations.',
     features: [
       'Custom web app or AI automation',
       'Custom CMS integration',
@@ -31,12 +33,13 @@ const packages = [
       'Performance optimization',
       'API integrations',
     ],
+    examples: ['E-commerce Store', 'SaaS Dashboard', 'Membership Portal'],
     accent: '#FF6B4A',
     highlighted: true,
   },
   {
     name: 'Enterprise',
-    price: '$15,000',
+    price: '₹25,000',
     priceLabel: 'starting from',
     desc: 'Full-stack products with dedicated team and ongoing partnership.',
     features: [
@@ -49,25 +52,140 @@ const packages = [
       'Priority response (24h)',
       'Source code ownership',
     ],
+    examples: ['Multi-tenant Platform', 'Marketplace', 'ERP System'],
     accent: '#3B8A88',
   },
-]
-
-const serviceRanges = [
-  { service: 'Web Development', from: '$2,500' },
-  { service: 'AI & Automation', from: '$5,000' },
-  { service: 'Mobile Apps', from: '$8,000' },
-  { service: 'UI/UX Design', from: '$2,000' },
+  {
+    name: 'Custom Animated',
+    price: '₹3,00,000',
+    priceLabel: 'onwards',
+    desc: 'Award-caliber animated experiences with 3D, WebGL, and cinematic motion design.',
+    features: [
+      'Custom 3D / WebGL experiences',
+      'Cinematic GSAP animations',
+      'Interactive brand storytelling',
+      'Dedicated creative director',
+      'Unlimited revision rounds',
+      'Priority support & maintenance',
+      'Performance optimization',
+      'Source code ownership',
+    ],
+    examples: ['3D / WebGL Experience', 'Cinematic Brand Showcase', 'Interactive Product Launch'],
+    accent: '#7C5CFC',
+  },
 ]
 
 const container = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.12 } },
 }
 
 const item = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+}
+
+function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook }) {
+  const {
+    cardRef,
+    isHovered,
+    tiltStyle,
+    spotlightBg,
+    handleMouseMove,
+    handleMouseEnter,
+    handleMouseLeave,
+  } = useTiltEffect({ tiltRange: 3, spotlightColor: `${pkg.accent}18` })
+
+  return (
+    <motion.div
+      variants={item}
+      className="relative group"
+      style={{ perspective: 1200 }}
+    >
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="relative rounded-2xl border overflow-visible transition-all duration-500 hover:-translate-y-1 flex flex-col"
+        style={{
+          ...tiltStyle,
+          borderColor: pkg.highlighted ? pkg.accent : border,
+          background: cardBg,
+          backdropFilter: 'blur(12px)',
+        }}
+      >
+        {pkg.highlighted && (
+          <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: pkg.accent }} />
+        )}
+
+        {/* Spotlight */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none rounded-2xl"
+          style={{ background: spotlightBg, opacity: isHovered ? 1 : 0 }}
+        />
+
+        <div className="p-8 flex flex-col h-full relative" style={{ transformStyle: 'preserve-3d' }}>
+          <div className="mb-6" style={{ transform: 'translateZ(30px)' }}>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-2xl font-bold" style={{ color: text }}>{pkg.name}</h3>
+              {pkg.highlighted && (
+                <span
+                  className="text-[11px] font-semibold px-3 py-1 rounded-full"
+                  style={{ backgroundColor: `${pkg.accent}20`, color: pkg.accent }}
+                >
+                  Most Popular
+                </span>
+              )}
+            </div>
+            <div className="flex items-baseline gap-1 mt-3">
+              <span className="text-4xl font-black" style={{ color: text }}>{pkg.price}</span>
+              <span className="text-sm" style={{ color: dim }}>{pkg.priceLabel}</span>
+            </div>
+            <p className="text-sm mt-3" style={{ color: muted }}>{pkg.desc}</p>
+          </div>
+
+          <ul className="space-y-3 mb-8 flex-1" style={{ transform: 'translateZ(20px)' }}>
+            {pkg.features.map((f) => (
+              <li key={f} className="flex items-start gap-3 text-sm" style={{ color: muted }}>
+                <Check className="size-4 mt-0.5 flex-shrink-0" style={{ color: pkg.accent }} />
+                {f}
+              </li>
+            ))}
+          </ul>
+
+          {/* Examples */}
+          <div className="mb-6" style={{ transform: 'translateZ(25px)' }}>
+            <p className="text-xs font-semibold tracking-wider uppercase mb-2" style={{ color: dim }}>
+              Best for
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {pkg.examples.map((ex) => (
+                <span
+                  key={ex}
+                  className="text-[11px] px-2.5 py-1 rounded-full border"
+                  style={{ borderColor: border, color: muted }}
+                >
+                  {ex}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={onBook}
+            className="w-full py-3 rounded-full text-sm font-semibold transition-all relative overflow-hidden"
+            style={{
+              backgroundColor: pkg.highlighted ? pkg.accent : (isDay ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.08)'),
+              color: pkg.highlighted ? '#FFFFFF' : text,
+            }}
+          >
+            Book a Free Call
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
 }
 
 export default function PricingSection({ isDay = true, onBook }) {
@@ -108,111 +226,37 @@ export default function PricingSection({ isDay = true, onBook }) {
           />
         </motion.div>
 
-        {/* Package cards */}
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-40px' }}
-          className="grid md:grid-cols-3 gap-6 mb-20"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
         >
           {packages.map((pkg) => (
-            <motion.div
+            <PricingCard
               key={pkg.name}
-              variants={item}
-              className="relative rounded-2xl border overflow-hidden transition-all duration-500 hover:-translate-y-1 flex flex-col"
-              style={{
-                borderColor: pkg.highlighted ? pkg.accent : border,
-                background: cardBg,
-                backdropFilter: 'blur(12px)',
-              }}
-            >
-              {pkg.highlighted && (
-                <div className="absolute top-0 left-0 right-0 h-1" style={{ background: pkg.accent }} />
-              )}
-              <div className="p-8 flex flex-col h-full">
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-2xl font-bold" style={{ color: text }}>{pkg.name}</h3>
-                    {pkg.highlighted && (
-                      <span
-                        className="text-[11px] font-semibold px-3 py-1 rounded-full"
-                        style={{
-                          backgroundColor: `${pkg.accent}20`,
-                          color: pkg.accent,
-                        }}
-                      >
-                        Most Popular
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-baseline gap-1 mt-3">
-                    <span className="text-4xl font-black" style={{ color: text }}>{pkg.price}</span>
-                    <span className="text-sm" style={{ color: dim }}>{pkg.priceLabel}</span>
-                  </div>
-                  <p className="text-sm mt-3" style={{ color: muted }}>{pkg.desc}</p>
-                </div>
-
-                <ul className="space-y-3 mb-8 flex-1">
-                  {pkg.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm" style={{ color: muted }}>
-                      <Check className="size-4 mt-0.5 flex-shrink-0" style={{ color: pkg.accent }} />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-
-                <button
-                  onClick={onBook}
-                  className="w-full py-3 rounded-full text-sm font-semibold transition-all"
-                  style={{
-                    backgroundColor: pkg.highlighted ? pkg.accent : (isDay ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.08)'),
-                    color: pkg.highlighted ? '#FFFFFF' : text,
-                  }}
-                >
-                  Book a Free Call
-                </button>
-              </div>
-            </motion.div>
+              pkg={pkg}
+              isDay={isDay}
+              text={text}
+              muted={muted}
+              dim={dim}
+              border={border}
+              cardBg={cardBg}
+              onBook={onBook}
+            />
           ))}
         </motion.div>
 
-        {/* Starting-from per service */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="max-w-2xl mx-auto"
+          className="text-center text-xs"
+          style={{ color: dim }}
         >
-          <h3 className="text-xl font-bold text-center mb-8" style={{ color: text }}>
-            Per-Service Starting Rates
-          </h3>
-          <div
-            className="rounded-2xl border divide-y overflow-hidden"
-            style={{
-              borderColor: border,
-              borderWidth: '1px',
-            }}
-          >
-            {serviceRanges.map((s, i) => (
-              <div
-                key={s.service}
-                className="flex items-center justify-between px-6 py-4"
-                style={{
-                  borderColor: border,
-                  backgroundColor: i % 2 === 0 ? (isDay ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)') : 'transparent',
-                }}
-              >
-                <span className="text-sm font-medium" style={{ color: text }}>{s.service}</span>
-                <span className="text-sm font-semibold" style={{ color: accent }}>from {s.from}</span>
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-xs mt-4" style={{ color: dim }}>
-            Every project is unique. Final pricing depends on scope, complexity, and timeline.
-          </p>
-        </motion.div>
+          Every project is unique. Final pricing depends on scope, complexity, and timeline.
+        </motion.p>
       </div>
     </section>
   )
