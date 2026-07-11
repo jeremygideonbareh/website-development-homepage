@@ -6,7 +6,8 @@ import {
   Smartphone, Palette, Braces, Bot, Database, Coins
 } from 'lucide-react'
 import { WordReveal, CharReveal, SectionEyebrow, KineticText } from './RevealText'
-import GalleryPhoto, { GalleryFrame } from './GalleryPhoto'
+import GalleryPhoto from './GalleryPhoto'
+import TeamMemberCard from './ui/team-member-card'
 
 function getDomain(url) {
   try { return new URL(url).hostname.replace('www.', '') } catch { return url }
@@ -280,7 +281,6 @@ export default function AboutUs({ onBack, theme = 'night' }) {
   const p = themes[theme] ?? themes.night
   const heroRef = useRef(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   useEffect(() => {
@@ -307,52 +307,14 @@ export default function AboutUs({ onBack, theme = 'night' }) {
             <ArrowLeft className="size-4" /> Back to home
           </motion.button>
 
-          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-            <motion.div style={{ y: heroY }} className="relative">
-              <div className="relative inline-block">
-                <GalleryFrame width="w-64 md:w-80" rotate={-2} from="left" delay={0}>
-                  <img src={galleryPhotos[4]} alt="Jeremy Gideon Bareh"
-                    className="w-full h-64 md:h-80 object-cover" />
-                </GalleryFrame>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.5 }}
-                  className="absolute -bottom-4 -right-4 rounded-xl border px-4 py-3"
-                  style={{ borderColor: p.glassBorder, background: p.glassBg, backdropFilter: 'blur(12px)' }}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="size-2 rounded-full bg-green-400" />
-                    <span className="text-xs font-semibold" style={{ color: p.text }}>Available for work</span>
-                  </div>
-                  <div className="text-[10px] mt-0.5" style={{ color: p.dim }}>React · Three.js · AI</div>
-                </motion.div>
-              </div>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
-              <SectionEyebrow delay={0.1} color={p.eyebrow}>Founder & Lead Developer</SectionEyebrow>
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-4" style={{ color: p.text }}>
-                Jeremy <br />Gideon <br /><span style={{ color: p.accent }}>Bareh</span>
-              </h1>
-              <p className="mt-6 text-base sm:text-lg max-w-md leading-relaxed" style={{ color: p.muted }}>
-                <WordReveal delay={0.4}>Full-stack engineer building premium digital experiences from scratch. No templates. No compromises. Just code that works.</WordReveal>
-              </p>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-                className="mt-8 flex flex-wrap gap-3"
-              >
-                {['React', 'Three.js', 'TypeScript', 'AI/ML'].map((skill) => (
-                  <span key={skill} className="px-4 py-1.5 text-xs font-medium rounded-full border"
-                    style={{ borderColor: p.glassBorder, color: p.accent, background: `${p.accent}08` }}>
-                    {skill}
-                  </span>
-                ))}
-              </motion.div>
-            </motion.div>
-          </div>
+          <TeamMemberCard
+            position="left"
+            jobPosition="Founder & Lead Developer"
+            firstName="Jeremy"
+            lastName="Gideon Bareh"
+            imageUrl={galleryPhotos[4]}
+            description="Full-stack engineer building premium digital experiences from scratch. No templates. No compromises. Just code that works."
+          />
         </motion.div>
 
         {/* ─── STATS ─── */}
