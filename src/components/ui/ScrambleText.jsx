@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
-export default function ScrambleText({ text, className, delay = 0, speed = 0.03 }) {
+export default function ScrambleText({ text, className, delay = 0, speed = 0.03, duration = 1000 }) {
   const [displayed, setDisplayed] = useState('')
   const [isRevealed, setIsRevealed] = useState(false)
 
@@ -18,8 +18,14 @@ export default function ScrambleText({ text, className, delay = 0, speed = 0.03 
       )
       if (frame >= text.length) clearInterval(timer)
     }, 60 + speed * 1000)
-    return () => clearInterval(timer)
-  }, [isRevealed, text, speed])
+
+    const reveal = setTimeout(() => {
+      clearInterval(timer)
+      setDisplayed(text)
+    }, duration)
+
+    return () => { clearInterval(timer); clearTimeout(reveal) }
+  }, [isRevealed, text, speed, duration])
 
   return (
     <motion.span

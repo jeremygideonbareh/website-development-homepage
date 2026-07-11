@@ -137,15 +137,15 @@ function SitePreviewThumbnail({ url, name }) {
 
   if (error) {
     return (
-      <div className="relative aspect-[4/3] overflow-hidden flex flex-col items-center justify-center gap-1.5 rounded-lg" style={{ background: 'rgba(255,255,255,0.03)' }}>
-        <Globe className="size-5" style={{ color: 'rgba(255,255,255,0.15)' }} />
-        <span className="text-[10px] text-center px-2 leading-tight" style={{ color: 'rgba(255,255,255,0.2)' }}>{domain}</span>
+      <div className="relative aspect-[16/10] overflow-hidden flex flex-col items-center justify-center gap-2 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)' }}>
+        <Globe className="size-6" style={{ color: 'rgba(255,255,255,0.15)' }} />
+        <span className="text-xs text-center px-3 leading-tight" style={{ color: 'rgba(255,255,255,0.25)' }}>{domain}</span>
       </div>
     )
   }
 
   return (
-    <div className="relative aspect-[4/3] overflow-hidden rounded-lg" style={{ background: '#fff' }}>
+    <div className="relative aspect-[16/10] overflow-hidden rounded-xl group/preview-img" style={{ background: '#fff' }}>
       <iframe
         src={url}
         title={name}
@@ -154,7 +154,7 @@ function SitePreviewThumbnail({ url, name }) {
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
         onError={() => setError(true)}
       />
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(10,10,10,0.85) 100%)', pointerEvents: 'none' }} />
+      <div className="absolute inset-0 transition-opacity duration-300 opacity-0 group-hover/preview-img:opacity-100" style={{ background: 'linear-gradient(to bottom, transparent 40%, rgba(10,10,10,0.85) 100%)', pointerEvents: 'none' }} />
     </div>
   )
 }
@@ -298,9 +298,9 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
 
         <div className="relative p-6 md:p-8" style={{ transformStyle: 'preserve-3d' }}>
           {hero ? (
-            /* Hero layout: side-by-side */
-            <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-              {/* Left: Content */}
+            /* Hero layout: stacked - text above, wider previews below */
+            <div className="space-y-8 md:space-y-10">
+              {/* Top: Content */}
               <div className="space-y-5">
                 <motion.div
                   className="size-14 md:size-16 rounded-xl flex items-center justify-center"
@@ -327,7 +327,7 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
                     {service.subtitle}
                   </p>
                 </div>
-                <p className="text-base md:text-lg leading-relaxed max-w-lg" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
+                <p className="text-base md:text-lg leading-relaxed max-w-2xl" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
                   {service.desc}
                 </p>
                 <div>
@@ -349,24 +349,27 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
                 )}
               </div>
 
-              {/* Right: 2x2 Previews */}
+              {/* Bottom: 2 wide previews */}
               <div>
-                <p className="text-sm font-semibold tracking-wider uppercase mb-3" style={{ color: isDay ? '#8A7A6A' : 'rgba(255,255,255,0.35)' }}>
+                <p className="text-sm font-semibold tracking-wider uppercase mb-4" style={{ color: isDay ? '#8A7A6A' : 'rgba(255,255,255,0.35)' }}>
                   Example Websites
                 </p>
-                <div className="grid grid-cols-2 gap-3">
-                  {examples.map((ex) => (
-                    <button key={ex.url} onClick={() => onSelectSite?.(ex)} className="group/preview block text-left w-full">
+                <div className="grid grid-cols-2 gap-4 md:gap-6">
+                  {examples.slice(0, 2).map((ex) => (
+                    <button key={ex.url} onClick={() => onSelectSite?.(ex)} className="group/preview block text-left w-full transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20">
                       <div className="relative rounded-xl overflow-hidden cursor-pointer" style={{ background: '#fff' }}>
                         <SitePreviewThumbnail url={ex.url} name={ex.name} />
-                        <div className="absolute bottom-0 left-0 right-0 p-2.5" style={{ pointerEvents: 'none' }}>
-                          <p className="text-xs font-semibold text-white truncate">{ex.name}</p>
-                          <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.5)' }}>{ex.type}</p>
+                        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4" style={{ pointerEvents: 'none' }}>
+                          <p className="text-sm md:text-base font-bold text-white truncate">{ex.name}</p>
+                          <p className="text-[11px] md:text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{ex.type}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 mt-1.5 px-0.5">
-                        <Star className="size-3" style={{ color: '#FFD700' }} />
-                        <span className="text-[11px]" style={{ color: '#FFD700' }}>{ex.rating}</span>
+                      <div className="flex items-center gap-1 mt-2 px-1">
+                        <Star className="size-3.5" style={{ color: '#FFD700' }} />
+                        <span className="text-xs" style={{ color: '#FFD700' }}>{ex.rating}</span>
+                        <span className="text-[11px] ml-auto opacity-0 group-hover/preview:opacity-100 transition-opacity" style={{ color: service.accent }}>
+                          Click to preview →
+                        </span>
                       </div>
                     </button>
                   ))}
