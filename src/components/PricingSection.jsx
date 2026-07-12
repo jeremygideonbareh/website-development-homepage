@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { useTiltEffect } from '../hooks/useTiltEffect'
@@ -5,7 +6,8 @@ import { useTiltEffect } from '../hooks/useTiltEffect'
 const packages = [
   {
     name: 'Basic',
-    price: '₹7,000',
+    monthlyPrice: '₹7,000',
+    yearlyPrice: '₹70,000',
     priceLabel: 'starting from',
     desc: 'A clean, responsive website that gets your business online fast.',
     features: [
@@ -16,12 +18,13 @@ const packages = [
       '1 revision round',
       '1 month hosting support',
     ],
-    examples: ['Portfolio / Showcase', 'Landing Page', 'Small Business Site'],
+    examples: ['Portfolio', 'Landing Page', 'Small Business Site'],
     accent: '#E85D3A',
   },
   {
     name: 'Business',
-    price: '₹14,000',
+    monthlyPrice: '₹14,000',
+    yearlyPrice: '₹1,40,000',
     priceLabel: 'starting from',
     desc: 'Custom functionality, CMS, and automation to scale your operations.',
     features: [
@@ -39,7 +42,8 @@ const packages = [
   },
   {
     name: 'Enterprise',
-    price: '₹25,000',
+    monthlyPrice: '₹25,000',
+    yearlyPrice: '₹2,50,000',
     priceLabel: 'starting from',
     desc: 'Full-stack products with dedicated team and ongoing partnership.',
     features: [
@@ -57,7 +61,8 @@ const packages = [
   },
   {
     name: 'Custom Animated',
-    price: '₹3,00,000',
+    monthlyPrice: '₹3,00,000',
+    yearlyPrice: '₹30,00,000',
     priceLabel: 'onwards',
     desc: 'Award-caliber animated experiences with 3D, WebGL, and cinematic motion design.',
     features: [
@@ -77,7 +82,7 @@ const packages = [
 
 const container = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 }
 
 const item = {
@@ -85,7 +90,41 @@ const item = {
   visible: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 }
 
-function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook }) {
+function BillingToggle({ isYearly, onToggle }) {
+  return (
+    <div className="flex justify-center mb-12">
+      <div className="relative flex w-fit items-center rounded-full p-1" style={{ background: 'rgba(255,255,255,0.06)' }}>
+        <motion.div
+          className="absolute top-0 h-full rounded-full"
+          layoutId="billing-pill"
+          transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+          style={{
+            width: '50%',
+            background: 'rgba(255,255,255,0.1)',
+            left: isYearly ? '50%' : '0%',
+          }}
+        />
+        <button
+          onClick={() => onToggle(false)}
+          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32"
+          style={{ color: isYearly ? '#8A8A8A' : '#F2F2F2' }}
+        >
+          Monthly
+        </button>
+        <button
+          onClick={() => onToggle(true)}
+          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32"
+          style={{ color: isYearly ? '#F2F2F2' : '#8A8A8A' }}
+        >
+          Yearly
+          <span className="ml-1.5 text-[10px]" style={{ color: '#FF6B4A' }}>-17%</span>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isYearly }) {
   const {
     cardRef,
     isHovered,
@@ -116,47 +155,46 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook }) {
         }}
       >
         {pkg.highlighted && (
-          <div className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl" style={{ background: pkg.accent }} />
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+            <span
+              className="text-[11px] font-semibold px-4 py-1.5 rounded-full shadow-lg"
+              style={{ backgroundColor: pkg.accent, color: '#FFFFFF' }}
+            >
+              Most Popular
+            </span>
+          </div>
         )}
 
-        {/* Spotlight */}
         <motion.div
           className="absolute inset-0 pointer-events-none rounded-2xl"
           style={{ background: spotlightBg, opacity: isHovered ? 1 : 0 }}
         />
 
-        <div className="p-8 flex flex-col h-full relative" style={{ transformStyle: 'preserve-3d' }}>
+        <div className="p-6 md:p-8 flex flex-col h-full relative" style={{ transformStyle: 'preserve-3d' }}>
           <div className="mb-6" style={{ transform: 'translateZ(30px)' }}>
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-2xl font-bold" style={{ color: text }}>{pkg.name}</h3>
-              {pkg.highlighted && (
-                <span
-                  className="text-[11px] font-semibold px-3 py-1 rounded-full"
-                  style={{ backgroundColor: `${pkg.accent}20`, color: pkg.accent }}
-                >
-                  Most Popular
-                </span>
-              )}
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="text-xl font-bold" style={{ color: text }}>{pkg.name}</h3>
             </div>
             <div className="flex items-baseline gap-1 mt-3">
-              <span className="text-4xl font-black" style={{ color: text }}>{pkg.price}</span>
+              <span className="text-4xl font-black tracking-tight" style={{ color: text }}>
+                {isYearly ? pkg.yearlyPrice : pkg.monthlyPrice}
+              </span>
               <span className="text-sm" style={{ color: dim }}>{pkg.priceLabel}</span>
             </div>
-            <p className="text-sm mt-3" style={{ color: muted }}>{pkg.desc}</p>
+            <p className="text-sm mt-3 leading-relaxed" style={{ color: muted }}>{pkg.desc}</p>
           </div>
 
-          <ul className="space-y-3 mb-8 flex-1" style={{ transform: 'translateZ(20px)' }}>
+          <ul className="space-y-2.5 mb-8 flex-1" style={{ transform: 'translateZ(20px)' }}>
             {pkg.features.map((f) => (
-              <li key={f} className="flex items-start gap-3 text-sm" style={{ color: muted }}>
+              <li key={f} className="flex items-start gap-3 text-sm leading-snug" style={{ color: muted }}>
                 <Check className="size-4 mt-0.5 flex-shrink-0" style={{ color: pkg.accent }} />
                 {f}
               </li>
             ))}
           </ul>
 
-          {/* Examples */}
           <div className="mb-6" style={{ transform: 'translateZ(25px)' }}>
-            <p className="text-xs font-semibold tracking-wider uppercase mb-2" style={{ color: dim }}>
+            <p className="text-xs font-semibold tracking-wider uppercase mb-2.5" style={{ color: dim }}>
               Best for
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -174,7 +212,7 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook }) {
 
           <button
             onClick={onBook}
-            className="w-full py-3 rounded-full text-sm font-semibold transition-all relative overflow-hidden"
+            className="w-full py-3.5 rounded-full text-sm font-semibold transition-all relative overflow-hidden hover:opacity-90"
             style={{
               backgroundColor: pkg.highlighted ? pkg.accent : (isDay ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.08)'),
               color: pkg.highlighted ? '#FFFFFF' : text,
@@ -189,6 +227,8 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook }) {
 }
 
 export default function PricingSection({ isDay = true, onBook }) {
+  const [isYearly, setIsYearly] = useState(false)
+
   const accent = isDay ? '#E85D3A' : '#FF6B4A'
   const text = isDay ? '#1A1A1A' : '#F2F2F2'
   const muted = isDay ? '#5A4A3A' : '#8A8A8A'
@@ -205,7 +245,7 @@ export default function PricingSection({ isDay = true, onBook }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <p className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: accent }}>
             Investment
@@ -226,12 +266,14 @@ export default function PricingSection({ isDay = true, onBook }) {
           />
         </motion.div>
 
+        <BillingToggle isYearly={isYearly} onToggle={setIsYearly} />
+
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-40px' }}
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 mb-12"
         >
           {packages.map((pkg) => (
             <PricingCard
@@ -244,6 +286,7 @@ export default function PricingSection({ isDay = true, onBook }) {
               border={border}
               cardBg={cardBg}
               onBook={onBook}
+              isYearly={isYearly}
             />
           ))}
         </motion.div>

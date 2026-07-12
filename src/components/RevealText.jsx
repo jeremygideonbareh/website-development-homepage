@@ -25,7 +25,7 @@ export function WordReveal({ children, className, delay = 0 }) {
 export function CharReveal({ children, className, delay = 0 }) {
   const chars = children.split('')
   return (
-    <span className={className}>
+    <span className={className} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
       {chars.map((char, i) => (
         <motion.span
           key={i}
@@ -98,7 +98,7 @@ export function KineticText({ children, mode = 'spring', delay = 0, className })
   const v = kineticVariants[mode] || kineticVariants.spring
 
   return (
-    <span className={className} style={{ display: 'inline', whiteSpace: 'pre-wrap' }}>
+    <span className={className} style={{ display: 'inline', whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
       {chars.map((char, i) => {
         const anim = v(i)
         return (
@@ -110,7 +110,7 @@ export function KineticText({ children, mode = 'spring', delay = 0, className })
             transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
             style={{ display: 'inline' }}
           >
-            {char === ' ' ? '\u00A0' : char}
+            {char === ' ' ? ' ' : char}
           </motion.span>
         )
       })}

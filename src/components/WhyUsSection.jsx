@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import NetworkParticles from './NetworkParticles'
+import AuroraBackground from './ui/aurora-background'
 
 const panels = [
   {
@@ -44,7 +44,7 @@ function PanelCard({ p, i, isDay }) {
       className="flex-shrink-0 w-[85vw] max-w-lg md:w-[40vw] snap-start"
     >
       <div
-        className="relative min-h-[320px] md:min-h-[400px] rounded-2xl border p-8 md:p-10 flex flex-col justify-between overflow-hidden group"
+        className="relative min-h-[320px] md:min-h-[400px] rounded-2xl border p-8 md:p-10 flex flex-col justify-between group"
         style={{
           borderColor: `${p.accent}33`,
           background: isDay
@@ -55,7 +55,7 @@ function PanelCard({ p, i, isDay }) {
       >
         {!loaded && (
           <motion.div
-            className="absolute inset-0 z-20 pointer-events-none overflow-hidden rounded-2xl"
+            className="absolute inset-0 z-20 pointer-events-none rounded-2xl"
             style={{
               background: isDay
                 ? 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%)'
@@ -113,13 +113,6 @@ export default function WhyUsSection({ isDay = true }) {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-
-  const revealWidth = useTransform(scrollYProgress, [0, 0.15], ['0%', '100%'])
-
   useEffect(() => {
     const el = trackRef.current
     if (!el) return
@@ -140,50 +133,51 @@ export default function WhyUsSection({ isDay = true }) {
   }
 
   return (
-    <section ref={sectionRef} className="relative z-10 py-32">
-      {/* Background layer that sweeps in from right */}
-      <motion.div
+    <section ref={sectionRef} className="relative z-10 py-32 overflow-hidden">
+      <AuroraBackground
         className="absolute inset-0"
-        style={{ width: revealWidth, right: 0 }}
-      >
-        <div className="absolute inset-0" style={{ background: isDay ? '#1A1817' : '#0A0A0A' }}>
-          <NetworkParticles color="#FF6B4A" speed={0.1} />
-        </div>
-      </motion.div>
+        colors={[
+          [255, 107, 74],
+          [232, 93, 58],
+          [43, 122, 120],
+          [59, 138, 136],
+        ]}
+        speed={0.8}
+        blobCount={4}
+      />
+      <div className="absolute inset-0" style={{ background: isDay ? 'rgba(26,24,23,0.5)' : 'rgba(10,10,10,0.6)' }} />
 
       <div className="relative px-6 md:px-12 mb-16">
         <motion.div
-          initial={{ x: 300, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
+          initial={{ y: 40, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ type: 'spring', stiffness: 100, damping: 22 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
           className="text-center"
         >
           <p
             className="text-sm font-medium tracking-widest uppercase mb-3"
-            style={{ color: isDay ? '#E85D3A' : '#FF6B4A' }}
+            style={{ color: '#FF6B4A' }}
           >
             Why choose us
           </p>
           <h2
             className="text-3xl font-bold sm:text-4xl md:text-5xl"
-            style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}
+            style={{ color: '#F2F2F2' }}
           >
             The Edge
           </h2>
         </motion.div>
       </div>
 
-      {/* Scrollable track with arrows */}
       <div className="relative group/track">
-        {/* Left arrow */}
         {canScrollLeft && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-opacity"
+            className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
             style={{
-              background: isDay ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.6)',
-              color: isDay ? '#1A1A1A' : '#F2F2F2',
+              background: 'rgba(0,0,0,0.6)',
+              color: '#F2F2F2',
               touchAction: 'manipulation',
             }}
           >
@@ -191,14 +185,13 @@ export default function WhyUsSection({ isDay = true }) {
           </button>
         )}
 
-        {/* Right arrow */}
         {canScrollRight && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-opacity"
+            className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center transition-opacity hover:opacity-80"
             style={{
-              background: isDay ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.6)',
-              color: isDay ? '#1A1A1A' : '#F2F2F2',
+              background: 'rgba(0,0,0,0.6)',
+              color: '#F2F2F2',
               touchAction: 'manipulation',
             }}
           >
@@ -211,7 +204,7 @@ export default function WhyUsSection({ isDay = true }) {
           className="WhyUsTrack flex gap-6 md:gap-10 px-6 md:px-12 overflow-x-auto snap-x snap-mandatory scroll-smooth"
           style={{
             scrollbarWidth: 'thin',
-            scrollbarColor: isDay ? '#E85D3A88 transparent' : '#FF6B4A88 transparent',
+            scrollbarColor: '#FF6B4A88 transparent',
             msOverflowStyle: '-ms-autohiding-scrollbar',
           }}
         >
@@ -219,11 +212,11 @@ export default function WhyUsSection({ isDay = true }) {
             .WhyUsTrack::-webkit-scrollbar { height: 4px; }
             .WhyUsTrack::-webkit-scrollbar-track { background: transparent; }
             .WhyUsTrack::-webkit-scrollbar-thumb {
-              background: ${isDay ? '#E85D3A66' : '#FF6B4A66'};
+              background: #FF6B4A66;
               border-radius: 999px;
             }
             .WhyUsTrack::-webkit-scrollbar-thumb:hover {
-              background: ${isDay ? '#E85D3A' : '#FF6B4A'};
+              background: #FF6B4A;
             }
           `}</style>
           {panels.map((p, i) => (
@@ -232,7 +225,6 @@ export default function WhyUsSection({ isDay = true }) {
         </div>
       </div>
 
-      {/* Scroll indicator dots */}
       <div className="relative z-10 flex justify-center gap-2 mt-8">
         {panels.map((p, i) => (
           <button
@@ -253,10 +245,10 @@ export default function WhyUsSection({ isDay = true }) {
 
       <motion.div
         className="mt-12 text-center"
-        initial={{ x: 300, opacity: 0 }}
-        whileInView={{ x: 0, opacity: 1 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ type: 'spring', stiffness: 100, damping: 22 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
       >
         <div
           className="inline-block h-1 rounded-full"

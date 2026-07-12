@@ -370,6 +370,61 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 ✅ `npm run build` passes (1.87s)
 ✅ Deployed to Workers `26f3a923` → `rogue.codes`, `www.rogue.codes`
 
+## Session — 12 Jul 2026 — Pricing Upgrade + KineticText Wrap Fix
+
+### Changes
+1. **KineticText space bug fixed** (`src/components/RevealText.jsx:113`):
+   - Root cause: `char === ' ' ? '\u00A0' : char` replaced spaces with non-breaking spaces (`\u00A0`), preventing word wrapping on mobile
+   - Fix: changed `'\u00A0'` to `' '` — words now wrap normally at container boundaries
+   - This affected all KineticText usages (AboutUs.jsx: "Ready to build something that actually works?", "How we bring your vision to life", hero-ascii.tsx)
+
+2. **PricingSection upgraded** (`src/components/PricingSection.jsx`):
+   - **Monthly/Yearly toggle** — Animated pill toggle (framer-motion `layoutId`) switching between monthly and yearly pricing
+   - **Yearly pricing added** — Each tier has `yearlyPrice` (~10× monthly = 2 months free): Basic ₹70K/yr, Business ₹1.4L/yr, Enterprise ₹2.5L/yr, Custom Animated ₹30L/yr
+   - **"Most Popular" badge** — Moved to floating pill above card (was a thin accent bar), matches 21st.dev patterns
+   - **Card spacing** — More compact on mobile (`p-6 md:p-8`), tighter feature list spacing (`space-y-2.5`)
+   - **Key `packages` data change**: `price` → `monthlyPrice` + `yearlyPrice`, all existing content preserved
+   - Zero new dependencies — uses only framer-motion, lucide-react, useTiltEffect
+
+### Files Changed
+- `src/components/RevealText.jsx` — Fixed KineticText space bug (`\u00A0` → `' '`)
+- `src/components/PricingSection.jsx` — Rewritten with monthly/yearly toggle, yearly prices, cleaner layout
+
+### Build
+✅ `npm run build` passes (2.15s)
+✅ Deployed to Workers `52d85929` → `rogue.codes`, `www.rogue.codes`
+
+## Session — 12 Jul 2026 — WhyUsSection Rebuild + Aurora Background
+
+### Changes
+1. **WhyUsSection full rebuild** (`src/components/WhyUsSection.jsx`):
+   - Removed NetworkParticles (Three.js) background + sweep-in panel
+   - Replaced with `AuroraBackground` canvas component (warm-toned orange/teal blobs)
+   - Dark overlay (`rgba(10,10,10,0.6)`) over aurora for readability
+   - Kept same 4 panel cards (Full Ownership, Ship in Weeks, One Point of Contact, End-to-End Service)
+   - Kept horizontal snap-scroll carousel with arrow buttons + dot indicators
+   - Improved section — cleaner heading animations, consistent night-mode colors
+
+2. **AuroraBackground improved** (`src/components/ui/aurora-background.tsx`):
+   - Rewrote with customizable colors, speed, blobCount props
+   - Palette: brand orange (#FF6B4A) + teal (#2B7A78) + sienna (#E85D3A) + teal2 (#3B8A88)
+   - Changed default from `position: fixed` to no positioning (caller sets via `className`)
+   - Updated `hero-ascii.tsx:403` to pass `className="fixed inset-0"` for backward compat
+
+3. **Text overflow fix (P0)** (`src/components/RevealText.jsx`):
+   - `CharReveal` (line 28): added `overflowWrap: 'break-word', wordBreak: 'break-word'` to wrapper span
+   - `KineticText` (line 101): added same to inline style
+
+### Files Changed
+- `src/components/WhyUsSection.jsx` — Rebuilt (removed NetworkParticles + revealWidth, added AuroraBackground, simplified state)
+- `src/components/ui/aurora-background.tsx` — Rewrote with customizable props, flexible positioning
+- `src/components/ui/hero-ascii.tsx` — Added `className="fixed inset-0"` to AuroraBackground usage
+- `src/components/RevealText.jsx` — Added overflow-wrap + word-break to CharReveal and KineticText
+
+### Build
+✅ `npm run build` passes (1.56s)
+✅ Deployed to Workers `db82166f` → `rogue.codes`, `www.rogue.codes`
+
 ### Next Steps
 - User needs to paste team photos into `public/images/team/`
 - Update `imageUrl` in TeamShowcase.jsx and AboutUs.jsx to local paths

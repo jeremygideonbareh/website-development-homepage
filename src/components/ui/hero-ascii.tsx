@@ -400,7 +400,7 @@ export default function Home() {
 
   return (
     <div style={{ backgroundColor: '#100904' }}>
-      <AuroraBackground />
+      <AuroraBackground className="fixed inset-0" />
       <AsciiRain
         density={0.06}
         speed={0.2}
