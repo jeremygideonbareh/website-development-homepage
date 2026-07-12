@@ -153,8 +153,8 @@ function VerticalStepCard({ step, index, isDay }) {
   const Icon = icons[index]
   return (
     <motion.div
-      initial={{ x: 300, opacity: 0, scale: 0.96 }}
-      whileInView={{ x: 0, opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, margin: '-60px' }}
       whileHover={{ y: -6, transition: { duration: 0.3 } }}
       className="relative rounded-2xl border overflow-hidden"
@@ -174,7 +174,7 @@ function VerticalStepCard({ step, index, isDay }) {
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.1 + index * 0.1 }}
       />
-      <div className="p-5 md:p-6">
+      <div className="p-4 sm:p-5 md:p-6">
         <div className="flex items-start justify-between mb-4">
           <div
             className="size-10 rounded-xl flex items-center justify-center"
@@ -345,7 +345,7 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
 
       {/* Mobile: vertical stack */}
       {isMobile && (
-        <div className="mx-auto max-w-lg px-6">
+        <div className="mx-auto px-5 sm:px-6 max-w-lg">
           <div className="text-center mb-12">
             <p
               className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase mb-2"
@@ -365,7 +365,7 @@ export default function AnimatedBeamTimeline({ isDay = true }) {
               <div key={step.id} className="relative">
                 {i < steps.length - 1 && (
                   <div
-                    className="absolute left-6 w-0.5"
+                    className="absolute left-[44px] w-0.5"
                     style={{
                       top: 68,
                       bottom: 0,
