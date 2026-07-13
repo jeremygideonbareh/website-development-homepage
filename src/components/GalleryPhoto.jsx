@@ -14,6 +14,8 @@ export default function GalleryPhoto({ src, alt, className, rotate = 0, offsetX 
         <img
           src={src}
           alt={alt}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
         />
       </div>

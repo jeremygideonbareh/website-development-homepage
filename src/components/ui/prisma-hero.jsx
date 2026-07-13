@@ -1,5 +1,4 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import ScrambleText from "./ScrambleText";
 import VariableFontCursorProximity from "./VariableFontCursorProximity";
@@ -60,11 +59,11 @@ export default function PrismaHero({ onStartProject }) {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
 
         {/* Hero content - vertical stack */}
-        <motion.div style={{ y: contentY }} className="absolute inset-0 flex flex-col justify-center px-4 sm:px-8 md:px-10 pb-[5%]">
+        <motion.div style={{ y: contentY, touchAction: 'manipulation' }} className="absolute inset-0 overflow-y-auto flex flex-col justify-center px-4 sm:px-8 md:px-10 py-[12%] sm:py-[10%] md:py-[5%] min-h-full">
           <div className="max-w-4xl mx-auto w-full">
             <VariableFontCursorProximity
               label={tagline}
-              fontSize="clamp(1.75rem,5vw,4.5rem)"
+              fontSize="clamp(1.25rem,4.5vw,4.5rem)"
               color="#E1E0CC"
               fromWeight={400}
               toWeight={900}
@@ -85,22 +84,6 @@ export default function PrismaHero({ onStartProject }) {
                 delay={0.8}
               />
             </motion.p>
-
-            <motion.button
-              onClick={onStartProject}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="group inline-flex items-center gap-2 rounded-full py-1 pl-5 pr-1 text-sm font-medium transition-all hover:gap-3 sm:text-base mt-8"
-              style={{ backgroundColor: "#E1E0CC", color: "#0A0A0A" }}
-            >
-              Start a project
-              <span className="flex h-11 w-11 items-center justify-center rounded-full transition-transform group-hover:scale-110"
-                style={{ backgroundColor: "#0A0A0A" }}
-              >
-                <ArrowRight className="h-4 w-4" style={{ color: "#E1E0CC" }} />
-              </span>
-            </motion.button>
           </div>
         </motion.div>
       </div>

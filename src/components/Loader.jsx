@@ -49,7 +49,7 @@ export default function Loader() {
         className="text-xs tracking-[0.15em] uppercase"
         style={{ color: 'rgba(255,255,255,0.35)' }}
       >
-        Loading&hellip;
+        Loading...
       </motion.p>
     </div>
   )

@@ -1,10 +1,48 @@
-User-agent: *
+# ─── AI Search / Citation Crawlers (allow for LLM discovery) ──────────────
+
+User-agent: OAI-SearchBot
 Allow: /
 
-# ─── Block internal / dev paths ─────────────────────────────────────────────
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# ─── General crawlers ─────────────────────────────────────────────────────
+
+User-agent: *
+Allow: /
 Disallow: /api/
 Disallow: /backend/
-Disallow: /node_modules/
 
-# ─── Sitemap ────────────────────────────────────────────────────────────────
-Sitemap: https://apexai.dev/sitemap.xml
+# ─── Sitemaps ─────────────────────────────────────────────────────────────
+
+Sitemap: https://rogue.codes/sitemap.xml

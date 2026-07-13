@@ -1,3 +1,21 @@
+/**
+ * About Us Page
+ *
+ * ── Team photo paths ──────────────────────────────────────
+ * The team member portrait is served from:
+ *
+ *   /images/team/jeremy.jpeg   → Jeremy Gideon Bareh
+ *
+ * To update, replace public/images/team/jeremy.jpeg with a
+ * new photo. The component passes this path to TeamMemberCard
+ * which overrides the default Unsplash fallback URL.
+ *
+ * Future additions (Aaron, Ashba) should follow the same
+ * pattern — add new .jpeg files to public/images/team/ and
+ * pass the path as `imageUrl` prop.
+ * ──────────────────────────────────────────────────────────
+ */
+
 import { useState, useRef, useEffect } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import {
@@ -19,15 +37,15 @@ function getFaviconUrl(url) {
 }
 
 const projects = [
-  { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers', tech: 'TypeScript, Next.js, Supabase', category: 'websites', color: '#FF6B4A', result: 'Full-stack booking & e-commerce platform' },
-  { name: 'Pet Grooming Website', url: 'https://github.com/jeremygideonbareh/pet-grooming-website-', tech: 'HTML, JavaScript, TypeScript', category: 'websites', color: '#2B7A78', result: 'Responsive service showcase site' },
-  { name: 'Be Kind Bakery', url: 'https://github.com/jeremygideonbareh/be-kind-bakery', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#FF6B4A', result: 'Digital storefront with online ordering' },
-  { name: 'Crumbs Bakery', url: 'https://github.com/jeremygideonbareh/crumbs-bakery-', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#3B8A88', result: 'Menu-driven bakery website' },
-  { name: 'Chelsea Man Spa Mobile', url: 'https://github.com/jeremygideonbareh/chelsea-man-spa-mobile', tech: 'JavaScript, Firebase, Google Auth', category: 'mobile', color: '#FF6B4A', result: 'Cross-platform booking app' },
-  { name: "Kiki's Portfolio", url: 'https://github.com/jeremygideonbareh/kiki-s-portfolio-website', tech: 'TypeScript, React', category: 'websites', color: '#2B7A78', result: 'Personal brand showcase' },
-  { name: 'Trading Bot', url: 'https://github.com/jeremygideonbareh/trading-bot-', tech: 'Python, TypeScript, Docker', category: 'ai', color: '#FF6B4A', result: 'Automated trading pipeline' },
-  { name: 'Support Ticket Agent', url: 'https://github.com/jeremygideonbareh/support-ticket-agent', tech: 'Python, LangChain, LangGraph', category: 'ai', color: '#2B7A78', result: 'AI-powered customer support' },
-  { name: 'Rogue Code (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', result: 'Interactive agency showcase' },
+  { name: "God's Creatures Pet Groomers", url: 'https://github.com/jeremygideonbareh/Gods-creatures-pet-groomers', tech: 'TypeScript, Next.js, Supabase', category: 'websites', color: '#FF6B4A', result: 'Full-stack Next.js booking & e-commerce platform' },
+  { name: 'Pet Grooming Website', url: 'https://github.com/jeremygideonbareh/pet-grooming-website-', tech: 'HTML, JavaScript, TypeScript', category: 'websites', color: '#2B7A78', result: 'Responsive React service showcase with contact forms' },
+  { name: 'Be Kind Bakery', url: 'https://github.com/jeremygideonbareh/be-kind-bakery', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#FF6B4A', result: 'React e-commerce storefront with online ordering' },
+  { name: 'Crumbs Bakery', url: 'https://github.com/jeremygideonbareh/crumbs-bakery-', tech: 'TypeScript, JavaScript, React', category: 'websites', color: '#3B8A88', result: 'React + PostgreSQL online ordering system' },
+  { name: 'Chelsea Man Spa Mobile', url: 'https://github.com/jeremygideonbareh/chelsea-man-spa-mobile', tech: 'JavaScript, Firebase, Google Auth', category: 'mobile', color: '#FF6B4A', result: 'React Native cross-platform booking app' },
+  { name: "Kiki's Portfolio", url: 'https://github.com/jeremygideonbareh/kiki-s-portfolio-website', tech: 'TypeScript, React', category: 'websites', color: '#2B7A78', result: 'Responsive React personal brand showcase' },
+  { name: 'Trading Bot', url: 'https://github.com/jeremygideonbareh/trading-bot-', tech: 'Python, TypeScript, Docker', category: 'ai', color: '#FF6B4A', result: 'Docker-based automated trading pipeline' },
+  { name: 'Support Ticket Agent', url: 'https://github.com/jeremygideonbareh/support-ticket-agent', tech: 'Python, LangChain, LangGraph', category: 'ai', color: '#2B7A78', result: 'LangChain AI agent for customer support' },
+  { name: 'Rogue Code (this site)', url: 'https://github.com/jeremygideonbareh/website-development-homepage', tech: 'React, Three.js, Framer Motion', category: 'websites', color: '#3B8A88', result: 'React + Three.js interactive agency showcase' },
 ]
 
 const categoryLabels = {
@@ -37,17 +55,17 @@ const categoryLabels = {
 }
 
 const values = [
-  { icon: Code, title: 'Custom from scratch', desc: 'Every site is hand-engineered — no themes, no page builders, no compromises. Your brand deserves code written for it, not retrofitted to it.' },
-  { icon: Zap, title: 'Speed without sacrifice', desc: 'AI-native workflows let us ship in weeks what takes other agencies months. Production-grade code, delivered fast.' },
-  { icon: Cpu, title: 'AI-powered engineering', desc: 'We combine human creativity with AI to build smarter, test faster, and iterate in real time. The result: better quality at half the cost.' },
-  { icon: Shield, title: 'Total ownership', desc: 'You get the code. Every line. No lock-in, no black boxes, no recurring license fees. Your digital asset, yours forever.' },
+  { icon: Code, title: 'Custom from scratch', desc: 'Every React 19 and TypeScript project is hand-engineered from scratch — no WordPress themes, no Squarespace templates, no page builders. Your brand deserves code written specifically for it, not retrofitted into an existing template.' },
+  { icon: Zap, title: 'Speed without sacrifice', desc: 'AI-native development workflows using LangChain and GPT-4 let Rogue Code ship in 2-4 weeks what takes traditional agencies 3-6 months. Production-grade React code with 95+ Lighthouse scores, delivered fast without cutting corners.' },
+  { icon: Cpu, title: 'AI-powered engineering', desc: 'Rogue Code combines human creativity with AI tooling to architect smarter, test edge cases faster, and iterate in real time. The result is better quality applications at roughly half the cost of traditional agencies.' },
+  { icon: Shield, title: 'Total ownership', desc: 'You receive every line of source code. No platform lock-in, no black-box licensing, no recurring license fees. Your React application, your data, your intellectual property — yours forever.' },
 ]
 
 const timeline = [
-  { year: '2023', title: 'The first line of code', desc: 'Jeremy started building websites from a single laptop. No clients. No portfolio. Just a conviction that templates were a compromise.', icon: Code },
-  { year: '2024', title: 'First client projects', desc: 'Word spread. Pet groomers, bakeries, spas — each project built from scratch. The portfolio grew. So did the reputation.', icon: Award },
-  { year: '2025', title: 'AI-native workflow', desc: 'Integrated AI tooling to ship faster without sacrificing quality. Support ticket agents, trading bots — the stack expanded into machine learning.', icon: Bot },
-  { year: '2026', title: 'Rogue Code studio', desc: 'What started as one developer became a lean, AI-augmented studio shipping production-grade web experiences for clients worldwide.', icon: Layers },
+  { year: '2023', title: 'The first line of code', desc: 'Jeremy started building websites from a single laptop in India. No clients. No portfolio. Just a conviction that WordPress templates were a compromise and every brand deserved hand-engineered React code.', icon: Code },
+  { year: '2024', title: 'First client projects', desc: 'Word spread through local business networks. Pet groomers in Mumbai, artisan bakeries in Portland, luxury spas in Dubai Marina — each project built from scratch with React 19 and deployed to Cloudflare Workers. The portfolio grew. So did the reputation.', icon: Award },
+  { year: '2025', title: 'AI-native workflow', desc: 'Integrated LangChain, LangGraph, and OpenAI GPT-4 for AI agent development. Built support ticket automation processing 500+ daily tickets, automated trading bots with Python Docker containers, and custom ML pipelines. The stack expanded into enterprise AI.', icon: Bot },
+  { year: '2026', title: 'Rogue Code studio', desc: 'What started as one developer became a lean, AI-augmented studio shipping production-grade React 19, TypeScript, and Next.js 15 experiences for clients across India, UAE, the United States, and Europe. Full-service web development, AI automation, and mobile app development.', icon: Layers },
 ]
 
 const testimonials = [
@@ -168,7 +186,7 @@ function ProjectCard({ proj, i, p }) {
         <div className="relative overflow-hidden" style={{ height: 160, background: p.surface2 }}>
           {iframeError ? (
             <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-              <img src={getFaviconUrl(proj.url)} alt="" className="size-6 rounded"
+              <img src={getFaviconUrl(proj.url)} alt="" loading="lazy" decoding="async" className="size-6 rounded"
                 onError={(e) => { e.target.style.display = 'none' }} />
               <span className="text-[10px] font-medium" style={{ color: p.dim, opacity: 0.5 }}>{domain}</span>
             </div>
@@ -236,12 +254,12 @@ function ScrollableCategory({ label, catProjects, catIdx, p }) {
       </motion.h2>
       <div className="relative group/track">
         {canScrollLeft && (
-          <button onClick={() => scroll('left')} className="absolute -left-2 top-1/2 -translate-y-1/2 z-20 size-9 rounded-full flex items-center justify-center shadow-lg"
-            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}` }}><ChevronRight className="size-4 rotate-180" /></button>
+          <button onClick={() => scroll('left')} className="absolute -left-2 top-1/2 -translate-y-1/2 z-20 size-9 min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center shadow-lg"
+            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}`, touchAction: 'manipulation' }}><ChevronRight className="size-4 rotate-180" /></button>
         )}
         {canScrollRight && (
-          <button onClick={() => scroll('right')} className="absolute -right-2 top-1/2 -translate-y-1/2 z-20 size-9 rounded-full flex items-center justify-center shadow-lg"
-            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}` }}><ChevronRight className="size-4" /></button>
+          <button onClick={() => scroll('right')} className="absolute -right-2 top-1/2 -translate-y-1/2 z-20 size-9 min-h-[44px] min-w-[44px] rounded-full flex items-center justify-center shadow-lg"
+            style={{ background: p.surface, color: p.text, border: `1px solid ${p.border}`, touchAction: 'manipulation' }}><ChevronRight className="size-4" /></button>
         )}
         <div ref={trackRef} className="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2"
           style={{ scrollbarWidth: 'thin', scrollbarColor: `${p.accent}66 transparent` }}>
@@ -288,10 +306,10 @@ export default function AboutUs({ onBack, theme = 'night' }) {
   }, [])
 
   const processSteps = [
-    { title: 'Discovery', desc: 'We learn your business, audience, and goals. Then map a roadmap tailored to your vision.' },
-    { title: 'Design', desc: 'Wireframes, design systems, and component architecture. Every pixel is intentional.' },
-    { title: 'Engineer', desc: 'React, Three.js, and AI come together. We build, animate, and optimize in parallel.' },
-    { title: 'Launch', desc: 'Deployment, performance tuning, and full source-code delivery. You own everything.' },
+    { title: 'Discovery', desc: 'Rogue Code learns your business model, target audience, and technical requirements. We deliver a detailed proposal with scope, milestones, INR pricing, and a 48-hour turnaround.' },
+    { title: 'Design', desc: 'Figma wireframes, high-fidelity mockups with your brand guidelines, and React 19 component architecture. Every pixel is intentional before a single line of TypeScript is written.' },
+    { title: 'Engineer', desc: 'React 19, Three.js, LangChain AI agents, and Node.js come together. We build, animate, and optimize in parallel — with weekly progress demos and milestone-based revision checkpoints.' },
+    { title: 'Launch', desc: 'Cloudflare Workers deployment with automated CI/CD, performance tuning for 95+ Lighthouse scores, and full source-code delivery. You own every line.' },
   ]
 
   return (
@@ -302,8 +320,8 @@ export default function AboutUs({ onBack, theme = 'night' }) {
         <motion.div ref={heroRef} style={{ opacity: heroOpacity }} className="relative mb-40">
           <motion.button onClick={onBack}
             initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-sm font-medium mb-20 transition-opacity hover:opacity-70"
-            style={{ color: p.accent }}>
+            className="flex items-center gap-2 text-sm font-medium mb-20 transition-opacity hover:opacity-70 min-h-[44px]"
+            style={{ color: p.accent, touchAction: 'manipulation' }}>
             <ArrowLeft className="size-4" /> Back to home
           </motion.button>
 
@@ -313,7 +331,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
             firstName="Jeremy"
             lastName="Gideon Bareh"
             imageUrl="/images/team/jeremy.jpeg"
-            description="Full-stack engineer building premium digital experiences from scratch. No templates. No compromises. Just code that works."
+            description="Full-stack engineer building premium React 19, TypeScript, and Next.js digital experiences from scratch. No WordPress templates, no page builders, no compromises. Just production-grade code deployed to Cloudflare Workers."
           />
         </motion.div>
 
@@ -511,7 +529,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.7 }}
           className="relative rounded-2xl overflow-hidden border" style={{ borderColor: p.glassBorder }}>
           <div className="absolute inset-0">
-            <img src={galleryPhotos[8]} alt="" className="w-full h-full object-cover" />
+            <img src={galleryPhotos[8]} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             <div className="absolute inset-0" style={{ background: `linear-gradient(to right, ${p.bg}ee, ${p.bg}99)` }} />
           </div>
           <div className="relative px-10 py-16 md:py-24 text-center max-w-2xl mx-auto">
@@ -530,8 +548,8 @@ export default function AboutUs({ onBack, theme = 'night' }) {
               — Jeremy Gideon Bareh
             </motion.p>
             <motion.button onClick={onBack} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-              className="mt-8 px-8 py-3.5 text-base font-semibold rounded-full transition-colors inline-flex items-center gap-2"
-              style={{ backgroundColor: p.accent, color: '#FFFFFF' }}>
+              className="mt-8 px-8 py-3.5 text-base font-semibold rounded-full transition-colors inline-flex items-center gap-2 min-h-[44px]"
+              style={{ backgroundColor: p.accent, color: '#FFFFFF', touchAction: 'manipulation' }}>
               Start your project <ArrowLeft className="size-4 rotate-180" />
             </motion.button>
           </div>

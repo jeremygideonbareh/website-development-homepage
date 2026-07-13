@@ -1,0 +1,22 @@
+# Rogue Code — Web Development & AI Automation Agency
+> Rogue Code builds custom websites, AI agents, mobile apps, and UI/UX design for businesses worldwide. From concept to deployment, we ship production-grade code that you own, forever. Specializing in React, Next.js, TypeScript, Python, LangChain, and modern full-stack development.
+
+## Services
+- Custom Web Development (React, Next.js, TypeScript, Tailwind CSS)
+- AI Agents & Automation (LangChain, LangGraph, OpenAI, Python)
+- Mobile App Development (React Native, Firebase)
+- UI/UX Design
+- API Development & Integration
+- AI Chatbots & Assistants
+
+## Pricing
+- Basic: ₹7,000/mo — 5-page responsive website, mobile-first design, basic SEO
+- Business: ₹14,000/mo — Custom web app or AI automation, CMS, 30-day support
+- Enterprise: ₹25,000/mo — Full-stack product, AI integration, dedicated team
+- Custom Animated: ₹3,00,000 — Custom 3D/WebGL experiences, cinematic animations
+
+## Contact
+- Email: cloudlyconfusing@gmail.com
+- GitHub: https://github.com/jeremygideonbareh
+- Twitter: https://twitter.com/roguecodes
+- LinkedIn: https://linkedin.com/company/roguecodes

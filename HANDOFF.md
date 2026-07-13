@@ -256,6 +256,9 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 - **TeamShowcase** (NEW `TeamShowcase.jsx`): replaced old `TeamSection.jsx` with bento photo grid + name list. Converted from TSX to JSX. Uses `react-icons/fa` for social icons. Added touch/tap support for mobile hover states. Day/night mode via `.dark` CSS variable wrapper.
 - **Dependencies**: added `react-icons` (`--force` due to platform-specific lockfile packages)
 
+### Erratum — CursorGlow / NoiseOverlay / useMouseParallax
+Items 3.⚡ listed `CursorGlow.jsx`, `NoiseOverlay.jsx`, and `useMouseParallax.js` as added, but these files were never written to disk or committed. HANDOFF.md updated 12 Jul 2026.
+
 ### Build
 ✅ `npm run build` passes (1.52s)
 ✅ deployed to Workers `973bdc7d` | committed `a6b1821`, `0b50d03`
@@ -429,3 +432,325 @@ Hero → Brand Story (3 sections) → Stats → Services → Case Studies → Pr
 - User needs to paste team photos into `public/images/team/`
 - Update `imageUrl` in TeamShowcase.jsx and AboutUs.jsx to local paths
 - Consider responsive layout of TeamMemberCard on mobile (currently uses fixed image widths that may overflow on small screens)
+
+## Session — 12 Jul 2026 — Final Polish Pass
+
+### Done
+1. **"Asme" → "Rogue Code"** (`contact-page.jsx:41`) — Fixed placeholder text
+2. **Contact social links** (`contact-page.jsx:22-25`) — Changed from `sshahaider` to `roguecodes` accounts
+3. **JSON-LD pricing** (`index.html:81-103`) — Updated from stale USD (2.5K/5K/15K) to current INR pricing (₹7K/14K/25K/3L)
+4. **VITE_SALES_PAGE_PASSWORD** (`.env`) — Added explicit env var so hardcoded fallback `rogue2024` is only used as fallback
+5. **Stale USD prices** (`ServicesSection.jsx`) — Removed dead `from:` fields that weren't rendered but contained misleading old USD figures
+6. **Root cleanup** — Deleted empty `scripts/`, `bugs/`, `photos/` dirs, removed dev artifacts (logs, .ts files, md drafts, screenshots, test scripts)
+7. **HANDOFF.md erratum** — Noted that CursorGlow/NoiseOverlay/useMouseParallax were never committed
+
+### Build
+✅ `npm run build` passes
+
+## Session — 12 Jul 2026 — Why Us Bento Grid + Floating CTA
+
+### Research Phase
+- Loaded `/webdev` skill for full-stack workflow guidance
+- Fetched Awwwards winning websites page and design agencies category to study patterns
+- Searched MagicUI registry for relevant components: `bento-grid`, `flickering-grid`, `animated-grid-pattern`, `animated-list`
+- Searched 21st.dev for "features section bento grid" components (API key not configured on this machine)
+- Read existing `WhyUsSection.jsx` (263 lines) — horizontal snap-scroll carousel with Aurora canvas background, 4 panel cards, arrow nav + dot indicators, gradient accent bar at bottom
+- Analyzed current layout: `Position: relative` section with `overflow-hidden`, Aurora bg (canvas-based animated blobs in orange/teal palette), dark overlay (`rgba(10,10,10,0.6)`), 4 `PanelCard` components in horizontal scroll track, each with number tag, title, description, accent color
+- Decided on asymmetric bento grid layout based on Awwwards design agency trends
+
+### WhyUsSection Redesign — Details
+
+#### Panel Content (all 4 cards)
+| Panel | Icon | Stat | Stat Label | Highlights | Accent |
+|---|---|---|---|---|---|
+| Full Ownership | `Code` | `100%` | IP Ownership | Full source code access, No platform lock-in, Commercial license included | `#FF6B4A` |
+| Ship in Weeks | `Zap` | `2-4` | Weeks to ship | AI-accelerated workflow, Lean agile process, Weekly progress demos | `#2B7A78` |
+| One Point of Contact | `MessageSquare` | `1` | Dedicated PM | Single point of contact, Direct communication, No bureaucracy | `#E85D3A` |
+| End-to-End Service | `Layers` | `Full` | Lifecycle coverage | Strategy & consulting, Design & development, Deploy & maintain | `#3B8A88` |
+
+#### Grid Layout (Desktop: 3 columns)
+```
+┌───────────────────┬──────────────┐
+│                   │  Ship in     │
+│   Full Ownership  │  Weeks       │
+│   (col-span-2     ├──────────────┤
+│    row-span-2)    │  One Pt of   │
+│                   │  Contact     │
+├───────────────────┴──────────────┤
+│   End-to-End Service (col-span-3) │
+└──────────────────────────────────┘
+```
+- Mobile: all cards collapse to single column (`grid-cols-1`, each card `col-span-3`)
+
+#### Card Component (`WhyCard`)
+- `motion.div` with staggered entrance: `y: 60 → 0`, `opacity: 0 → 1`, `duration: 0.5s`, `delay: i * 0.1`
+- Background: dark gradient (`p.accent + 08` opacity → transparent) on night, `rgba(255,255,255,0.85)` on day
+- Border: `1px` at `p.accent + 22` opacity
+- Hover glow: absolute positioned circle (`-top-24 -right-24`, `h-48 w-48`) with radial gradient, `opacity: 0 → 0.2` on hover, `blur-3xl`, 700ms transition
+- Layout: icon in accent-colored box top-left, large number tag top-right (at `p.accent + 10` opacity), stat badge below icon, title, description (max-w-md), highlight pills at bottom
+- Min height: `min-h-[200px]`
+
+#### StatBadge Component
+- Renders stat value (e.g. `100%`) at `text-3xl font-bold tabular-nums` in accent color, with stat label in `text-xs uppercase tracking-wider text-zinc-500`
+
+#### Highlight Tags
+- Rendered as `flex-wrap gap-2` pills at bottom of each card
+- Each pill: `text-xs font-medium px-2.5 py-1 rounded-full`, background at `p.accent + 12`, border at `p.accent + 22`, accent dot indicator
+- 3 highlights per panel
+
+#### Background: FlickeringGrid
+- Installed from MagicUI registry: `npx shadcn@latest add "https://magicui.design/r/flickering-grid.json"`
+- Canvas-based SVG flickering grid, configurable: `squareSize=4`, `gridGap=6`, `color=#FF6B4A`, `maxOpacity=0.05` (night) / `0.08` (day)
+- Position: `absolute inset-0` with dark gradient overlay (`rgba(10,8,7,0.97)` night / `rgba(245,240,235,0.97)` day) for readability
+- Lighter than Aurora canvas — no Three.js dependency, reuses same canvas pattern from 11 Jul 2026 batch 3 section
+
+#### Section Structure
+- `position: relative; zIndex: 10; py-24 md:py-32; overflow-hidden`
+- FlickeringGrid (full inset) → dark semi-transparent gradient overlay → heading block → bento grid → gradient bar
+- Heading: "Why choose us" label (orange, tracking-widest, uppercase) + "The Edge" title (text-3xl to md:text-5xl, white on night, black on day)
+- Gradient bar at bottom: `linear-gradient(to right, #FF6B4A, #2B7A78, #E85D3A, #3B8A88)`, `clamp(120px, 20vw, 240px)` wide, `h-1`, centered
+
+#### What Was Removed
+- Horizontal snap-scroll carousel track (`WhyUsTrack` flexbox with overflow-x-auto, snap-x, custom scrollbar)
+- Arrow navigation buttons (left/right Chevron, absolute positioned, rgba black background)
+- Dot indicator navigation (4 buttons in `flex justify-center gap-2`)
+- AuroraBackground component + dark overlay
+- `PanelCard` component (old card with skeleton shimmer, radial gradient glow, number tag at text-7xl, accent line at bottom)
+- `loaded` state + skeleton shimmer animation
+
+### Floating CTA Button — Details
+
+#### Motivation
+- User reported "Start a project button still doesnt work" — investigation showed the App.jsx wiring `onStartProject={() => setShowBooking(true)}` was correct (sets `showBooking` state, `BookingModal` renders at bottom with `open={showBooking}`)
+- Root cause unclear — likely z-index or pointer-event issue with `position: fixed; zIndex: 0` hero container intercepting or the centered button being inobvious
+- Decision: replace centered hero button with persistent right-side floating CTA
+
+#### Implementation
+- **Location:** `App.jsx`, rendered at root level (after CookieConsent, before closing `</motion.div>`)
+- **Position:** `fixed right-0 top-1/2 -translate-y-1/2 z-50`
+- **Appearance:** vertical pill (`writing-mode: vertical-rl`), rounded-left corners (`rounded-l-lg`), gradient background `linear-gradient(135deg, #E85D3A, #FF6B4A)`, white text, subtle shadow `0 4px 20px rgba(232, 93, 58, 0.3)`
+- **Content:** `ArrowRight` icon (rotated 90deg to point down) + "Start a project" text
+- **Animation:** slides in from right (`x: 100 → 0`, `opacity: 0 → 1`, `duration: 0.6s`, `delay: 1.5s`, cubic-bezier ease)
+- **Hover:** expands padding-left (`pl-4 → pl-5`), arrow translates right (x: 0 → 0.5)
+- **Desktop only:** `hidden md:flex` — not shown on mobile (could add mobile version later)
+- **On Click:** `() => setShowBooking(true)` — opens BookingModal (same flow as before)
+- **Z-index:** `z-50` — above hero (z-0), above all sections (z-10), below modals (z-200)
+
+#### Hero Button Removal
+- `src/components/ui/prisma-hero.jsx` — removed `<motion.button>` block (lines 89-103 old) including:
+  - `ArrowRight` import (removed from import line)
+  - Button with `initial/animate/transition` entrance, `rounded-full py-1 pl-5 pr-1`, `bg-[#E1E0CC] text-[#0A0A0A]`, arrow in dark circle
+  - Kept `onStartProject` prop in component signature for App.jsx compatibility
+
+### MagicUI Component Installation — Details
+
+#### bento-grid.tsx
+- Installed via `npx shadcn@latest add "https://magicui.design/r/bento-grid.json"` (after `--force` npm install of `@radix-ui/react-icons` which was failing on Windows due to `@rolldown/binding-linux-x64-gnu` platform mismatch — same issue as noted in HANDOFF.md Pipeline section)
+- Dependencies: `@radix-ui/react-icons`, `@/lib/utils`, `@/components/ui/button`
+- Components: `BentoGrid` (3-column auto-rows grid wrapper), `BentoCard` (feature card with hover reveal)
+- Not directly used in WhyUsSection — wrote custom `WhyCard` instead for full styling control (accent colors, stat badges, highlight tags, dark theme)
+
+#### flickering-grid.tsx
+- Installed via `npx shadcn@latest add "https://magicui.design/r/flickering-grid.json"`
+- Zero npm dependencies — pure React + Canvas API
+- Props: `squareSize` (4), `gridGap` (6), `flickerChance` (0.3), `color` (rgb string), `maxOpacity` (0.3), `width/height`, `className`
+- Internal: canvas with `devicePixelRatio` scaling, `Float32Array` for per-square opacity, `IntersectionObserver` for in-view detection (pauses when scrolled away), `ResizeObserver` for responsive sizing, rAF loop at ~30fps
+- Used in WhyUsSection with `color="#FF6B4A"`, `maxOpacity=0.05`, `squareSize=4`, `gridGap=6`
+
+#### button.tsx (shadcn)
+- Auto-installed as dependency of bento-grid
+- Replaced existing `src/components/ui/button.jsx` (functionally identical but with `gap-2` and `[&_svg]` classes added for icon support)
+- Dependencies: `@radix-ui/react-slot`, `class-variance-authority`, `@/lib/utils` — all already installed
+- Old `button.jsx` deleted manually to avoid import ambiguity (both .jsx and .tsx resolve to same path)
+
+### Cleanup
+- `src/components/ui/button.jsx` — Deleted (replaced by shadcn button.tsx)
+- `src/components/ui/prisma-hero.jsx` — Removed unused `ArrowRight` import (button was only consumer)
+- `WhyUsSection.jsx` — `AuroraBackground` still used by `hero-ascii.tsx`, not deleted
+
+### Files Changed (complete list)
+- `src/components/WhyUsSection.jsx` — Full 246-line rewrite (was 263 lines)
+- `src/App.jsx` — Added floating CTA button block (16 lines), added `ArrowRight` to lucide imports
+- `src/components/ui/prisma-hero.jsx` — Removed button block (14 lines) + `ArrowRight` import
+- `src/components/ui/bento-grid.tsx` — NEW (109 lines, MagicUI, TypeScript)
+- `src/components/ui/flickering-grid.tsx` — NEW (196 lines, MagicUI, TypeScript, canvas-based)
+- `src/components/ui/button.tsx` — NEW (56 lines, shadcn, TypeScript)
+- `src/components/ui/button.jsx` — DELETED (50 lines, replaced by TS version)
+- `HANDOFF.md` — Updated with erratum (11 Jul batch 3: CursorGlow/NoiseOverlay never committed), added this session
+
+### Dependencies
+- `@radix-ui/react-icons` (added for bento-grid component compatibility)
+
+### Build Output
+```
+dist/index.html                             7.43 kB │ gzip:  1.98 kB
+dist/assets/index-CLEmUv74.css             63.77 kB │ gzip: 12.08 kB
+dist/assets/rolldown-runtime-BYbx6iT9.js    0.82 kB │ gzip:  0.47 kB
+dist/assets/vendor-icons-Cf3ALAwR.js       23.50 kB │ gzip:  8.99 kB
+dist/assets/vendor-motion-CKXfXRps.js     135.97 kB │ gzip: 44.69 kB
+dist/assets/vendor-react-DD79OjLP.js      181.79 kB │ gzip: 57.19 kB
+dist/assets/index-CFE6seR-.js             272.22 kB │ gzip: 75.30 kB
+```
+- Build time: 3.22s
+- Deploy: Version `7911cb7b`, deployed to `rogue.codes` + `www.rogue.codes`
+
+### Aknowledged Build Issue
+- Cloudflare Worker Builds (auto-deploy from Git) is broken: "The build token selected for this build has been deleted or rolled and cannot be used for this build." Fix: reset build token in Cloudflare Dashboard → Workers & Pages → project → Settings → Builds. Manual deploy via `npx wrangler deploy` still works.
+
+## Session — 13 Jul 2026 — i18n Localization (Phase I), Video Embeds (Phase J), +4 Blog Posts (Phase N)
+
+### Phase I — i18n Localization
+**Files created:**
+- `src/i18n/i18n.js` — i18next config with en/ar/hi resources, localStorage detection
+- `src/i18n/locales/en.json` — 80+ UI translation keys (nav, hero, services, pricing, FAQ, CTA, footer, case studies, blog, about, admin, exit popup, booking)
+- `src/i18n/locales/ar.json` — Arabic translations with full Arabic script
+- `src/i18n/locales/hi.json` — Hindi translations with Devanagari script
+- `src/i18n/LanguageSwitcher.jsx` — Globe icon dropdown for EN/AR/HI selection
+
+**Files modified:**
+- `src/main.jsx` — Added `import './i18n/i18n'`
+- `src/App.jsx` — Added `useTranslation`, `dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}`, LanguageSwitcher in nav, replaced static text with `t()` calls
+- `src/components/PricingSection.jsx` — Translated all UI labels
+- `src/components/FAQSection.jsx` — Translated eyebrow and heading
+- `src/components/WhyUsSection.jsx` — Translated eyebrow and heading
+- `src/components/ServicesSection.jsx` — Translated eyebrow, heading, and links
+- `src/components/CaseStudiesSection.jsx` — Translated eyebrow, heading, "View on GitHub"
+- `src/components/CaseStudyPage.jsx` — Translated "Back", "Key Result", "View on GitHub"
+- `src/components/ExitIntentPopup.jsx` — Translated heading and subtitle
+- `src/components/AdminPage.jsx` — Translated all UI text
+- `src/components/BookingModal.jsx` — Translated title and subtitle
+- `src/components/NotFoundPage.jsx` — Translated "Back"
+- `src/components/PrivacyPage.jsx`, `TermsPage.jsx` — Translated "Back"
+- Dependencies: `react-i18next`, `i18next` installed
+
+### Phase J — Video Case Study Embeds
+**Files created:**
+- `src/components/VideoEmbed.jsx` — Responsive YouTube/Loom/Vimeo embed with 16:9 aspect, loading spinner, `loading="lazy"`, accessibility
+
+**Files modified:**
+- `src/seo-route-data.js` — Added `videoUrl` to all 10 blogPosts + all 10 caseStudies
+- `src/components/CaseStudyPage.jsx` — Added VideoEmbed section with "Walkthrough" label between tags and key result
+- `src/components/BlogPage.jsx` — Added VideoEmbed section with "Walkthrough" label after key result
+
+### Phase N — 4 New Blog Posts
+**Posts added to all data sources (seo-route-data.js, BlogPage.jsx, CaseStudyPage.jsx):**
+
+| Slug | Category | Result |
+|------|----------|--------|
+| ecommerce-nextjs-stripe | Web Development | 40% higher conversion than Shopify |
+| ai-chatbot-langchain-saas | AI & Automation | 65% queries resolved without human |
+| analytics-dashboard-react-firebase | Web Development | 50K+ events daily, sub-second queries |
+| ai-invoice-processing | AI & Automation | 85% faster, 97% accuracy |
+
+Each post includes full GEO-optimized content: question-form H2s, entity-dense paragraphs with frameworks/tools/metrics, specific result statistics with context.
+
+### Build
+✅ `npm run build` passes (2.37s)
+✅ Deployed to Workers `57f82256` → `rogue.codes`, `www.rogue.codes`
+
+### Current Bundle
+- JS: ~261 kB (index) + vendor chunks (react 182 kB, motion 136 kB, icons 27 kB)
+- CSS: ~67 kB
+- BlogPage: ~40 kB (now includes 10 posts)
+- CaseStudyPage: ~10 kB (now includes 10 projects)
+- VideoEmbed: ~1.4 kB (independently lazy-loadable)
+
+## Session — 13 Jul 2026 (batch 2) — CI, CursorGlow, Email, R2, Team Photos, Mobile QA
+
+### ✅ GitHub Actions CI
+- `.github/workflows/deploy.yml` — auto-deploys to Cloudflare Workers on push to `main` (Node 22, `npm ci` → `npm run build` → `cloudflare/wrangler-action@v3`). Also supports `workflow_dispatch` manual trigger.
+- Requires `CLOUDFLARE_API_TOKEN` secret in GitHub repo settings.
+
+### ✅ CursorGlow + NoiseOverlay + useMouseParallax (never committed before)
+- `src/components/CursorGlow.jsx` — 6px dot + 40px glow ring following cursor via framer-motion springs. Hidden on touch devices.
+- `src/components/NoiseOverlay.jsx` — Canvas grain texture (~4fps), opacity 0.03, pauses on reduced-motion / out-of-view.
+- `src/hooks/useMouseParallax.js` — Hook returning `{ style: { x, y } }` for parallax on elements.
+- Wired in `App.jsx`.
+
+### ✅ Email Automation (code-ready, needs RESEND_API_KEY)
+- `src/api/email.js` — `sendLeadEmail()` (team notification) + `sendAutoReply()` (lead confirmation). Both gracefully skip if `RESEND_API_KEY` not set.
+- `src/api/index.js` — Lead POST handler calls both via `ctx.waitUntil()`.
+- Set `RESEND_API_KEY` in Cloudflare Dashboard → Workers → rogue-codes → Settings → Variables to activate.
+
+### ✅ R2 File Upload (code-ready, needs R2 enabled)
+- `src/api/upload.js` — `handleUpload()` accepts multipart files, stores in R2 bucket. Returns 501 gracefully if no R2 binding.
+- `src/worker.js` — `/api/upload` route wired.
+- `src/lib/api.js` — `uploadLeadFiles()` for client-side.
+- `src/components/LeadForm.jsx` — File input + upload on submit (non-blocking).
+- **To activate:** Enable R2 in Cloudflare Dashboard → R2, then uncomment the `r2_buckets` block in `wrangler.jsonc` and run `npx wrangler deploy`.
+
+### ✅ Team Photo Infrastructure
+- `public/images/team/.gitkeep` — directory tracked.
+- `TeamShowcase.jsx` — already uses local paths (`/images/team/jeremy.jpeg`). JSDoc comment added.
+- `AboutUs.jsx` — already uses `/images/team/jeremy.jpeg`. JSDoc comment added.
+- **To activate:** Paste actual photos as `jeremy.jpeg`, `aaron.jpeg`, `ashba.jpeg` into `public/images/team/`.
+
+### ✅ Mobile Responsive QA
+- **prisma-hero.jsx** — Reduced `py-[15%]` → `py-[12%]` on mobile, added `touchAction`.
+- **ServicesSection.jsx** — Added `break-words`, `max-w-full`, `touchAction: 'pan-x'` on scroll container.
+- **PricingSection.jsx** — Added `min-h-[44px]` + `touchAction` to toggle buttons and card content.
+- **WhyUsSection.jsx** — Changed `min-h-[200px]` → `min-h-[160px] md:min-h-[200px]`, added `break-words`.
+- **FAQSection.jsx** — Already compliant (44px min height + touchAction).
+- **TeamShowcase.jsx** — Added `min-h-[44px]` + `touchAction` to MemberRow.
+- **AboutUs.jsx** — Added min touch targets to scroll arrows, back button, CTA.
+- **team-member-card.tsx** — JSDoc comment for placeholder fallback.
+
+### Build
+✅ `npm run build` passes (2.37s) | Deployed to Workers `92f76076` → `rogue.codes`, `www.rogue.codes`
+
+### Still Requires Manual Setup
+1. **R2:** Enable in Cloudflare Dashboard → uncomment binding in `wrangler.jsonc`
+2. **Photos:** Paste team photos into `public/images/team/` (jeremy.jpeg, aaron.jpeg, ashba.jpeg)
+
+## Session — 13 Jul 2026 (batch 3) — Secrets, Deploy, SEO Assessment
+
+### ✅ Secrets Set
+- `RESEND_API_KEY` — set as Cloudflare Worker secret (`wrangler secret put`)
+- `CLOUDFLARE_API_TOKEN` — set as GitHub repo secret (`gh secret set`) on `jeremygideonbareh/website-development-homepage`
+- Both stored in `.env` (gitignored) for local reference
+
+### ✅ Final Deploy
+- Version: `7cbce916` → `rogue.codes`, `www.rogue.codes`
+- Build: 2.45s | Deploy: 10.10s
+
+### 📊 SEO / GEO Discoverability Assessment
+
+| Category | Metric | Status |
+|----------|--------|--------|
+| AI crawlers | 11 bots explicitly allowed in robots.txt | ✅ |
+| Sitemap | 20+ URLs with priority/lastmod/changefreq | ✅ |
+| LLM discovery | llms.txt + llm-index.json | ✅ |
+| Content surface | 10 blog posts + 10 case studies | ✅ |
+| GEO optimization | Answer-first H2s, entity-dense, metrics in context | ✅ |
+| Structured data | JSON-LD for services, FAQ, pricing, blog, case studies | ✅ |
+| AI crawl meta | HTMLRewriter injects per-route title/desc/schema | ✅ |
+| Analytics | Plausible tracking (`rogue.codes`) | ✅ |
+| Performance | Cache headers (immutable static), preconnect, dns-prefetch | ✅ |
+| i18n | EN/AR/HI for broader audience | ✅ |
+
+#### ❌ Gaps (ordered by impact)
+
+| # | Gap | Impact | Fix |
+|---|-----|--------|-----|
+| 1 | **No Google Search Console** | Can't submit sitemap, can't see indexing status, no crawl error visibility | Register site in GSC → submit sitemap URL |
+| 2 | **No backlinks (zero domain authority)** | Google won't rank without authoritative inbound links; new domain = no trust | Guest posts, directories (Clutch, GoodFirms), open-source GitHub repos, HARO |
+| 3 | **No Google Business Profile** | Zero local SEO presence; no Google Maps visibility | Claim GBP with rogue.codes URL |
+| 4 | **No OG/Twitter social meta tags** | Sharing links shows no preview — kills click-through on Twitter/Discord/Slack | Add `og:title`, `og:description`, `og:image`, `twitter:card` per route |
+| 5 | **SPA hash routing (`?page=...`)** | Google may not index deep-linked pages as well as clean URLs | Migrate to React Router with `/blog/post-slug` URLs (P0 infra change) |
+| 6 | **No Bing Webmaster Tools** | Second-largest search engine unclaimed | Register in Bing Webmaster Tools, submit sitemap |
+| 7 | **No canonical URLs** | `rogue.codes` vs `www.rogue.codes` may be treated as duplicate content | Add `<link rel="canonical" href="https://rogue.codes/...">` in HTMLRewriter |
+| 8 | **No blog promotion** | Content exists but no RSS feed, no newsletter, no social cross-posting | Add RSS feed link in head, set up social auto-post on new articles |
+| 9 | **No backlink strategy** | No directory listings, no guest posts, no open-source citations | List on Clutch, GoodFirms, BuiltWith; open-source relevant tools on GitHub |
+| 10 | **No bounce/engagement metrics visible** | Can't optimize what you don't measure | Plausible is set up — check regularly for high-exit pages |
+
+#### 📈 AI Discovery Likelihood: MODERATE
+- **ChatGPT/Claude/Perplexity:** Higher chance — robots.txt explicitly allows all major AI crawlers, llms.txt + JSON-LD gives them structured content to cite
+- **Google Organic:** Very low — zero backlinks + no Search Console = near-invisible for competitive keywords
+
+#### 🏆 Recommended Priority Order
+1. **This week:** Register Google Search Console + submit sitemap — free, immediate visibility into indexing
+2. **This week:** Claim Google Business Profile — free, unlocks local discovery
+3. **This month:** Add OG/Twitter meta tags to worker.js HTMLRewriter — 1-2 hour dev task, big shareability improvement
+4. **This month:** List on 3 directories (Clutch, GoodFirms, DesignRush) — start building backlinks
+5. **Next quarter:** React Router migration for clean URLs / post-slug — unlocks proper per-page SEO
+6. **Ongoing:** Publish blog posts monthly + cross-post on LinkedIn/Twitter/Dev.to

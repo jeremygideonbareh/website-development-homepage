@@ -87,6 +87,8 @@ export default function Services() {
                   <img
                     src={service.image}
                     alt={`${service.title} showcase`}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute w-44 h-auto rounded-lg shadow-md transform -rotate-6 transition-all duration-500 ease-out will-change-transform group-hover:rotate-[-10deg] group-hover:scale-105"
                     onError={(e) => {
                       e.currentTarget.onerror = null
@@ -96,6 +98,8 @@ export default function Services() {
                   <img
                     src={service.overlayImage}
                     alt={`${service.title} example`}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute w-44 h-auto rounded-lg shadow-lg transform rotate-3 transition-all duration-500 ease-out will-change-transform group-hover:rotate-[5deg] group-hover:scale-105"
                     onError={(e) => {
                       e.currentTarget.onerror = null

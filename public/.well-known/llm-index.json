@@ -1,0 +1,107 @@
+{
+  "llm_ld_version": "1.0",
+  "site": {
+    "name": "Rogue Code",
+    "tagline": "Web Development & AI Automation Agency",
+    "description": "Rogue Code builds custom websites, AI agents, mobile apps, and UI/UX design for businesses worldwide. From concept to deployment, we ship production-grade code that you own, forever.",
+    "url": "https://rogue.codes",
+    "founded": 2024,
+    "founder": "Jeremy Gideon Bareh",
+    "contact_email": "cloudlyconfusing@gmail.com"
+  },
+  "services": [
+    {
+      "name": "Custom Web Development",
+      "description": "React, Next.js, TypeScript, Tailwind CSS. No themes, no page builders.",
+      "price_range": "₹7,000 - ₹25,000"
+    },
+    {
+      "name": "AI Agents & Automation",
+      "description": "LangChain, LangGraph, OpenAI, custom ML models for business automation.",
+      "price_range": "₹14,000 - ₹3,00,000"
+    },
+    {
+      "name": "Mobile App Development",
+      "description": "React Native, Firebase, cross-platform iOS and Android apps.",
+      "price_range": "₹14,000 - ₹25,000"
+    },
+    {
+      "name": "UI/UX Design",
+      "description": "Wireframes, mockups, design systems, and premium frontend engineering.",
+      "price_range": "₹7,000 - ₹25,000"
+    },
+    {
+      "name": "API Development & Integration",
+      "description": "REST, GraphQL, third-party API integration, webhook systems.",
+      "price_range": "₹14,000 - ₹25,000"
+    },
+    {
+      "name": "AI Chatbots & Assistants",
+      "description": "Custom conversational AI for customer support, lead gen, and internal tools.",
+      "price_range": "₹14,000 - ₹25,000"
+    }
+  ],
+  "pricing": {
+    "currency": "INR",
+    "tiers": [
+      { "name": "Basic", "price": 7000, "period": "monthly", "description": "5-page responsive website, mobile-first design, basic SEO" },
+      { "name": "Business", "price": 14000, "period": "monthly", "description": "Custom web app or AI automation, CMS, 30-day support" },
+      { "name": "Enterprise", "price": 25000, "period": "monthly", "description": "Full-stack product, AI integration, dedicated team" },
+      { "name": "Custom Animated", "price": 300000, "period": "one-time", "description": "Custom 3D/WebGL, cinematic GSAP animations, dedicated creative director" }
+    ]
+  },
+  "case_studies": [
+    {
+      "title": "Paws for Change India",
+      "description": "Animal rescue & adoption platform with donation integration and volunteer management.",
+      "url": "https://rogue.codes/?page=blog&slug=paws-for-change-india",
+      "result": "50+ pets adopted through the platform",
+      "technologies": ["React", "TypeScript", "Tailwind CSS", "Firebase"]
+    },
+    {
+      "title": "Chelsea Man Spa",
+      "description": "Mobile booking app with Google Auth, real-time Firestore, and Stripe payments.",
+      "url": "https://rogue.codes/?page=blog&slug=chelsea-man-spa",
+      "result": "200+ bookings in first month",
+      "technologies": ["React Native", "Firebase", "Google Auth", "Stripe"]
+    },
+    {
+      "title": "Support Ticket Agent",
+      "description": "AI agent for automated ticket classification, routing, and response drafting.",
+      "url": "https://rogue.codes/?page=blog&slug=support-ticket-agent",
+      "result": "70% reduction in manual triage time",
+      "technologies": ["Python", "LangChain", "LangGraph", "OpenAI"]
+    },
+    {
+      "title": "JMJ Events & Interiors",
+      "description": "Portfolio website with masonry gallery, CMS, and inquiry management.",
+      "url": "https://rogue.codes/?page=blog&slug=jmj-events-interiors",
+      "result": "3x increase in client inquiries",
+      "technologies": ["React", "TypeScript", "Responsive", "CMS"]
+    },
+    {
+      "title": "Crumbs Bakery",
+      "description": "Online ordering platform with daily specials, dietary filters, and admin panel.",
+      "url": "https://rogue.codes/?page=blog&slug=crumbs-bakery",
+      "result": "Online orders within 2 weeks of launch",
+      "technologies": ["React", "JavaScript", "PostgreSQL", "Responsive"]
+    },
+    {
+      "title": "Trading Bot",
+      "description": "24/7 automated trading system with multi-exchange connectivity and backtesting.",
+      "url": "https://rogue.codes/?page=blog&slug=trading-bot",
+      "result": "Automated 24/7 trading pipeline",
+      "technologies": ["Python", "TypeScript", "Docker", "APIs"]
+    }
+  ],
+  "faq": [
+    { "question": "How long does it take to build a website?", "answer": "Most projects ship within 2-4 weeks." },
+    { "question": "What technologies do you use?", "answer": "React, Next.js, TypeScript, Tailwind CSS, Node.js, Python, LangChain." },
+    { "question": "Do you provide ongoing support?", "answer": "Yes. Maintenance retainer packages available for ongoing updates and support." }
+  ],
+  "social": {
+    "github": "https://github.com/jeremygideonbareh",
+    "twitter": "https://twitter.com/roguecodes",
+    "linkedin": "https://linkedin.com/company/roguecodes"
+  }
+}

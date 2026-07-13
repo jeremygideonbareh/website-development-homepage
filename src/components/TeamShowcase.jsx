@@ -1,3 +1,19 @@
+/**
+ * Team Showcase Component
+ *
+ * ── Team photo paths ──────────────────────────────────────
+ * To update team photos, replace the .jpeg files in public/images/team/
+ * with new images. The filenames must match exactly:
+ *
+ *   /images/team/jeremy.jpeg   → Jeremy Gideon Bareh
+ *   /images/team/aaron.jpeg    → Aaron Jaison
+ *   /images/team/ashba.jpeg    → Ashba Merim Francis
+ *
+ * After replacing the files, the site will serve the new photos
+ * on next build / cache clear. No code changes needed.
+ * ──────────────────────────────────────────────────────────
+ */
+
 import { useState } from 'react'
 import { FaLinkedinIn, FaTwitter, FaBehance, FaInstagram } from 'react-icons/fa'
 import { cn } from '../lib/utils'
@@ -21,24 +37,7 @@ const defaultMembers = [
     image: '/images/team/ashba.jpeg',
     social: { linkedin: '#' },
   },
-  {
-    name: 'Placeholder',
-    role: 'Team Member',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=85',
-    social: { linkedin: '#', twitter: '#' },
-  },
-  {
-    name: 'Placeholder',
-    role: 'Team Member',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=85',
-    social: { twitter: '#', linkedin: '#' },
-  },
-  {
-    name: 'Placeholder',
-    role: 'Team Member',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=85',
-    social: { linkedin: '#' },
-  },
+
 ]
 
 export default function TeamShowcase({ isDay = true, members = defaultMembers }) {
@@ -131,10 +130,20 @@ function PhotoCard({ member, className, activeId, onHover, onTouch, id }) {
       onMouseEnter={() => onHover(id)}
       onMouseLeave={() => onHover(null)}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleClick()
+        }
+      }}
+      role="button"
+      tabIndex={0}
     >
       <img
         src={member.image}
         alt={member.name}
+        loading="lazy"
+        decoding="async"
         className="w-full h-full object-cover transition-[filter] duration-500"
         style={{
           filter: isActive ? 'grayscale(0) brightness(1)' : 'grayscale(1) brightness(0.77)',
@@ -156,12 +165,21 @@ function MemberRow({ member, activeId, onHover, onTouch, id }) {
   return (
     <div
       className={cn(
-        'cursor-pointer transition-opacity duration-300',
+        'cursor-pointer transition-opacity duration-300 min-h-[44px] flex flex-col justify-center',
         isDimmed ? 'opacity-50' : 'opacity-100',
       )}
       onMouseEnter={() => onHover(id)}
       onMouseLeave={() => onHover(null)}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleClick()
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      style={{ touchAction: 'manipulation' }}
     >
       <div className="flex items-center gap-2.5">
         <span

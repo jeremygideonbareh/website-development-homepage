@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "about": "About Us",
+    "startProject": "Start a Project",
+    "back": "Back",
+    "backToSite": "Back to site",
+    "theme": "Toggle theme"
+  },
+  "hero": {
+    "tagline": "We build websites, AI agents, and mobile apps that grow your business.",
+    "subtitle": "Full-service web development and AI automation agency. Custom React websites, AI agents, React Native apps — shipped in 2-4 weeks with full source code ownership."
+  },
+  "services": {
+    "heading": "Services",
+    "eyebrow": "What we do",
+    "learnMore": "Learn more about {name} →",
+    "browseExamples": "Browse website examples →"
+  },
+  "pricing": {
+    "heading": "Transparent Pricing",
+    "eyebrow": "Investment",
+    "subtitle": "No hidden fees. No surprise charges. Every project starts with a free discovery call.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "bookCall": "Book a Free Call",
+    "bestFor": "Best for",
+    "disclaimer": "Every project is unique. Final pricing depends on scope, complexity, and timeline."
+  },
+  "faq": {
+    "heading": "Frequently Asked Questions",
+    "eyebrow": "Questions?"
+  },
+  "whyUs": {
+    "heading": "The Edge",
+    "eyebrow": "Why choose us"
+  },
+  "cta": {
+    "heading": "Need a website that ranks, converts, and actually works?",
+    "subtitle": "Most agencies take 3-6 months and deliver template-based sites. Rogue Code ships custom React applications in 2-4 weeks with full source code ownership. Book a free discovery call.",
+    "button": "Start your project",
+    "attribution": "— Jeremy Gideon Bareh",
+    "floating": "Start a project"
+  },
+  "footer": {
+    "rights": "© 2026 Rogue Code. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "caseStudies": {
+    "heading": "Case Studies",
+    "eyebrow": "Our work",
+    "keyResult": "Key Result",
+    "back": "Back to home",
+    "viewOnGitHub": "View on GitHub"
+  },
+  "blog": {
+    "heading": "Case Studies",
+    "description": "Deep dives into projects shipped by Rogue Code — web development, AI automation, and mobile apps."
+  },
+  "about": {
+    "description": "Rogue Code is a full-service web development and AI automation agency building custom digital products.",
+    "back": "Back to home"
+  },
+  "admin": {
+    "title": "Leads",
+    "unlock": "Unlock",
+    "password": "Admin password",
+    "incorrectPassword": "Incorrect password",
+    "search": "Search by name, email, company...",
+    "allTiers": "All tiers",
+    "allPriority": "All priority",
+    "noLeads": "No leads yet",
+    "noLeadsDesc": "Leads submitted via the booking form will appear here.",
+    "noMatch": "No leads match your filters",
+    "noMatchDesc": "Try adjusting your search or filters.",
+    "export": "CSV",
+    "refresh": "Refresh",
+    "lock": "Lock"
+  },
+  "exitPopup": {
+    "heading": "Wait — don't leave yet",
+    "subtitle": "Most agencies take 3-6 months. Rogue Code ships custom React websites in 2-4 weeks — with full source code ownership. Book a free discovery call."
+  },
+  "booking": {
+    "title": "Book a Free Call",
+    "subtitle": "Tell us about your project and we'll find a time that works."
+  }
+}

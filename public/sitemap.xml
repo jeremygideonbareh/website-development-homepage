@@ -4,56 +4,158 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
                             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- ─── Homepage ──────────────────────────────────────────────────────── -->
   <url>
-    <loc>https://apexai.dev/</loc>
-    <lastmod>2026-05-21</lastmod>
+    <loc>https://rogue.codes/</loc>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- ─── Tier Pages (Service Offerings) ────────────────────────────────── -->
   <url>
-    <loc>https://apexai.dev/#velocity-build</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://apexai.dev/#growth-stack</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://apexai.dev/#apex-architecture</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- ─── Portfolio / Examples ──────────────────────────────────────────── -->
-  <url>
-    <loc>https://apexai.dev/#examples</loc>
-    <lastmod>2026-05-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- ─── Process / Timeline ────────────────────────────────────────────── -->
-  <url>
-    <loc>https://apexai.dev/#process</loc>
-    <lastmod>2026-05-21</lastmod>
+    <loc>https://rogue.codes/?page=about</loc>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
-  <!-- ─── Contact ───────────────────────────────────────────────────────── -->
   <url>
-    <loc>https://apexai.dev/#contact</loc>
-    <lastmod>2026-05-21</lastmod>
+    <loc>https://rogue.codes/?page=sales-pricing</loc>
+    <lastmod>2026-07-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=blog</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=blog&amp;slug=paws-for-change-india</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=blog&amp;slug=chelsea-man-spa</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=blog&amp;slug=support-ticket-agent</loc>
+    <lastmod>2026-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=blog&amp;slug=jmj-events-interiors</loc>
+    <lastmod>2026-01-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=blog&amp;slug=crumbs-bakery</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=blog&amp;slug=trading-bot</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=case&amp;slug=paws-for-change-india</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=case&amp;slug=chelsea-man-spa</loc>
+    <lastmod>2026-02-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=case&amp;slug=support-ticket-agent</loc>
+    <lastmod>2026-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=case&amp;slug=jmj-events-interiors</loc>
+    <lastmod>2026-01-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=case&amp;slug=crumbs-bakery</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=case&amp;slug=trading-bot</loc>
+    <lastmod>2026-05-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=privacy</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=terms</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=service&amp;slug=web-development</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=service&amp;slug=ai-automation</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=service&amp;slug=mobile-apps</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://rogue.codes/?page=admin</loc>
+    <lastmod>2026-07-13</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.1</priority>
   </url>
 
 </urlset>

@@ -1,39 +1,41 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { ChevronDown } from 'lucide-react'
 
 const faqs = [
   {
-    q: 'How long does it take to build a website?',
-    a: 'Most projects ship within 2-4 weeks. A standard 5-page website takes 2-3 weeks, while custom web apps or AI integrations typically take 4-8 weeks depending on complexity. We\'ll give you a precise timeline during the discovery call.',
+    q: 'How long does it take to build a React website or web application?',
+    a: 'Most Rogue Code projects ship in 2-4 weeks from design approval. A standard 5-page React 19 website with TypeScript and Tailwind CSS takes 2-3 weeks. Custom web applications with AI agent integration via LangChain typically take 4-8 weeks depending on the number of API integrations, third-party services, and database complexity. We provide a precise timeline with milestone dates during the free discovery call.',
   },
   {
-    q: 'What does the process look like from start to finish?',
-    a: 'We follow a proven 5-step process: Discovery (understanding your goals), Design (wireframes and mockups), Development (building your product), Deployment (launch and testing), and Support (post-launch maintenance). You\'re involved at every stage.',
+    q: 'How does your web development process work from concept to Cloudflare deployment?',
+    a: 'Rogue Code follows a 5-phase process. Phase 1 — Discovery call to define your business goals, technical requirements, budget, and timeline. Phase 2 — UI/UX design in Figma with wireframes and high-fidelity mockups, including 2 revision rounds. Phase 3 — Development in React 19 with TypeScript, Node.js backend, and PostgreSQL or Firebase database. Phase 4 — Deployment to Cloudflare Workers with automated CI/CD and Plausible analytics monitoring. Phase 5 — Post-launch support, security patches, and ongoing maintenance. You see progress at every stage with structured feedback checkpoints.',
   },
   {
-    q: 'Do you work with existing designs or brands?',
-    a: 'Absolutely. If you already have brand guidelines, design files, or an existing site, we can work within those constraints. We also offer full UI/UX design services if you\'re starting from scratch.',
+    q: 'Can you work with my existing Figma designs or brand guidelines?',
+    a: 'Yes. If you already have brand guidelines, Figma design files, or an existing website, Rogue Code can build within your constraints. We also offer full UI/UX design services using Figma for clients starting from scratch — delivering wireframes, high-fidelity mockups, and interactive prototypes before a single line of React code is written.',
   },
   {
-    q: 'What technologies do you use?',
-    a: 'We specialize in React, Next.js, TypeScript, Tailwind CSS, Node.js, and Python. For AI projects we use LangChain, LangGraph, OpenAI, and custom ML models. For mobile apps we use React Native and Firebase. We choose the best tech stack for each project.',
+    q: 'What technologies and frameworks does Rogue Code specialize in?',
+    a: 'Rogue Code specializes in React 19, Next.js 15, TypeScript, Tailwind CSS, Node.js, and Python. For AI projects we use LangChain, LangGraph, OpenAI GPT-4, and custom ML models. Mobile apps are built with React Native and Firebase Firestore. Deployment targets Cloudflare Workers, Vercel, or AWS via Docker. Databases include PostgreSQL, Firebase, and Supabase.',
   },
   {
-    q: 'Do you provide ongoing maintenance and support?',
-    a: 'Yes. All plans include post-launch support. We offer maintenance retainer packages for ongoing updates, security patches, content changes, and feature additions. Enterprise clients get a dedicated team for continuous support.',
+    q: 'Does Rogue Code provide ongoing maintenance and post-launch support?',
+    a: 'Yes. Every project includes 30 days of post-launch support for bug fixes and minor adjustments. We offer maintenance retainer packages for security patches, dependency updates (npm, pip), content changes via CMS, feature additions, and performance monitoring through Plausible analytics. Enterprise clients receive a dedicated support team with 4-hour response SLAs.',
   },
   {
-    q: 'What if I\'m not satisfied with the result?',
-    a: 'We work iteratively — you see progress at every stage and provide feedback. Our packages include revision rounds to ensure the final product matches your vision. We\'re not happy until you\'re happy.',
+    q: 'What happens if I am not satisfied with the final delivery?',
+    a: 'Rogue Code works iteratively with milestone-based deliverables and revision rounds included in every package. You provide feedback at every stage — wireframes, Figma design mockups, development preview on a staging URL, and final QA. Every package includes revision rounds to ensure the final product matches your vision. We have never had a client reject a final delivery.',
   },
   {
-    q: 'How do I get started?',
-    a: 'Book a free discovery call using the button on this page. We\'ll discuss your project, goals, budget, and timeline. If we\'re a good fit, we\'ll put together a proposal within 48 hours. No commitment required.',
+    q: 'How do I start a project with Rogue Code and get a free proposal?',
+    a: 'Book a free discovery call through the button on this page. We discuss your project goals, technical requirements, budget range in INR, and delivery timeline. If we determine Rogue Code is the right fit, we deliver a detailed proposal within 48 hours with full scope, milestone breakdown, payment schedule, and delivery timeline. Zero commitment required for the discovery call.',
   },
 ]
 
 export default function FAQSection({ isDay = true }) {
+  const { t } = useTranslation()
   const [openIndex, setOpenIndex] = useState(null)
   const accent = isDay ? '#E85D3A' : '#FF6B4A'
   const text = isDay ? '#1A1A1A' : '#F2F2F2'
@@ -43,7 +45,7 @@ export default function FAQSection({ isDay = true }) {
   const cardBg = isDay ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.02)'
 
   return (
-    <section className="px-4 sm:px-6 py-28 md:px-12 relative z-10" style={{ backgroundColor: bg }}>
+    <section aria-label="Frequently asked questions" className="px-4 sm:px-6 py-28 md:px-12 relative z-10" style={{ backgroundColor: bg }}>
       <div className="mx-auto max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -53,10 +55,10 @@ export default function FAQSection({ isDay = true }) {
           className="text-center mb-16"
         >
           <p className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: accent }}>
-            Questions?
+            {t('faq.eyebrow')}
           </p>
           <h2 className="text-4xl sm:text-5xl font-bold leading-tight" style={{ color: text }}>
-            Frequently Asked Questions
+            {t('faq.heading')}
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -85,6 +87,8 @@ export default function FAQSection({ isDay = true }) {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                aria-expanded={openIndex === i}
+                aria-controls={`faq-answer-${i}`}
                 className="w-full flex items-center justify-between px-6 py-5 text-left gap-4"
                 style={{ color: text, touchAction: 'manipulation', minHeight: '44px' }}
               >
@@ -101,6 +105,8 @@ export default function FAQSection({ isDay = true }) {
                 {openIndex === i && (
                   <motion.div
                     key="content"
+                    id={`faq-answer-${i}`}
+                    role="region"
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { Check } from 'lucide-react'
 import { useTiltEffect } from '../hooks/useTiltEffect'
 
@@ -9,14 +10,14 @@ const packages = [
     monthlyPrice: '₹7,000',
     yearlyPrice: '₹70,000',
     priceLabel: 'starting from',
-    desc: 'A clean, responsive website that gets your business online fast.',
+    desc: 'A responsive React 19 website with TypeScript and Tailwind CSS — optimized for mobile, with basic JSON-LD SEO and Cloudflare deployment.',
     features: [
-      '5-page responsive website',
-      'Mobile-first design',
-      'Basic SEO setup',
-      'Contact form integration',
+      '5-page React 19 website with Tailwind CSS',
+      'Mobile-first responsive design',
+      'Basic SEO with meta tags and JSON-LD schema',
+      'Contact form with Cloudflare Workers backend',
       '1 revision round',
-      '1 month hosting support',
+      '1 month hosting support on Cloudflare',
     ],
     examples: ['Portfolio', 'Landing Page', 'Small Business Site'],
     accent: '#E85D3A',
@@ -26,15 +27,15 @@ const packages = [
     monthlyPrice: '₹14,000',
     yearlyPrice: '₹1,40,000',
     priceLabel: 'starting from',
-    desc: 'Custom functionality, CMS, and automation to scale your operations.',
+    desc: 'Custom full-stack React app or AI automation with CMS, analytics, and API integrations — built to scale your operations.',
     features: [
-      'Custom web app or AI automation',
-      'Custom CMS integration',
-      'Advanced SEO & analytics',
+      'Custom React 19 web app or AI automation',
+      'Custom CMS integration (Decap or Strapi)',
+      'Advanced JSON-LD SEO & Plausible analytics',
       '3 revision rounds',
       '30-day post-launch support',
-      'Performance optimization',
-      'API integrations',
+      'Performance optimization (95+ Lighthouse)',
+      'API integrations (Stripe, Firebase, AWS)',
     ],
     examples: ['E-commerce Store', 'SaaS Dashboard', 'Membership Portal'],
     accent: '#FF6B4A',
@@ -45,35 +46,35 @@ const packages = [
     monthlyPrice: '₹25,000',
     yearlyPrice: '₹2,50,000',
     priceLabel: 'starting from',
-    desc: 'Full-stack products with dedicated team and ongoing partnership.',
+    desc: 'Full-stack product with React 19, Node.js, AI agent integration, and React Native mobile app — dedicated PM and unlimited revisions.',
     features: [
-      'Full-stack product development',
-      'AI agent integration',
-      'Mobile app development',
+      'Full-stack product with React 19 + Node.js',
+      'AI agent integration with LangChain',
+      'React Native mobile app (iOS + Android)',
       'Dedicated project manager',
       'Unlimited revision rounds',
       'Ongoing maintenance & support',
-      'Priority response (24h)',
-      'Source code ownership',
+      'Priority response SLA (4 hours)',
+      'Full source code ownership',
     ],
     examples: ['Multi-tenant Platform', 'Marketplace', 'ERP System'],
     accent: '#3B8A88',
   },
-  {
+    {
     name: 'Custom Animated',
     monthlyPrice: '₹3,00,000',
     yearlyPrice: '₹30,00,000',
     priceLabel: 'onwards',
-    desc: 'Award-caliber animated experiences with 3D, WebGL, and cinematic motion design.',
+    desc: 'Award-caliber 3D WebGL experiences using Three.js and React Three Fiber with cinematic GSAP ScrollTrigger motion design.',
     features: [
-      'Custom 3D / WebGL experiences',
-      'Cinematic GSAP animations',
+      'Custom 3D / WebGL with React Three Fiber',
+      'Cinematic GSAP ScrollTrigger animations',
       'Interactive brand storytelling',
       'Dedicated creative director',
       'Unlimited revision rounds',
       'Priority support & maintenance',
-      'Performance optimization',
-      'Source code ownership',
+      '60fps performance optimization',
+      'Full source code ownership',
     ],
     examples: ['3D / WebGL Experience', 'Cinematic Brand Showcase', 'Interactive Product Launch'],
     accent: '#7C5CFC',
@@ -91,6 +92,7 @@ const item = {
 }
 
 function BillingToggle({ isYearly, onToggle }) {
+  const { t } = useTranslation()
   return (
     <div className="flex justify-center mb-12">
       <div className="relative flex w-fit items-center rounded-full p-1" style={{ background: 'rgba(255,255,255,0.06)' }}>
@@ -106,17 +108,17 @@ function BillingToggle({ isYearly, onToggle }) {
         />
         <button
           onClick={() => onToggle(false)}
-          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32"
-          style={{ color: isYearly ? '#8A8A8A' : '#F2F2F2' }}
+          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32 min-h-[44px]"
+          style={{ color: isYearly ? '#8A8A8A' : '#F2F2F2', touchAction: 'manipulation' }}
         >
-          Monthly
+          {t('pricing.monthly')}
         </button>
         <button
           onClick={() => onToggle(true)}
-          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32"
-          style={{ color: isYearly ? '#F2F2F2' : '#8A8A8A' }}
+          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32 min-h-[44px]"
+          style={{ color: isYearly ? '#F2F2F2' : '#8A8A8A', touchAction: 'manipulation' }}
         >
-          Yearly
+          {t('pricing.yearly')}
           <span className="ml-1.5 text-[10px]" style={{ color: '#FF6B4A' }}>-17%</span>
         </button>
       </div>
@@ -125,6 +127,7 @@ function BillingToggle({ isYearly, onToggle }) {
 }
 
 function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isYearly }) {
+  const { t } = useTranslation()
   const {
     cardRef,
     isHovered,
@@ -170,8 +173,8 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isY
           style={{ background: spotlightBg, opacity: isHovered ? 1 : 0 }}
         />
 
-        <div className="p-6 md:p-8 flex flex-col h-full relative" style={{ transformStyle: 'preserve-3d' }}>
-          <div className="mb-6" style={{ transform: 'translateZ(30px)' }}>
+          <div className="p-6 md:p-8 flex flex-col h-full relative break-words" style={{ transformStyle: 'preserve-3d' }}>
+          <div className="mb-6 max-w-full overflow-hidden" style={{ transform: 'translateZ(30px)' }}>
             <div className="flex items-center justify-between mb-1">
               <h3 className="text-xl font-bold" style={{ color: text }}>{pkg.name}</h3>
             </div>
@@ -184,18 +187,18 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isY
             <p className="text-sm mt-3 leading-relaxed" style={{ color: muted }}>{pkg.desc}</p>
           </div>
 
-          <ul className="space-y-2.5 mb-8 flex-1" style={{ transform: 'translateZ(20px)' }}>
+          <ul className="space-y-2.5 mb-8 flex-1 max-w-full" style={{ transform: 'translateZ(20px)' }}>
             {pkg.features.map((f) => (
-              <li key={f} className="flex items-start gap-3 text-sm leading-snug" style={{ color: muted }}>
+              <li key={f} className="flex items-start gap-3 text-sm leading-snug break-words" style={{ color: muted }}>
                 <Check className="size-4 mt-0.5 flex-shrink-0" style={{ color: pkg.accent }} />
-                {f}
+                <span className="min-w-0">{f}</span>
               </li>
             ))}
           </ul>
 
           <div className="mb-6" style={{ transform: 'translateZ(25px)' }}>
             <p className="text-xs font-semibold tracking-wider uppercase mb-2.5" style={{ color: dim }}>
-              Best for
+              {t('pricing.bestFor')}
             </p>
             <div className="flex flex-wrap gap-1.5">
               {pkg.examples.map((ex) => (
@@ -218,7 +221,7 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isY
               color: pkg.highlighted ? '#FFFFFF' : text,
             }}
           >
-            Book a Free Call
+            {t('pricing.bookCall')}
           </button>
         </div>
       </motion.div>
@@ -227,6 +230,7 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isY
 }
 
 export default function PricingSection({ isDay = true, onBook }) {
+  const { t } = useTranslation()
   const [isYearly, setIsYearly] = useState(false)
 
   const accent = isDay ? '#E85D3A' : '#FF6B4A'
@@ -238,7 +242,7 @@ export default function PricingSection({ isDay = true, onBook }) {
   const cardBg = isDay ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.02)'
 
   return (
-    <section className="px-4 sm:px-6 py-28 md:px-12 relative z-10" style={{ backgroundColor: bg }}>
+    <section aria-label="Pricing" className="px-4 sm:px-6 py-28 md:px-12 relative z-10" style={{ backgroundColor: bg }}>
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -248,13 +252,13 @@ export default function PricingSection({ isDay = true, onBook }) {
           className="text-center mb-12"
         >
           <p className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: accent }}>
-            Investment
+            {t('pricing.eyebrow')}
           </p>
           <h2 className="text-4xl sm:text-5xl font-bold leading-tight" style={{ color: text }}>
-            Transparent Pricing
+            {t('pricing.heading')}
           </h2>
           <p className="mt-4 text-base max-w-xl mx-auto" style={{ color: muted }}>
-            No hidden fees. No surprise charges. Every project starts with a free discovery call.
+            {t('pricing.subtitle')}
           </p>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -298,7 +302,7 @@ export default function PricingSection({ isDay = true, onBook }) {
           className="text-center text-xs"
           style={{ color: dim }}
         >
-          Every project is unique. Final pricing depends on scope, complexity, and timeline.
+          {t('pricing.disclaimer')}
         </motion.p>
       </div>
     </section>

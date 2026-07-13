@@ -1,16 +1,21 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Toaster } from 'sonner'
+import { useTranslation } from 'react-i18next'
 import {
   ArrowLeft, Sun, Moon,
 } from 'lucide-react'
 import Loader from './components/Loader'
+import CursorGlow from './components/CursorGlow'
+import NoiseOverlay from './components/NoiseOverlay'
+import LanguageSwitcher from './i18n/LanguageSwitcher'
 import PrismaHero from './components/ui/prisma-hero'
 import ServicesSection from './components/ServicesSection'
 import TeamShowcase from './components/TeamShowcase'
 import WhyUsSection from './components/WhyUsSection'
-import { ContactPage } from './components/ui/contact-page'
 import { BookingModal } from './components/BookingModal'
+import CookieConsent from './components/CookieConsent'
+import ExitIntentPopup from './components/ExitIntentPopup'
 import AnimatedBeamTimeline from './components/AnimatedBeamTimeline'
 import { WordReveal, CharReveal, SectionEyebrow } from './components/RevealText'
 import GalleryPhoto from './components/GalleryPhoto'
@@ -19,8 +24,20 @@ import CaseStudiesSection from './components/CaseStudiesSection'
 import ScrambleText from './components/ui/ScrambleText'
 import PricingSection from './components/PricingSection'
 import FAQSection from './components/FAQSection'
-import ExamplesPage from './components/ExamplesPage'
-import AboutUs from './components/AboutUs'
+import Testimonials from './components/ui/testimonials'
+const CaseStudyPage = lazy(() => import('./components/CaseStudyPage'))
+const AdminPage = lazy(() => import('./components/AdminPage'))
+const SalesPricingPage = lazy(() => import('./components/SalesPricingPage'))
+const PrivacyPage = lazy(() => import('./components/PrivacyPage'))
+const TermsPage = lazy(() => import('./components/TermsPage'))
+const ExamplesPage = lazy(() => import('./components/ExamplesPage'))
+const AboutUs = lazy(() => import('./components/AboutUs'))
+const NotFoundPage = lazy(() => import('./components/NotFoundPage'))
+const ServicePage = lazy(() => import('./components/ServicePage'))
+const BlogListLazy = lazy(() => import('./components/BlogPage').then(m => ({ default: m.BlogList })))
+const BlogPage = lazy(() => import('./components/BlogPage'))
+const ContactPageLazy = lazy(() => import('./components/ui/contact-page').then(m => ({ default: m.ContactPage })))
+import { HomeSeo, PageSeo } from './components/Seo'
 
 const palette = {
   day: {
@@ -81,7 +98,40 @@ function App() {
   const [showBooking, setShowBooking] = useState(false)
   const [showAbout, setShowAbout] = useState(false)
   const [showExamples, setShowExamples] = useState(false)
-  const [theme, setTheme] = useState(() => 'night')
+  const [showPrivacy, setShowPrivacy] = useState(false)
+  const [showTerms, setShowTerms] = useState(false)
+  const [showSalesPricing, setShowSalesPricing] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('page') === 'sales-pricing'
+  })
+  const [showAdmin, setShowAdmin] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('page') === 'admin'
+  })
+  const [showBlog, setShowBlog] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('page') === 'blog'
+  })
+  const [blogSlug, setBlogSlug] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('page') === 'blog' ? params.get('slug') : null
+  })
+  const [caseStudySlug, setCaseStudySlug] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('page') === 'case' ? params.get('slug') : null
+  })
+  const [serviceSlug, setServiceSlug] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('page') === 'service' ? params.get('slug') : null
+  })
+  const knownPages = ['admin', 'sales-pricing', 'privacy', 'terms', 'case', 'blog', 'service']
+  const [showNotFound, setShowNotFound] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    const page = params.get('page')
+    return page && !knownPages.includes(page)
+  })
+  const [theme, setTheme] = useState(() => localStorage.getItem('rogue_theme') || 'night')
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2000)
@@ -91,8 +141,21 @@ function App() {
   const p = palette[theme]
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: p.bg }}>
-      {!showExamples && !showAbout && !showContact && <PrismaHero onStartProject={() => setShowBooking(true)} />}
+    <div className="min-h-screen" style={{ backgroundColor: p.bg }} dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}>
+      {/* Skip to content link — visible on focus for keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-semibold focus:text-white focus:bg-[#FF6B4A] focus:outline-none focus:ring-2 focus:ring-white"
+        style={{ position: 'absolute', left: '-9999px' }}
+        onFocus={(e) => { e.target.style.position = 'fixed'; e.target.style.left = '16px' }}
+        onBlur={(e) => { e.target.style.position = 'absolute'; e.target.style.left = '-9999px' }}
+      >
+        Skip to main content
+      </a>
+      <div id="main-content" />
+      <CursorGlow />
+      <NoiseOverlay />
+      {!showExamples && !showAbout && !showContact && !showSalesPricing && !showPrivacy && !showTerms && !showAdmin && !caseStudySlug && !showNotFound && !showBlog && !blogSlug && !serviceSlug && <PrismaHero onStartProject={() => setShowBooking(true)} />}
 
       <AnimatePresence>
         {isLoading && (
@@ -113,6 +176,7 @@ function App() {
         style={{ position: 'relative', zIndex: 1 }}
       >
         <motion.nav
+          aria-label="Main navigation"
           variants={navVariants}
           initial="hidden"
           animate="visible"
@@ -126,17 +190,18 @@ function App() {
         >
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setTheme(prev => prev === 'night' ? 'day' : 'night')}
+              onClick={() => setTheme(prev => { const next = prev === 'night' ? 'day' : 'night'; localStorage.setItem('rogue_theme', next); return next; })}
               className="flex items-center justify-center min-w-[44px] min-h-[44px] rounded-full border transition-colors"
               style={{
                 borderColor: p.border,
                 color: p.text,
                 touchAction: 'manipulation',
               }}
-              aria-label="Toggle theme"
+              aria-label={t('nav.theme')}
             >
               {theme === 'night' ? <Sun className="size-4" /> : <Moon className="size-4" />}
             </button>
+            <LanguageSwitcher color={p.text} border={p.border} />
             <button
               onClick={() => { setShowAbout(!showAbout); setShowContact(false); }}
               className="flex items-center gap-2 px-5 py-2 text-sm font-medium rounded-full border transition-colors"
@@ -145,9 +210,10 @@ function App() {
                 color: p.text,
                 touchAction: 'manipulation',
               }}
+              aria-label={showAbout ? t('nav.back') : t('nav.about')}
             >
               {showAbout && <ArrowLeft className="size-4" />}
-              {showAbout ? 'Back' : 'About Us'}
+              {showAbout ? t('nav.back') : t('nav.about')}
             </button>
             <button
               onClick={() => setShowContact(!showContact)}
@@ -157,22 +223,55 @@ function App() {
                 color: p.bg,
                 touchAction: 'manipulation',
               }}
+              aria-label={showContact ? t('nav.back') : t('nav.startProject')}
             >
               {showContact && <ArrowLeft className="size-4" />}
-              {showContact ? 'Back' : 'Start a Project'}
+              {showContact ? t('nav.back') : t('nav.startProject')}
             </button>
           </div>
         </motion.nav>
 
-        {showExamples ? (
-          <ExamplesPage onBack={() => setShowExamples(false)} />
+        <Suspense fallback={<div style={{ minHeight: '100vh', backgroundColor: '#0A0A0A' }} />}>
+        {serviceSlug ? (
+          <ServicePage slug={serviceSlug} onBack={() => setServiceSlug(null)} onBook={() => setShowBooking(true)} />
+        ) : caseStudySlug ? (
+          <CaseStudyPage slug={caseStudySlug} onBack={() => setCaseStudySlug(null)} />
+        ) : blogSlug ? (
+          <BlogPage slug={blogSlug} onBack={() => setBlogSlug(null)} />
+        ) : showBlog ? (
+          <>
+            <PageSeo title={t('blog.heading')} description={t('blog.description')} path="/?page=blog" />
+            <BlogListLazy onViewPost={(s) => setBlogSlug(s)} onBack={() => setShowBlog(false)} />
+          </>
+        ) : showAdmin ? (
+          <>
+            <PageSeo title="Admin Dashboard" description="Lead management dashboard for Rogue Code" path="/?page=admin" />
+            <AdminPage onBack={() => setShowAdmin(false)} />
+          </>
+        ) : showSalesPricing ? (
+          <SalesPricingPage onBack={() => setShowSalesPricing(false)} />
+        ) : showPrivacy ? (
+          <PrivacyPage onBack={() => setShowPrivacy(false)} />
+        ) : showTerms ? (
+          <TermsPage onBack={() => setShowTerms(false)} />
+        ) : showExamples ? (
+          <>
+            <PageSeo title="Our Work" description="Case studies and projects by Rogue Code — web development, AI automation, and mobile apps." path="/?page=examples" />
+            <ExamplesPage onBack={() => setShowExamples(false)} />
+          </>
+        ) : showNotFound ? (
+          <NotFoundPage onBack={() => setShowNotFound(false)} />
         ) : showAbout ? (
-          <AboutUs theme={theme} onBack={() => setShowAbout(false)} />
+          <>
+            <PageSeo title={t('nav.about')} description={t('about.description')} path="/?page=about" />
+            <AboutUs theme={theme} onBack={() => setShowAbout(false)} />
+          </>
         ) : (
           <>
+            <HomeSeo />
             <div className={showContact ? 'hidden' : ''} style={{ paddingTop: '100dvh' }}>
               {/* Brand Story */}
-              <section className="px-4 sm:px-6 py-24 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
+              <section aria-label="Our philosophy" className="px-4 sm:px-6 py-24 md:px-12 relative z-10" style={{ backgroundColor: p.bg }}>
                 <div className="mx-auto max-w-6xl space-y-48">
 
                   {/* Philosophy — text left, photo right */}
@@ -184,15 +283,15 @@ function App() {
                     className="grid md:grid-cols-2 gap-8 md:gap-20 items-center"
                   >
                     <div className="max-w-xl w-full">
-                      <SectionEyebrow><ScrambleText text="Our Philosophy" delay={0.3} /></SectionEyebrow>
+                      <SectionEyebrow><ScrambleText text="How We Build" delay={0.3} /></SectionEyebrow>
                       <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
                         <CharReveal delay={0.2}>
-                          We believe the web deserves better than templates.
+                          Why does Rogue Code build websites from scratch instead of using templates?
                         </CharReveal>
                       </h2>
                       <p className="mt-8 text-base leading-relaxed" style={{ color: p.muted }}>
                         <WordReveal delay={0.6}>
-                          Every brand is unique. Your website should be too. We engineer custom digital experiences from the ground up — no themes, no page builders, no compromises.
+                          Because every brand deserves a digital presence engineered for its specific goals, audience, and market. Rogue Code builds custom websites using React, Next.js, and TypeScript — no WordPress themes, no page builders, no compromises. Jeremy Gideon Bareh founded the agency in 2024 on the principle that production-grade code outperforms template-based sites in speed, security, and conversion. The result: websites that load in under two seconds, score 95+ on Lighthouse, and rank higher in Google Search results.
                         </WordReveal>
                       </p>
                     </div>
@@ -211,12 +310,12 @@ function App() {
                     <div className="max-w-xl w-full md:ml-auto md:text-right">
                       <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
                         <CharReveal delay={0.3}>
-                          Speed without sacrifice.
+                          How does Rogue Code ship websites faster than traditional agencies?
                         </CharReveal>
                       </h2>
                       <p className="mt-8 text-base leading-relaxed" style={{ color: p.muted }}>
                         <WordReveal delay={0.7}>
-                          We combine AI-native workflows with hand-crafted engineering to ship in weeks what takes other agencies months. The result: production-grade code that you own, forever.
+                          Rogue Code combines AI-native engineering workflows with hand-crafted frontend development to ship production-grade websites in 2-4 weeks. Traditional agencies average 3-6 months for the same scope. The stack pairs React 19 with Framer Motion animations, Three.js 3D graphics, and Tailwind CSS for pixel-perfect responsive design. Every project includes Cloudflare deployment, automated CI/CD via GitHub, and Plausible analytics integration — all owned by the client with zero recurring license fees.
                         </WordReveal>
                       </p>
                     </div>
@@ -233,12 +332,12 @@ function App() {
                     <div className="max-w-xl w-full">
                       <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
                         <CharReveal delay={0.3}>
-                          You focus on your business. We build the digital architecture.
+                          What does Rogue Code handle from concept to launch?
                         </CharReveal>
                       </h2>
                       <p className="mt-8 text-base leading-relaxed" style={{ color: p.muted }}>
                         <WordReveal delay={0.7}>
-                          From concept to deployment, we handle everything — design, engineering, animation, optimization, and launch. One point of contact. Zero overhead.
+                          Rogue Code manages every phase of digital product delivery — strategy, UI/UX design in Figma, frontend engineering with React and TypeScript, backend API development with Node.js and Python, AI agent integration via LangChain, custom animation with GSAP and Framer Motion, performance optimization targeting 95+ Lighthouse scores, and Cloudflare Workers deployment with automated CI/CD. One project manager coordinates everything. Clients provide feedback through weekly demos, receive full source code ownership, and launch with zero platform lock-in.
                         </WordReveal>
                       </p>
                     </div>
@@ -249,7 +348,7 @@ function App() {
               </section>
 
               {/* Stats */}
-              <section className="px-4 sm:px-6 pt-24 md:px-12 relative z-10">
+              <section aria-label="Company statistics" className="px-4 sm:px-6 pt-24 md:px-12 relative z-10">
                 <div className="mx-auto max-w-5xl">
                   <motion.div
                     initial={{ opacity: 0, y: 40 }}
@@ -272,9 +371,9 @@ function App() {
                 </div>
               </section>
 
-              <ServicesSection isDay={theme === 'day'} onShowExamples={() => setShowExamples(true)} />
+              <ServicesSection isDay={theme === 'day'} onShowExamples={() => setShowExamples(true)} onViewService={(slug) => setServiceSlug(slug)} />
 
-              <CaseStudiesSection isDay={theme === 'day'} />
+              <CaseStudiesSection isDay={theme === 'day'} onViewProject={(slug) => setCaseStudySlug(slug)} />
 
               <AnimatedBeamTimeline isDay={theme === 'day'} />
 
@@ -284,12 +383,14 @@ function App() {
 
               <FAQSection isDay={theme === 'day'} />
 
+              <Testimonials />
+
               <section style={{ backgroundColor: '#0A0A0A' }}>
                 <TeamShowcase isDay={theme === 'day'} />
               </section>
 
               {/* CTA — Full-bleed photo */}
-              <section className="px-4 sm:px-6 py-32 md:px-12 relative z-10">
+              <section aria-label="Call to action" className="px-4 sm:px-6 py-32 md:px-12 relative z-10">
                 <motion.div
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -299,7 +400,7 @@ function App() {
                   style={{ borderColor: p.border }}
                 >
                   <div className="absolute inset-0">
-                    <img src={cinematicPhotos[9]} alt="" className="w-full h-full object-cover" />
+                    <img src={cinematicPhotos[9]} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     <div className="absolute inset-0" style={{ background: `linear-gradient(to right, ${p.bg}ee, ${p.bg}99)` }} />
                   </div>
                   <div className="relative px-10 py-20 md:py-28 text-center">
@@ -311,8 +412,7 @@ function App() {
                       className="text-4xl font-bold leading-tight sm:text-5xl md:text-6xl"
                       style={{ color: p.text }}
                     >
-                      Ready to build something{' '}
-                      <span style={{ color: p.accent }}>that actually works?</span>
+                      {t('cta.heading')}
                     </motion.h2>
                     <motion.p
                       initial={{ opacity: 0, y: 20 }}
@@ -322,7 +422,7 @@ function App() {
                       className="mt-6 text-lg max-w-xl mx-auto"
                       style={{ color: p.muted }}
                     >
-                      Stop burning time on agencies that over-promise and under-deliver. Let&apos;s build something real — together.
+                      {t('cta.subtitle')}
                     </motion.p>
                     <motion.p
                       initial={{ opacity: 0, y: 20 }}
@@ -332,7 +432,7 @@ function App() {
                       className="mt-3 text-sm sm:text-base"
                       style={{ color: p.dim }}
                     >
-                      — Jeremy Gideon Bareh
+                      {t('cta.attribution')}
                     </motion.p>
                     <motion.button
                       onClick={() => setShowBooking(true)}
@@ -345,7 +445,7 @@ function App() {
                       className="mt-10 px-10 py-4 text-base font-semibold rounded-full transition-colors shadow-lg"
                       style={{ backgroundColor: p.accent, color: '#FFFFFF' }}
                     >
-                      Start your project
+                      {t('cta.button')}
                     </motion.button>
                   </div>
                 </motion.div>
@@ -359,17 +459,18 @@ function App() {
                       Rogue<span style={{ color: p.accent }}>Code</span>
                     </span>
                     <div className="flex gap-6 text-sm" style={{ color: p.dim }}>
-                      <a href="#" className="hover:opacity-70 transition-opacity">Twitter</a>
-                      <a href="#" className="hover:opacity-70 transition-opacity">LinkedIn</a>
-                      <a href="#" className="hover:opacity-70 transition-opacity">GitHub</a>
+                      <a href="https://twitter.com/roguecodes" className="hover:opacity-70 transition-opacity" aria-label="Twitter">Twitter</a>
+                      <a href="https://linkedin.com/company/roguecodes" className="hover:opacity-70 transition-opacity" aria-label="LinkedIn">LinkedIn</a>
+                      <a href="https://github.com/jeremygideonbareh" className="hover:opacity-70 transition-opacity" aria-label="GitHub">GitHub</a>
+                      <button onClick={() => { window.location.href = '/?page=blog' }} className="hover:opacity-70 transition-opacity bg-transparent border-0 p-0 cursor-pointer text-inherit text-sm">{t('caseStudies.heading')}</button>
                     </div>
                   </div>
                   <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t pt-8 text-sm sm:flex-row"
                     style={{ borderColor: p.border2, color: p.dim }}>
-                    <p>&copy; 2026 Rogue Code. All rights reserved.</p>
+                    <p>{t('footer.rights')}</p>
                     <div className="flex gap-6">
-                      <a href="#" className="hover:opacity-70 transition-opacity">Privacy</a>
-                      <a href="#" className="hover:opacity-70 transition-opacity">Terms</a>
+                      <button onClick={() => setShowPrivacy(true)} className="hover:opacity-70 transition-opacity bg-transparent border-0 p-0 cursor-pointer text-inherit text-sm">{t('footer.privacy')}</button>
+                      <button onClick={() => setShowTerms(true)} className="hover:opacity-70 transition-opacity bg-transparent border-0 p-0 cursor-pointer text-inherit text-sm">{t('footer.terms')}</button>
                     </div>
                   </div>
                 </div>
@@ -377,13 +478,16 @@ function App() {
             </div>
 
             <div className={showContact ? '' : 'hidden'}>
-              <ContactPage />
+              <ContactPageLazy />
             </div>
           </>
         )}
+        </Suspense>
 
         <BookingModal open={showBooking} onClose={() => setShowBooking(false)} />
         <Toaster richColors position="bottom-right" />
+        <CookieConsent />
+        <ExitIntentPopup />
       </motion.div>
     </div>
   )

@@ -1,9 +1,11 @@
 import { useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { X } from 'lucide-react'
 import { LeadForm } from '@/components/LeadForm'
 
 export function BookingModal({ open, onClose, defaultTier = '' }) {
+  const { t } = useTranslation()
   const closeRef = useRef(null)
 
   useEffect(() => {
@@ -82,21 +84,22 @@ export function BookingModal({ open, onClose, defaultTier = '' }) {
               <button
                 ref={closeRef}
                 onClick={onClose}
+                aria-label="Close booking modal"
                 className="absolute top-4 right-4 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white transition-all"
               >
                 <X className="size-4" />
               </button>
 
               <div className="mb-6">
-                <h2
-                  className="text-2xl sm:text-3xl font-bold mb-1"
-                  style={{ fontFamily: "'Clash Display', sans-serif", color: '#E1E0CC' }}
-                >
-                  Book a Free Call
-                </h2>
-                <p className="text-sm text-zinc-400 max-w-sm">
-                  Tell us about your project and we'll find a time that works.
-                </p>
+                  <h2
+                    className="text-2xl sm:text-3xl font-bold mb-1"
+                    style={{ fontFamily: "'Clash Display', sans-serif", color: '#E1E0CC' }}
+                  >
+                    {t('booking.title')}
+                  </h2>
+                  <p className="text-sm text-zinc-400 max-w-sm">
+                    {t('booking.subtitle')}
+                  </p>
               </div>
 
               <LeadForm defaultTier={defaultTier} />

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Loader2, Send, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
+import { Loader2, Send, CheckCircle, AlertCircle, ArrowRight, Paperclip, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { submitLead } from '@/lib/api'
+import { submitLead, uploadLeadFiles } from '@/lib/api'
 
 const TIERS = [
   { value: '', label: 'Select a tier...' },
@@ -83,13 +83,16 @@ function CooldownRing({ remaining, total }) {
 }
 
 export function LeadForm({ defaultTier = '' }) {
+  const fileInputRef = useRef(null)
   const [form, setForm] = useState({
     name: '',
     email: '',
     company: '',
+    phone: '',
     project_tier: defaultTier,
     message: '',
   })
+  const [files, setFiles] = useState([])
   const [loading, setLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState({})
   const [success, setSuccess] = useState(false)
@@ -128,9 +131,19 @@ export function LeadForm({ defaultTier = '' }) {
     setSuccess(false)
 
     try {
+      // Submit lead without files — file attachments go to R2 separately
       const result = await submitLead(form)
 
-      if (result.status === 'success') {
+      if (result && result.id) {
+        // Upload files to R2 if present
+        if (files.length > 0) {
+          try {
+            await uploadLeadFiles(result.id, files)
+          } catch (uploadErr) {
+            console.error('File upload to R2 failed:', uploadErr)
+            // Lead was created successfully; don't block the success state
+          }
+        }
         setSuccess(true)
       }
     } catch (err) {
@@ -149,7 +162,7 @@ export function LeadForm({ defaultTier = '' }) {
   }
 
   const inputBase =
-    'w-full rounded-xl border px-4 py-3 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 bg-white/5 backdrop-blur-sm'
+    'w-full rounded-xl border px-4 py-3 text-sm text-white placeholder-zinc-500 outline-none focus-visible:ring-2 focus-visible:ring-white/30 transition-all duration-200 bg-white/5 backdrop-blur-sm'
 
   const renderField = (field, opts = {}) => {
     const hasError = !!fieldErrors[field]
@@ -242,7 +255,8 @@ export function LeadForm({ defaultTier = '' }) {
               transition={{ delay: 0.7, duration: 0.4 }}
               onClick={() => {
                 setSuccess(false)
-                setForm({ name: '', email: '', company: '', project_tier: '', message: '' })
+                setForm({ name: '', email: '', company: '', phone: '', project_tier: '', message: '' })
+                setFiles([])
               }}
               className="mt-8 flex items-center gap-2 rounded-full border border-zinc-700/60 px-5 py-2 text-sm text-zinc-300 hover:bg-white/5 transition-colors"
             >
@@ -280,6 +294,12 @@ export function LeadForm({ defaultTier = '' }) {
                   Company
                 </label>
                 {renderField('company', { placeholder: 'Your company (optional)' })}
+              </div>
+              <div className="space-y-1.5">
+                <label htmlFor="phone" className="block text-sm font-medium text-zinc-300">
+                  Phone
+                </label>
+                {renderField('phone', { type: 'tel', placeholder: '+1 (555) 000-0000' })}
               </div>
               <div className="space-y-1.5">
                 <label htmlFor="project_tier" className="block text-sm font-medium text-zinc-300">
@@ -333,6 +353,48 @@ export function LeadForm({ defaultTier = '' }) {
                 Message <span className="text-red-400">*</span>
               </label>
               {renderField('message', { required: true, placeholder: 'Tell us about your project...' })}
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-zinc-300">Attachments</label>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-1.5 rounded-xl border border-zinc-800/60 px-4 py-2.5 text-xs text-zinc-400 hover:bg-white/5 hover:text-zinc-300 transition-all"
+                >
+                  <Paperclip className="size-3.5" />
+                  Add files
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.txt,.zip,.png,.jpg,.jpeg"
+                  onChange={(e) => setFiles(Array.from(e.target.files || []))}
+                  className="hidden"
+                  aria-label="Upload project files"
+                />
+                {files.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {Array.from(files).map((f, i) => (
+                      <span key={i} className="flex items-center gap-1 rounded-lg border border-zinc-800/60 px-2.5 py-1 text-[11px] text-zinc-400">
+                        <Paperclip className="size-3" />
+                        {f.name.length > 20 ? f.name.slice(0, 17) + '...' : f.name}
+                        <button
+                          type="button"
+                          onClick={() => setFiles(prev => prev.filter((_, j) => j !== i))}
+                          className="hover:text-red-400 transition-colors"
+                          aria-label={`Remove ${f.name}`}
+                        >
+                          <X className="size-3" />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <p className="text-[11px] text-zinc-600">PDF, DOC, TXT, images accepted. Max 10MB per file.</p>
             </div>
 
             <motion.button

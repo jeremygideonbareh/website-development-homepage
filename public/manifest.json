@@ -1,0 +1,16 @@
+{
+  "name": "Rogue Code",
+  "short_name": "RogueCode",
+  "description": "Web development & AI automation agency — custom websites, AI agents, mobile apps.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1A1817",
+  "theme_color": "#1A1817",
+  "icons": [
+    {
+      "src": "/icons.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

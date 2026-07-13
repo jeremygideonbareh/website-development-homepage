@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { useTiltEffect } from '../hooks/useTiltEffect'
 import { Code, Bot, Smartphone, Palette, ExternalLink, Star, Globe, X } from 'lucide-react'
 
@@ -42,10 +43,10 @@ function getFaviconUrl(url) {
 const services = [
   {
     title: 'Web Development',
+    slug: 'web-development',
     subtitle: 'React, Next.js, TypeScript',
-    desc: 'Custom websites and web applications engineered for speed, scalability, and conversion. No page builders, no templates — just production-grade code with pixel-perfect design.',
+    desc: 'Rogue Code builds custom websites and web applications using React 19, Next.js, TypeScript, and Tailwind CSS. No WordPress themes, no page builders, no Squarespace templates — just production-grade code engineered for 95+ Lighthouse scores, sub-2-second load times, and conversion-optimized user flows.',
     icon: Code,
-    from: '$2,500',
     accent: '#E85D3A',
     decor: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80',
     projects: [
@@ -57,10 +58,10 @@ const services = [
   },
   {
     title: 'AI & Automation',
+    slug: 'ai-automation',
     subtitle: 'LangChain, LLMs, Agents',
-    desc: 'Intelligent AI agents, automated workflows, chatbots, and custom ML pipelines. We make AI work for your business — not the other way around.',
+    desc: 'Rogue Code builds intelligent AI agents and automated workflows using LangChain, LangGraph, OpenAI GPT-4, and custom Python ML pipelines. From support ticket automation that cuts triage time by 70% to custom chatbots trained on your business data — AI that actually delivers measurable ROI.',
     icon: Bot,
-    from: '$5,000',
     accent: '#FF6B4A',
     decor: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1600&q=80',
     projects: [
@@ -71,10 +72,10 @@ const services = [
   },
   {
     title: 'Mobile Apps',
+    slug: 'mobile-apps',
     subtitle: 'React Native, Firebase',
-    desc: 'Cross-platform mobile applications with native performance. From booking systems to full-featured product apps — we ship on iOS and Android.',
+    desc: 'Rogue Code ships cross-platform mobile applications using React Native and Firebase that perform natively on both iOS and Android from a single codebase. From spa booking apps that processed 200+ bookings in month one to full-featured product platforms with real-time sync, Stripe payments, and push notifications.',
     icon: Smartphone,
-    from: '$8,000',
     accent: '#2B7A78',
     decor: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1600&q=80',
     projects: [
@@ -87,7 +88,6 @@ const services = [
     subtitle: 'Interfaces, Prototypes, Systems',
     desc: 'Research-driven interface design that balances beauty with usability. Wireframes, high-fidelity mockups, interactive prototypes, and design systems.',
     icon: Palette,
-    from: '$2,000',
     accent: '#3B8A88',
     decor: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1600&q=80',
     projects: [
@@ -115,6 +115,8 @@ function ExampleRow({ examples, isDay, onSelectSite }) {
             <img
               src={getFaviconUrl(ex.url)}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="size-4 rounded shrink-0"
               onError={(e) => { e.target.style.display = 'none' }}
             />
@@ -189,7 +191,7 @@ function SitePreviewModal({ site, onClose }) {
         {/* Browser chrome */}
         <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)', background: '#222020' }}>
           <div className="flex items-center gap-2">
-            <button onClick={onClose} className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ touchAction: 'manipulation' }}>
+            <button onClick={onClose} aria-label="Close preview" className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ touchAction: 'manipulation' }}>
               <span className="size-3 rounded-full bg-[#FF5F57]" />
             </button>
             <span className="size-3 rounded-full bg-[#FFBD2E]" />
@@ -200,10 +202,10 @@ function SitePreviewModal({ site, onClose }) {
             {getDomain(site.url)}
           </div>
           <div className="flex items-center gap-2">
-            <a href={site.url} target="_blank" rel="noopener noreferrer" className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2' }}>
+            <a href={site.url} target="_blank" rel="noopener noreferrer" aria-label="Open in new tab" className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2' }}>
               <ExternalLink className="size-4" />
             </a>
-            <button onClick={onClose} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2', touchAction: 'manipulation' }}>
+            <button onClick={onClose} aria-label="Close preview" className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2', touchAction: 'manipulation' }}>
               <X className="size-4" />
             </button>
           </div>
@@ -232,7 +234,8 @@ function SitePreviewModal({ site, onClose }) {
   )
 }
 
-function ServiceCard({ service, index, isDay, hoveredService, setHoveredService, onShowExamples, hero = false, onSelectSite }) {
+function ServiceCard({ service, index, isDay, hoveredService, setHoveredService, onShowExamples, hero = false, onSelectSite, onViewService }) {
+  const { t } = useTranslation()
   const tiltRange = hero ? 2 : 4
   const stiffness = hero ? 150 : 250
   const damping = hero ? 30 : 25
@@ -283,7 +286,7 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
         }}
       >
         <div className="absolute inset-0 pointer-events-none opacity-[0.015] overflow-hidden">
-          <img src={service.decor} alt="" className="w-full h-full object-cover" style={{ filter: 'blur(8px)' }} />
+          <img src={service.decor} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" style={{ filter: 'blur(8px)' }} />
         </div>
 
         {/* Spotlight */}
@@ -327,7 +330,7 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
                     {service.subtitle}
                   </p>
                 </div>
-                <p className="text-base md:text-lg leading-relaxed max-w-2xl" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
+                <p className="text-base md:text-lg leading-relaxed max-w-2xl break-words" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
                   {service.desc}
                 </p>
                 <div>
@@ -344,7 +347,7 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
                 </div>
                 {onShowExamples && (
                   <button onClick={onShowExamples} className="inline-flex items-center gap-2 text-sm font-semibold tracking-wide transition-colors hover:opacity-70" style={{ color: service.accent }}>
-                    Browse website examples →
+                    {t('services.browseExamples')}
                   </button>
                 )}
               </div>
@@ -378,7 +381,7 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
             </div>
           ) : (
             /* Default layout: compact row */
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 max-w-full">
               <motion.div
                 className="flex-shrink-0 size-12 rounded-xl flex items-center justify-center"
                 style={{
@@ -404,7 +407,7 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
                 <p className="text-xs font-medium tracking-widest uppercase mb-3" style={{ color: service.accent }}>
                   {service.subtitle}
                 </p>
-                <p className="text-sm leading-relaxed" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
+                <p className="text-sm leading-relaxed break-words" style={{ color: isDay ? '#5A4A3A' : '#8A8A8A' }}>
                   {service.desc}
                 </p>
 
@@ -429,7 +432,12 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
 
                 {service.title === 'Web Development' && onShowExamples && (
                   <button onClick={onShowExamples} className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide transition-colors hover:opacity-70" style={{ color: service.accent }}>
-                    Browse website examples →
+                    {t('services.browseExamples')}
+                  </button>
+                )}
+                {service.slug && onViewService && (
+                  <button onClick={() => onViewService(service.slug)} className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold tracking-wide transition-colors hover:opacity-70" style={{ color: service.accent }}>
+                    {t('services.learnMore', { name: service.title })}
                   </button>
                 )}
               </div>
@@ -452,7 +460,8 @@ function ServiceCard({ service, index, isDay, hoveredService, setHoveredService,
   )
 }
 
-export default function ServicesSection({ isDay = true, onShowExamples }) {
+export default function ServicesSection({ isDay = true, onShowExamples, onViewService }) {
+  const { t } = useTranslation()
   const sectionRef = useRef(null)
   const [hoveredService, setHoveredService] = useState(null)
   const [selectedSite, setSelectedSite] = useState(null)
@@ -465,7 +474,7 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
   const progressWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
 
   return (
-    <section ref={sectionRef} className="relative z-10 overflow-x-hidden" style={{ backgroundColor: isDay ? '#F5F0EB' : '#1A1817' }}>
+    <section aria-label="Services" ref={sectionRef} className="relative z-10 overflow-x-hidden" style={{ backgroundColor: isDay ? '#F5F0EB' : '#1A1817' }}>
       <motion.div
         className="fixed top-0 left-0 h-0.5 z-[60]"
         style={{
@@ -501,10 +510,10 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
             className="text-center mb-24"
           >
             <p className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: isDay ? '#E85D3A' : '#FF6B4A' }}>
-              What we do
+              {t('services.eyebrow')}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight" style={{ color: isDay ? '#1A1A1A' : '#F2F2F2' }}>
-              Services
+              {t('services.heading')}
             </h2>
             <motion.div
               initial={{ scaleX: 0 }}
@@ -526,11 +535,12 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
             setHoveredService={setHoveredService}
             onShowExamples={onShowExamples}
             onSelectSite={setSelectedSite}
+            onViewService={onViewService}
           />
 
           {/* Remaining services */}
           <div className="mt-12 md:mt-24">
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 hide-scrollbar">
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-4 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 hide-scrollbar" style={{ touchAction: 'pan-x' }}>
                 {services.slice(1).map((s, i) => (
                 <ServiceCard
                   key={s.title}
@@ -541,6 +551,7 @@ export default function ServicesSection({ isDay = true, onShowExamples }) {
                   setHoveredService={setHoveredService}
                   onShowExamples={onShowExamples}
                   onSelectSite={setSelectedSite}
+                  onViewService={onViewService}
                 />
               ))}
             </div>

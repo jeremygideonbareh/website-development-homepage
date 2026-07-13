@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { ExternalLink, ArrowUpRight, Code, Bot, Smartphone, Palette } from 'lucide-react'
 
 const projects = [
@@ -83,7 +84,8 @@ const item = {
   visible: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 }
 
-export default function CaseStudiesSection({ isDay = true }) {
+export default function CaseStudiesSection({ isDay = true, onViewProject }) {
+  const { t } = useTranslation()
   const [activeCategory, setActiveCategory] = useState('All')
   const accent = isDay ? '#E85D3A' : '#FF6B4A'
   const text = isDay ? '#1A1A1A' : '#F2F2F2'
@@ -97,7 +99,7 @@ export default function CaseStudiesSection({ isDay = true }) {
     : projects.filter(p => p.category === activeCategory)
 
   return (
-    <section className="px-4 sm:px-6 py-28 md:px-12 relative z-10" style={{ backgroundColor: bg }}>
+    <section aria-label="Case studies" className="px-4 sm:px-6 py-28 md:px-12 relative z-10" style={{ backgroundColor: bg }}>
       <div className="mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -107,10 +109,10 @@ export default function CaseStudiesSection({ isDay = true }) {
           className="text-center mb-12"
         >
           <p className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: accent }}>
-            Our Work
+            {t('caseStudies.eyebrow')}
           </p>
           <h2 className="text-4xl sm:text-5xl font-bold leading-tight" style={{ color: text }}>
-            Case Studies
+            {t('caseStudies.heading')}
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -151,13 +153,31 @@ export default function CaseStudiesSection({ isDay = true }) {
           {filtered.map((project) => {
             const Icon = project.icon
             return (
-              <motion.a
+              <motion.div
                 key={project.name}
                 variants={item}
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group rounded-2xl border overflow-hidden transition-all duration-500 hover:-translate-y-1"
+                onClick={() => {
+                  const slug = project.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                  if (onViewProject) {
+                    onViewProject(slug)
+                  } else {
+                    window.location.href = `/?page=case&slug=${slug}`
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    const slug = project.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+                    if (onViewProject) {
+                      onViewProject(slug)
+                    } else {
+                      window.location.href = `/?page=case&slug=${slug}`
+                    }
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                className="group rounded-2xl border overflow-hidden transition-all duration-500 hover:-translate-y-1 cursor-pointer"
                 style={{
                   borderColor: border,
                   background: cardBg,
@@ -168,6 +188,8 @@ export default function CaseStudiesSection({ isDay = true }) {
                   <img
                     src={project.image}
                     alt={project.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -213,10 +235,10 @@ export default function CaseStudiesSection({ isDay = true }) {
                     style={{ color: accent }}
                   >
                     <ExternalLink className="size-3" />
-                    View on GitHub
+                    {t('caseStudies.viewOnGitHub')}
                   </span>
                 </div>
-              </motion.a>
+              </motion.div>
             )
           })}
         </motion.div>

@@ -232,6 +232,7 @@ function GlassCTA() {
               <input
                 type="email"
                 placeholder="your@email.com"
+                aria-label="Email for newsletter"
                 className="w-full px-5 py-3.5 text-sm outline-none transition-all duration-300"
                 style={{
                   color: '#ffedd7',
@@ -791,6 +792,7 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="your@email.com"
+                  aria-label="Email for newsletter"
                   className="flex-1 px-4 py-2.5 text-xs outline-none transition-colors duration-200"
                   style={{
                     color: '#ffedd7',

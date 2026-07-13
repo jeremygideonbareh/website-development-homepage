@@ -25,7 +25,7 @@ function SiteThumbnail({ url, name }) {
     <div className="relative overflow-hidden" style={{ height: 160, background: '#0A0A0A' }}>
       {error ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-1">
-          <img src={getFaviconUrl(url)} alt="" className="size-6 rounded"
+          <img src={getFaviconUrl(url)} alt="" loading="lazy" decoding="async" className="size-6 rounded"
             onError={(e) => { e.target.style.display = 'none' }} />
           <span className="text-[10px] font-medium text-white/50 text-center px-2 leading-tight">{domain}</span>
         </div>
@@ -54,7 +54,7 @@ function SitePreview({ url, name }) {
     <div className="relative overflow-hidden" style={{ height: '80dvh', maxHeight: 800 }}>
       {error ? (
         <div className="w-full h-full flex flex-col items-center justify-center gap-4" style={{ background: '#1A1817' }}>
-          <img src={getFaviconUrl(url)} alt="" className="size-16 rounded-xl" style={{ background: 'rgba(255,255,255,0.05)' }}
+          <img src={getFaviconUrl(url)} alt="" loading="lazy" decoding="async" className="size-16 rounded-xl" style={{ background: 'rgba(255,255,255,0.05)' }}
             onError={(e) => { e.target.style.display = 'none' }} />
           <p className="text-lg font-semibold text-white">{domain}</p>
           <p className="text-sm opacity-60" style={{ color: '#8A8A8A' }}>Preview unavailable — open in new tab</p>
@@ -123,7 +123,7 @@ const categories = [
       { name: 'Flour Bakery', url: 'https://www.flourbakery.com/', desc: 'Boston\'s iconic bakery and cafe known for sticky buns, croissants and hearty sandwiches.', rating: 4.8, reviews: 980 },
       { name: 'Honeybear Bake Shop', url: 'https://www.honeybearbakeshop.com/', desc: 'Bright and playful bakery with pink tones, curvy shapes, and fun copy.', rating: 4.9, reviews: 340 },
       { name: 'TOAD Bakery', url: 'https://www.toadbakery.com/', desc: 'Minimalist grid bakery with professional product photography and clear pricing.', rating: 4.7, reviews: 180 },
-      { name: 'Fuji Bakery', url: 'http://fujibakeryinc.com/', desc: 'Japanese-French fusion bakery with stunning artisan breads and pastries.', rating: 4.6, reviews: 670 },
+      { name: 'Fuji Bakery', url: 'https://fujibakeryinc.com/', desc: 'Japanese-French fusion bakery with stunning artisan breads and pastries.', rating: 4.6, reviews: 670 },
       { name: 'Crust Vegan Bakery', url: 'https://www.crustveganbakery.com/', desc: 'Vegan bakery with warm terracotta color scheme and charming storefront design.', rating: 4.8, reviews: 290 },
       { name: 'Breadbelly', url: 'https://www.breadbelly.com/', desc: 'Modern bakery in San Francisco with Asian-inspired pastries and naturally leavened breads.', rating: 4.7, reviews: 340 },
     ]
@@ -171,7 +171,7 @@ const categories = [
       { name: 'ToddSunn Company', url: 'https://www.toddsunn.com/', desc: 'Creative portfolio showcasing brand identity and digital art projects.', rating: 4.5, reviews: 15 },
       { name: 'Sadie\'s Couture Floral', url: 'https://www.sadiesfloral.com/', desc: 'Floral design portfolio with beautiful photography and elegant layout.', rating: 4.7, reviews: 85 },
       { name: 'Squarespace', url: 'https://www.squarespace.com/', desc: 'All-in-one website building platform with award-winning designer templates.', rating: 4.5, reviews: 3200 },
-      { name: 'Junction361', url: 'http://junction361.com/', desc: 'Creative portfolio website with a clean, minimal design aesthetic.', rating: 4.6, reviews: 20 },
+      { name: 'Junction361', url: 'https://junction361.com/', desc: 'Creative portfolio website with a clean, minimal design aesthetic.', rating: 4.6, reviews: 20 },
       { name: 'Wix Portfolio', url: 'https://www.wix.com/', desc: 'Leading website builder with stunning portfolio templates for creative professionals.', rating: 4.3, reviews: 2500 },
       { name: 'Donut Shop Framer', url: 'https://donutshop.framer.website/', desc: 'Playful bakery portfolio on Framer with drag-and-drop donut ordering.', rating: 4.7, reviews: 45 },
     ]
@@ -251,8 +251,8 @@ const categories = [
       { name: 'Sadie\'s Couture Floral', url: 'https://www.sadiesfloral.com/', desc: 'Floral design studio with stunning photography and elegant layout.', rating: 4.7, reviews: 85 },
       { name: 'ProFlowers', url: 'https://www.proflowers.com/', desc: 'Online flower delivery with fresh arrangements and user-friendly shopping experience.', rating: 4.3, reviews: 3200 },
       { name: 'Three Bees Pottery & Coffee', url: 'https://threebeeskck.com/', desc: 'Gift shop combining handmade pottery with a welcoming coffee bar.', rating: 4.5, reviews: 85 },
-      { name: 'Art Cafe Nyack', url: 'http://www.artcafenyack.com/', desc: 'NY cafe and art space with clean design showcasing local artists.', rating: 4.4, reviews: 65 },
-      { name: 'Belle Epicurean', url: 'http://www.belleepicurean.com/', desc: 'Bakery-cafe with gift baskets, pastries and house-made treats.', rating: 4.1, reviews: 430 },
+      { name: 'Art Cafe Nyack', url: 'https://www.artcafenyack.com/', desc: 'NY cafe and art space with clean design showcasing local artists.', rating: 4.4, reviews: 65 },
+      { name: 'Belle Epicurean', url: 'https://www.belleepicurean.com/', desc: 'Bakery-cafe with gift baskets, pastries and house-made treats.', rating: 4.1, reviews: 430 },
       { name: 'From You Flowers', url: 'https://www.fromyouflowers.com/', desc: 'Florist and gift delivery service with vibrant design and same-day delivery.', rating: 4.2, reviews: 1800 },
     ]
   },
@@ -311,7 +311,7 @@ function SuggestModal({ open, onClose }) {
                 <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Know a cute local business website? Share it!</p>
               </div>
             </div>
-            <button onClick={onClose} className="size-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors">
+            <button onClick={onClose} aria-label="Close suggestion form" className="size-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors">
               <X className="size-4" style={{ color: 'rgba(255,255,255,0.4)' }} />
             </button>
           </div>
@@ -328,15 +328,15 @@ function SuggestModal({ open, onClose }) {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.5)' }}>Business Name</label>
-                <input required value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Sweet Petite Bakery" className="w-full px-3 py-2.5 text-sm rounded-xl border outline-none transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }} />
+                <input required value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Sweet Petite Bakery" aria-label="Business name" className="w-full px-3 py-2.5 text-sm rounded-xl border outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B4A] transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }} />
               </div>
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.5)' }}>Website URL</label>
-                <input required value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com" type="url" className="w-full px-3 py-2.5 text-sm rounded-xl border outline-none transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }} />
+                <input required value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com" type="url" aria-label="Website URL" className="w-full px-3 py-2.5 text-sm rounded-xl border outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B4A] transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }} />
               </div>
               <div>
                 <label className="block text-xs font-medium mb-1.5" style={{ color: 'rgba(255,255,255,0.5)' }}>Category</label>
-                <select required value={category} onChange={e => setCategory(e.target.value)} className="w-full px-3 py-2.5 text-sm rounded-xl border outline-none transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }}>
+                <select required value={category} onChange={e => setCategory(e.target.value)} aria-label="Category" className="w-full px-3 py-2.5 text-sm rounded-xl border outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B4A] transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }}>
                   <option value="" disabled>Select a category</option>
                   {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                   <option value="other">Other</option>
@@ -475,15 +475,15 @@ export default function ExamplesPage({ onBack }) {
               <button onClick={() => setShowSuggest(true)} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors" style={{ borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.6)', background: 'rgba(255,255,255,0.03)' }}>
                 <Plus className="size-3" /> Suggest
               </button>
-              <button onClick={() => setViewMode('grid')} className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'}`}><Grid3X3 className="size-4" /></button>
-              <button onClick={() => setViewMode('list')} className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'}`}><List className="size-4" /></button>
+              <button onClick={() => setViewMode('grid')} aria-label="Grid view" className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'}`}><Grid3X3 className="size-4" /></button>
+              <button onClick={() => setViewMode('list')} aria-label="List view" className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'}`}><List className="size-4" /></button>
             </div>
           </div>
           {/* Search & filters */}
           <div className="pb-4 flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4" style={{ color: 'rgba(255,255,255,0.3)' }} />
-              <input type="text" placeholder="Search businesses..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border outline-none transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }} />
+              <input type="text" placeholder="Search businesses..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} aria-label="Search businesses" className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border outline-none focus-visible:ring-2 focus-visible:ring-[#FF6B4A] transition-colors" style={{ background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.08)', color: '#fff' }} />
             </div>
             <div className="flex gap-2 flex-wrap">
               {/* Category filter */}
@@ -563,7 +563,15 @@ export default function ExamplesPage({ onBack }) {
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.05 }}
                       onClick={() => setSelectedItem(item)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          setSelectedItem(item)
+                        }
+                      }}
                       whileHover={{ y: -4 }}
+                      role="button"
+                      tabIndex={0}
                       className="group relative rounded-xl border overflow-hidden cursor-pointer transition-all duration-300"
                       style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.03)' }}
                     >
@@ -600,6 +608,14 @@ export default function ExamplesPage({ onBack }) {
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.03 }}
                       onClick={() => setSelectedItem(item)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          setSelectedItem(item)
+                        }
+                      }}
+                      role="button"
+                      tabIndex={0}
                       className="flex items-center gap-4 p-3 rounded-xl border cursor-pointer transition-all hover:bg-white/5"
                       style={{ borderColor: 'rgba(255,255,255,0.06)' }}
                     >
@@ -656,7 +672,7 @@ export default function ExamplesPage({ onBack }) {
               {/* Browser chrome */}
               <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.08)', background: '#222020' }}>
                 <div className="flex items-center gap-2">
-                  <button onClick={() => setSelectedItem(null)} className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ touchAction: 'manipulation' }}>
+                  <button onClick={() => setSelectedItem(null)} aria-label="Close preview" className="min-w-[44px] min-h-[44px] flex items-center justify-center" style={{ touchAction: 'manipulation' }}>
                     <span className="size-3 rounded-full bg-[#FF5F57]" />
                   </button>
                   <span className="size-3 rounded-full bg-[#FFBD2E]" />
@@ -667,10 +683,10 @@ export default function ExamplesPage({ onBack }) {
                   {getDomain(selectedItem.url)}
                 </div>
                 <div className="flex items-center gap-2">
-                  <a href={selectedItem.url} target="_blank" rel="noopener noreferrer" className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2' }}>
+                  <a href={selectedItem.url} target="_blank" rel="noopener noreferrer" aria-label="Open in new tab" className="size-8 flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2' }}>
                     <ExternalLink className="size-4" />
                   </a>
-                  <button onClick={() => setSelectedItem(null)} className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2', touchAction: 'manipulation' }}>
+                  <button onClick={() => setSelectedItem(null)} aria-label="Close preview" className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full transition-colors hover:bg-white/10" style={{ color: '#F2F2F2', touchAction: 'manipulation' }}>
                     <X className="size-4" />
                   </button>
                 </div>

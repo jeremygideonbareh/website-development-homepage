@@ -8,29 +8,24 @@
   },
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "none"
+    "not_found_handling": "single-page-application"
   },
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
   "routes": [
     { "pattern": "rogue.codes", "custom_domain": true },
     { "pattern": "www.rogue.codes", "custom_domain": true }
   ],
   "vars": {
-    "INTERNAL_API_SECRET": "",
     "CORS_ORIGINS": "https://rogue.codes,https://www.rogue.codes"
-  }
-  // To add persistent D1 storage:
-  // 1. Create database via Cloudflare Dashboard: Dashboard → Workers & Pages → D1 → Create
-  // 2. Run: npx wrangler d1 execute rogue-code-leads --file=src/schema.sql --remote
-  // 3. Uncomment below with the database_id from step 1:
-  //
-  // "d1_databases": [
-  //   {
-  //     "binding": "DB",
-  //     "database_name": "rogue-code-leads",
-  //     "database_id": "<id-from-dashboard>"
-  //   }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "rogue-code-leads",
+      "database_id": "7e69dc92-8a6a-4512-94a1-2b855ddc9f66"
+    }
+  ],
+  // R2 binding (uncomment after enabling R2 in Cloudflare Dashboard):
+  // "r2_buckets": [
+  //   { "binding": "FILES", "bucket_name": "rogue-code-uploads" }
   // ]
 }

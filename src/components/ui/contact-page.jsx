@@ -19,10 +19,10 @@ const APP_PHONE = '+92 334 8585873'
 
 export function ContactPage() {
   const socialLinks = [
-    { icon: GitBranch, href: 'https://github.com/sshahaider', label: 'GitHub' },
-    { icon: MessageCircle, href: 'https://twitter.com/sshahaider', label: 'Twitter' },
-    { icon: Briefcase, href: 'https://linkedin.com/in/sshahaider', label: 'LinkedIn' },
-    { icon: Camera, href: 'https://instagram.com/sshahaider', label: 'Instagram' },
+    { icon: GitBranch, href: 'https://github.com/jeremygideonbareh', label: 'GitHub' },
+    { icon: MessageCircle, href: 'https://twitter.com/roguecodes', label: 'Twitter' },
+    { icon: Briefcase, href: 'https://linkedin.com/company/roguecodes', label: 'LinkedIn' },
+    { icon: Camera, href: '#', label: 'Instagram' },
   ]
 
   return (
@@ -38,7 +38,7 @@ export function ContactPage() {
         </div>
         <div className="flex grow flex-col justify-center px-4 md:px-6 pt-32 pb-16">
           <h1 className="text-4xl font-bold md:text-5xl">Contact Us</h1>
-          <p className="text-zinc-400 mb-5 text-base">Contact the support team at Asme.</p>
+          <p className="text-zinc-400 mb-5 text-base">Contact the team at Rogue Code.</p>
         </div>
         <BorderSeparator />
         <div className="grid md:grid-cols-3">

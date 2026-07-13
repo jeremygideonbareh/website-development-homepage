@@ -30,6 +30,14 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
       transition={{ type: 'spring', stiffness: 100, damping: 22 }}
       whileHover={{ y: -6, transition: { duration: 0.25 } }}
       onClick={() => onSelect?.(ex)}
+      onKeyDown={(e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && onSelect) {
+          e.preventDefault()
+          onSelect(ex)
+        }
+      }}
+      role="button"
+      tabIndex={0}
       className="rounded-xl overflow-hidden border group cursor-pointer"
       style={{
         borderColor: isDay ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)',
@@ -78,6 +86,8 @@ export default function BrowserFrame({ ex, isDay = true, onSelect }) {
             <img
               src={getFaviconUrl(ex.url)}
               alt=""
+              loading="lazy"
+              decoding="async"
               className="size-8 rounded-lg"
               style={{ background: isDay ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.05)' }}
               onError={(e) => { e.target.style.display = 'none' }}

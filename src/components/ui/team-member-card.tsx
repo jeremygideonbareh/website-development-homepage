@@ -8,6 +8,13 @@
  * @license: MIT
  * @website: https://emerald-ui.com
  *
+ * ── Photo paths ──────────────────────────────────────────
+ * The default `imageUrl` below is a fallback Unsplash photo.
+ * When this card is used via AboutUs.jsx, the `imageUrl` prop
+ * is explicitly set to `/images/team/jeremy.jpeg` (or another
+ * local path). To replace photos, swap the .jpeg files in
+ * public/images/team/ — no prop changes needed.
+ * ──────────────────────────────────────────────────────────
  */
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -64,15 +71,15 @@ export default function TeamMemberCard({
         </p>
       </motion.div>
 
-      <div className='flex items-center justify-end'>
+      <div className='flex flex-col md:flex-row items-center md:items-end justify-end gap-6 md:gap-0'>
         {/* Portrait image with reveal animation */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className={cn(
-            'relative h-125 w-90 shrink-0 overflow-hidden',
-            isPositionRight && 'order-1'
+            'relative w-full md:w-90 md:h-125 aspect-[4/5] md:aspect-auto shrink-0 overflow-hidden md:order-none',
+            isPositionRight && 'md:order-1'
           )}
         >
           {/* Subtle grain overlay for texture */}
@@ -80,23 +87,25 @@ export default function TeamMemberCard({
           <img
             src={imageUrl}
             alt={fullName}
+            loading="lazy"
+            decoding="async"
             className='h-full w-full object-cover duration-500 ease-[0.22,1,0.36,1] hover:scale-105'
           />
         </motion.div>
 
-        {/* Info block — overlaps image via negative margin */}
+        {/* Info block — overlaps image via negative margin on desktop */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className={cn(
-            'relative -left-8 z-2 flex w-[calc(100%-350px)] flex-col gap-14',
-            isPositionRight && 'left-8 items-end'
+            'relative md:-left-8 z-2 flex w-full md:w-[calc(100%-350px)] flex-col gap-6 md:gap-14 px-4 md:px-0',
+            isPositionRight && 'md:left-8 md:items-end'
           )}
         >
           {/* Display name — large editorial type */}
           <div>
-            <p className='text-5xl leading-[1.1] font-extralight tracking-tight text-zinc-900 dark:text-white'>
+            <p className='text-3xl md:text-5xl leading-[1.1] font-extralight tracking-tight text-zinc-900 dark:text-white text-center md:text-left'>
               {firstName}
               <br />
               <span className='font-normal'>{lastName}</span>
@@ -104,31 +113,31 @@ export default function TeamMemberCard({
           </div>
 
           {/* Details row — toggle + bio */}
-          <div className={cn('flex gap-8', isPositionRight && 'justify-end')}>
+          <div className={cn('flex gap-4 md:gap-8', isPositionRight && 'md:justify-end')}>
             {/* Circular CTA with hover pulse */}
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               className={cn(
-                'group flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center rounded-full border border-zinc-300 transition-colors duration-300 hover:border-zinc-600 hover:bg-zinc-900 dark:border-white/20 dark:hover:border-white/60 dark:hover:bg-white/10',
-                isPositionRight && 'order-1'
+                'group flex h-12 w-12 md:h-20 md:w-20 shrink-0 cursor-pointer items-center justify-center rounded-full border border-zinc-300 transition-colors duration-300 hover:border-zinc-600 hover:bg-zinc-900 dark:border-white/20 dark:hover:border-white/60 dark:hover:bg-white/10',
+                isPositionRight && 'md:order-1'
               )}
             >
               <ArrowRight
                 size={22}
                 className={cn(
                   'text-zinc-600 transition-all duration-300 group-hover:-rotate-45 group-hover:text-white dark:text-zinc-400 dark:group-hover:text-white',
-                  isPositionRight && 'rotate-180 group-hover:rotate-225'
+                  isPositionRight && 'rotate-180 group-hover:md:rotate-225'
                 )}
               />
             </motion.div>
 
             {/* Bio copy — restrained body text */}
-            <div className='w-[40%]'>
+            <div className='w-full md:w-[40%]'>
               <p
                 className={cn(
                   'text-sm leading-[1.8] text-zinc-500 dark:text-zinc-400',
-                  isPositionRight && 'text-right'
+                  isPositionRight && 'md:text-right'
                 )}
               >
                 {description}
