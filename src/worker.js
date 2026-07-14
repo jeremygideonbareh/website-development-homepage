@@ -37,8 +37,10 @@ class SeoHandler {
     this.descDone = false
     this.ogTitleDone = false
     this.ogDescDone = false
+    this.ogImageDone = false
     this.twTitleDone = false
     this.twDescDone = false
+    this.twImageDone = false
     this.canonicalDone = false
     this.schemaDone = false
     this.rootDone = false
@@ -73,14 +75,28 @@ class SeoHandler {
         this.ogDescDone = true
         return
       }
+      if (property === 'og:image' && !this.ogImageDone && this.routeData.image) {
+        element.setAttribute('content', this.routeData.image)
+        this.ogImageDone = true
+        return
+      }
       if (name === 'twitter:title' && !this.twTitleDone) {
         element.setAttribute('content', this.routeData.title)
         this.twTitleDone = true
         return
       }
+      if (property === 'og:url' && this.routeData.canonical) {
+        element.setAttribute('content', this.routeData.canonical)
+        return
+      }
       if (name === 'twitter:description' && !this.twDescDone) {
         element.setAttribute('content', this.routeData.description)
         this.twDescDone = true
+        return
+      }
+      if (name === 'twitter:image' && !this.twImageDone && this.routeData.image) {
+        element.setAttribute('content', this.routeData.image)
+        this.twImageDone = true
         return
       }
       return

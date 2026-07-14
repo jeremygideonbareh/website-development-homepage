@@ -735,10 +735,10 @@ Each post includes full GEO-optimized content: question-form H2s, entity-dense p
 | 1 | **No Google Search Console** | Can't submit sitemap, can't see indexing status, no crawl error visibility | Register site in GSC → submit sitemap URL |
 | 2 | **No backlinks (zero domain authority)** | Google won't rank without authoritative inbound links; new domain = no trust | Guest posts, directories (Clutch, GoodFirms), open-source GitHub repos, HARO |
 | 3 | **No Google Business Profile** | Zero local SEO presence; no Google Maps visibility | Claim GBP with rogue.codes URL |
-| 4 | **No OG/Twitter social meta tags** | Sharing links shows no preview — kills click-through on Twitter/Discord/Slack | Add `og:title`, `og:description`, `og:image`, `twitter:card` per route |
+| 4 | ~~**No OG/Twitter social meta tags**~~ | ✅ Now per-route: `og:image`, `twitter:image`, `og:url` all populate blog/case study specific images | Done in batch 4 |
 | 5 | **SPA hash routing (`?page=...`)** | Google may not index deep-linked pages as well as clean URLs | Migrate to React Router with `/blog/post-slug` URLs (P0 infra change) |
 | 6 | **No Bing Webmaster Tools** | Second-largest search engine unclaimed | Register in Bing Webmaster Tools, submit sitemap |
-| 7 | **No canonical URLs** | `rogue.codes` vs `www.rogue.codes` may be treated as duplicate content | Add `<link rel="canonical" href="https://rogue.codes/...">` in HTMLRewriter |
+| 7 | ~~**No canonical URLs**~~ | ✅ Already handled — `link[rel="canonical"]` per-route via HTMLRewriter | Already working |
 | 8 | **No blog promotion** | Content exists but no RSS feed, no newsletter, no social cross-posting | Add RSS feed link in head, set up social auto-post on new articles |
 | 9 | **No backlink strategy** | No directory listings, no guest posts, no open-source citations | List on Clutch, GoodFirms, BuiltWith; open-source relevant tools on GitHub |
 | 10 | **No bounce/engagement metrics visible** | Can't optimize what you don't measure | Plausible is set up — check regularly for high-exit pages |
@@ -748,9 +748,28 @@ Each post includes full GEO-optimized content: question-form H2s, entity-dense p
 - **Google Organic:** Very low — zero backlinks + no Search Console = near-invisible for competitive keywords
 
 #### 🏆 Recommended Priority Order
-1. **This week:** Register Google Search Console + submit sitemap — free, immediate visibility into indexing
+1. **This week:** Register Google Search Console + submit sitemap — free, immediate indexing visibility
 2. **This week:** Claim Google Business Profile — free, unlocks local discovery
-3. **This month:** Add OG/Twitter meta tags to worker.js HTMLRewriter — 1-2 hour dev task, big shareability improvement
-4. **This month:** List on 3 directories (Clutch, GoodFirms, DesignRush) — start building backlinks
-5. **Next quarter:** React Router migration for clean URLs / post-slug — unlocks proper per-page SEO
-6. **Ongoing:** Publish blog posts monthly + cross-post on LinkedIn/Twitter/Dev.to
+3. **This month:** List on 3 directories (Clutch, GoodFirms, DesignRush) — start building backlinks
+4. **Next quarter:** React Router for clean URLs `/blog/post-slug`
+5. **Ongoing:** Publish blog posts monthly + cross-post on LinkedIn/Twitter/Dev.to
+
+## Session — 13 Jul 2026 (batch 4) — Per-Route OG Images + CI Fix
+
+### ✅ Per-Route OG Images (gap 4 from audit)
+- `src/seo-route-data.js`: Added `image` field to every route — blog/case study pages use their specific Unsplash image, all other pages use default `og-image.jpg`
+- `src/worker.js`: SeoHandler now populates `og:image`, `twitter:image`, `og:url` per route from `routeData.image` and `routeData.canonical`
+- Sharing a blog post on Twitter/Discord/Slack now shows the post's own image + correct URL
+
+### ✅ CI Fix (batch 2)
+- `.github/workflows/deploy.yml`: Added `wranglerVersion: '4'` — default wrangler-action@v3 pinned Wrangler 3.90.0 which can't read `wrangler.jsonc`. Wrangler 4 correctly parses the config.
+- CI confirmed green: `bfcd65e` → auto-deployed in 37s
+
+### ✅ Still Manual (cannot be coded)
+1. **R2:** Enable in Cloudflare Dashboard → uncomment `r2_buckets` in `wrangler.jsonc` → deploy
+2. **Photos:** Paste into `public/images/team/` (jeremy.jpeg, aaron.jpeg, ashba.jpeg)
+3. **Google Search Console:** Register → submit sitemap (5 min)
+4. **Google Business Profile:** Claim listing
+
+### Build
+✅ `npm run build` passes (3.45s) | Deployed to Workers `368c438c` → `rogue.codes`, `www.rogue.codes`

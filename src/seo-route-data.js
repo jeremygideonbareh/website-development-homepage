@@ -229,10 +229,13 @@ export function getRouteData(url) {
   const page = params.get('page')
   const slug = params.get('slug')
 
+  const DEFAULT_IMAGE = SITE + '/og-image.jpg'
+
   if (!page) {
     return {
       title: 'Rogue Code — Web Development & AI Automation Agency',
       description: 'Rogue Code is a full-service web development and AI automation agency. We build custom websites, AI agents, mobile apps, and UI/UX design for businesses worldwide.',
+      image: DEFAULT_IMAGE,
       canonical: SITE + '/',
       schema: siteGraph([
         {
@@ -275,9 +278,10 @@ export function getRouteData(url) {
     return {
       title: `${p.name} — Rogue Code Case Study`,
       description: p.desc,
+      image: p.image,
       canonical: pageUrl,
       schema: siteGraph([
-        articleSchema(pageUrl, `${p.name}: ${p.desc}`, p.desc, p.image, null, p.tags),
+        articleSchema(pageUrl, p.title, p.excerpt, p.image, p.date, p.tags),
         {
           '@type': articleType,
           name: p.name,
@@ -304,6 +308,7 @@ export function getRouteData(url) {
       return {
         title: `${p.title} — Rogue Code Case Study`,
         description: p.excerpt,
+        image: p.image,
         canonical: pageUrl,
         schema: siteGraph([
           articleSchema(pageUrl, p.title, p.excerpt, p.image, p.date, p.tags),
@@ -318,6 +323,7 @@ export function getRouteData(url) {
     return {
       title: 'Case Studies — Rogue Code',
       description: 'Deep dives into projects shipped by Rogue Code — web development, AI automation, and mobile apps.',
+      image: DEFAULT_IMAGE,
       canonical: `${SITE}/?page=blog`,
       schema: siteGraph([
         {
@@ -339,6 +345,7 @@ export function getRouteData(url) {
     return {
       title: 'Pricing — Rogue Code Agency',
       description: 'Rogue Code pricing: Basic (₹7,000), Business (₹14,000), Enterprise (₹25,000), Custom Animated (₹3,00,000). Web development, AI automation, and mobile app services.',
+      image: DEFAULT_IMAGE,
       canonical: `${SITE}/?page=sales-pricing`,
       schema: siteGraph([
         {
@@ -360,6 +367,7 @@ export function getRouteData(url) {
     return {
       title: 'Admin Dashboard — Rogue Code',
       description: 'Lead management dashboard for Rogue Code.',
+      image: DEFAULT_IMAGE,
       canonical: `${SITE}/?page=admin`,
       schema: siteGraph(),
       rootContent: makeGenericContent('Admin Dashboard', 'Lead management dashboard for Rogue Code.'),
@@ -370,6 +378,7 @@ export function getRouteData(url) {
     return {
       title: 'About Us — Rogue Code Agency',
       description: 'Rogue Code is a full-service web development and AI automation agency building custom digital products. We ship production-grade code that you own.',
+      image: DEFAULT_IMAGE,
       canonical: `${SITE}/?page=about`,
       schema: siteGraph([
         {
@@ -391,6 +400,7 @@ export function getRouteData(url) {
     return {
       title: 'Privacy Policy — Rogue Code',
       description: 'Privacy policy for Rogue Code website and services.',
+      image: DEFAULT_IMAGE,
       canonical: `${SITE}/?page=privacy`,
       schema: siteGraph(),
       rootContent: makeGenericContent('Privacy Policy', 'Rogue Code privacy policy.'),
@@ -401,6 +411,7 @@ export function getRouteData(url) {
     return {
       title: 'Terms of Service — Rogue Code',
       description: 'Terms of service for Rogue Code website and services.',
+      image: DEFAULT_IMAGE,
       canonical: `${SITE}/?page=terms`,
       schema: siteGraph(),
       rootContent: makeGenericContent('Terms of Service', 'Rogue Code terms of service.'),
@@ -419,6 +430,7 @@ export function getRouteData(url) {
     return {
       title: meta.title,
       description: meta.desc,
+      image: DEFAULT_IMAGE,
       canonical: pageUrl,
       schema: siteGraph([
         {
