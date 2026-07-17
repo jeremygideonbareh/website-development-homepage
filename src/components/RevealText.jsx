@@ -33,7 +33,7 @@ export function CharReveal({ children, className, delay = 0 }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.4, delay: delay + i * 0.015, ease: [0.25, 0.4, 0.25, 1] }}
-          className="inline"
+          className="inline-block"
         >
           {char}
         </motion.span>
@@ -108,7 +108,7 @@ export function KineticText({ children, mode = 'spring', delay = 0, className })
             whileInView={anim.whileInView}
             viewport={{ once: true, margin: '-60px' }}
             transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
-            style={{ display: 'inline' }}
+            style={{ display: 'inline-block' }}
           >
             {char === ' ' ? ' ' : char}
           </motion.span>

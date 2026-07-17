@@ -284,7 +284,7 @@ function App() {
                   >
                     <div className="max-w-xl w-full">
                       <SectionEyebrow><ScrambleText text="How We Build" delay={0.3} /></SectionEyebrow>
-                      <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight" style={{ color: p.text }}>
+                      <h2 className="text-3xl sm:text-4xl font-bold mt-6 leading-tight break-words" style={{ color: p.text }}>
                         <CharReveal delay={0.2}>
                           Why does Rogue Code build websites from scratch instead of using templates?
                         </CharReveal>
@@ -308,7 +308,7 @@ function App() {
                   >
                     <GalleryPhoto src={cinematicPhotos[1]} alt="" width="w-full" rotate={3} offsetX={0} offsetY={0} from="left" delay={0.3} />
                     <div className="max-w-xl w-full md:ml-auto md:text-right">
-                      <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
+                      <h2 className="text-3xl sm:text-4xl font-bold leading-tight break-words" style={{ color: p.text }}>
                         <CharReveal delay={0.3}>
                           How does Rogue Code ship websites faster than traditional agencies?
                         </CharReveal>
@@ -330,7 +330,7 @@ function App() {
                     className="grid md:grid-cols-2 gap-12 md:gap-20 items-center"
                   >
                     <div className="max-w-xl w-full">
-                      <h2 className="text-3xl sm:text-4xl font-bold leading-tight" style={{ color: p.text }}>
+                      <h2 className="text-3xl sm:text-4xl font-bold leading-tight break-words" style={{ color: p.text }}>
                         <CharReveal delay={0.3}>
                           What does Rogue Code handle from concept to launch?
                         </CharReveal>
