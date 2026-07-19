@@ -8,7 +8,8 @@ const TIERS = [
   { value: '', label: 'Select a tier...' },
   { value: 'The Velocity Build', label: 'The Velocity Build' },
   { value: 'The Growth Stack', label: 'The Growth Stack' },
-  { value: 'The Apex Architecture', label: 'The Apex Architecture' },
+  { value: 'The Rogue Architecture', label: 'The Rogue Architecture' },
+  { value: 'The Custom Animated Experience', label: 'The Custom Animated Experience' },
 ]
 
 const FIELDS = ['name', 'email', 'company', 'project_tier', 'message']

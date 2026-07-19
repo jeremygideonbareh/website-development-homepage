@@ -1,64 +1,76 @@
 import { motion } from 'framer-motion'
 
+const wordVariant = {
+  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] } },
+}
+
 export function WordReveal({ children, className, delay = 0 }) {
   const segments = children.split(/(\s+)/)
-  let wordIndex = 0
+  const container = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.04, delayChildren: delay } },
+  }
   return (
-    <span className={className} style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+    <motion.span
+      className={className}
+      style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+      variants={container}
+    >
       {segments.map((seg, i) => {
         if (seg.match(/^\s+$/)) {
           return <span key={i} className="inline-block whitespace-pre">{'\u00A0'}</span>
         }
-        const currentWordIndex = wordIndex++
         return (
           <span key={i} className="inline-block whitespace-pre">
-            <motion.span
-              initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.5, delay: delay + currentWordIndex * 0.04, ease: [0.25, 0.4, 0.25, 1] }}
-              className="inline-block"
-            >
+            <motion.span variants={wordVariant} className="inline-block">
               {seg}
             </motion.span>
           </span>
         )
       })}
-    </span>
+    </motion.span>
   )
+}
+
+const charVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.4, 0.25, 1] } },
 }
 
 export function CharReveal({ children, className, delay = 0 }) {
   const segments = children.split(/(\s+)/)
-  let flatIndex = 0
+  const container = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.015, delayChildren: delay } },
+  }
   return (
-    <span className={className} style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+    <motion.span
+      className={className}
+      style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+      variants={container}
+    >
       {segments.map((seg, i) => {
         if (seg.match(/^\s+$/)) {
-          flatIndex++ // whitespace token takes one index slot
           return <span key={i} className="inline-block whitespace-pre">{'\u00A0'}</span>
         }
         return (
           <span key={i} className="inline-block whitespace-pre">
-            {seg.split('').map((char, j) => {
-              const charIndex = flatIndex++
-              return (
-                <motion.span
-                  key={j}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-80px' }}
-                  transition={{ duration: 0.4, delay: delay + charIndex * 0.015, ease: [0.25, 0.4, 0.25, 1] }}
-                  className="inline-block"
-                >
-                  {char}
-                </motion.span>
-              )
-            })}
+            {seg.split('').map((char, j) => (
+              <motion.span key={j} variants={charVariant} className="inline-block">
+                {char}
+              </motion.span>
+            ))}
           </span>
         )
       })}
-    </span>
+    </motion.span>
   )
 }
 
@@ -113,25 +125,51 @@ const kineticVariants = {
   }),
 }
 
+function buildChildVariant(anim) {
+  if (!anim || !anim.transition) {
+    return {
+      hidden: anim?.initial || {},
+      visible: { ...(anim?.whileInView || {}), transition: { duration: 0.5, ease: [0.25, 0.4, 0.25, 1] } },
+    }
+  }
+  const { delay: _delay, ...restTransition } = anim.transition
+  return {
+    hidden: anim.initial,
+    visible: { ...anim.whileInView, transition: restTransition },
+  }
+}
+
+const containerConfigs = {
+  spring: { staggerChildren: 0.025 },
+  wave: { staggerChildren: 0.03 },
+  scatter: { staggerChildren: 0.02 },
+  typewriter: { staggerChildren: 0.04 },
+}
+
 export function KineticText({ children, mode = 'spring', delay = 0, className }) {
   const segments = children.split(/(\s+)/)
   const v = kineticVariants[mode] || kineticVariants.spring
+  const cfg = containerConfigs[mode] || containerConfigs.spring
+  const container = {
+    hidden: {},
+    visible: { transition: { staggerChildren: cfg.staggerChildren, delayChildren: delay } },
+  }
   let flatIndex = 0
 
   return (
-    <span className={className} style={{ display: 'inline', whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+    <motion.span
+      className={className}
+      style={{ display: 'inline', whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+      variants={container}
+    >
       {segments.map((seg, i) => {
         if (seg.match(/^\s+$/)) {
-          const anim = v(flatIndex++)
+          const childVariant = buildChildVariant(v(flatIndex++))
           return (
-            <motion.span
-              key={i}
-              initial={anim.initial}
-              whileInView={anim.whileInView}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
-              style={{ display: 'inline-block' }}
-            >
+            <motion.span key={i} variants={childVariant} style={{ display: 'inline-block' }}>
               {'\u00A0'}
             </motion.span>
           )
@@ -139,16 +177,9 @@ export function KineticText({ children, mode = 'spring', delay = 0, className })
         return (
           <span key={i} className="inline-block whitespace-pre">
             {seg.split('').map((char, j) => {
-              const anim = v(flatIndex++)
+              const childVariant = buildChildVariant(v(flatIndex++))
               return (
-                <motion.span
-                  key={j}
-                  initial={anim.initial}
-                  whileInView={anim.whileInView}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
-                  style={{ display: 'inline-block' }}
-                >
+                <motion.span key={j} variants={childVariant} style={{ display: 'inline-block' }}>
                   {char}
                 </motion.span>
               )
@@ -156,6 +187,6 @@ export function KineticText({ children, mode = 'spring', delay = 0, className })
           </span>
         )
       })}
-    </span>
+    </motion.span>
   )
 }

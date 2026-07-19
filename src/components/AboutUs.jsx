@@ -313,7 +313,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
   ]
 
   return (
-    <div className="min-h-screen pt-24 pb-32 md:overflow-x-hidden" style={{ backgroundColor: p.bg }}>
+    <div className="min-h-screen pt-24 pb-32 overflow-x-hidden" style={{ backgroundColor: p.bg }}>
       <div className="relative px-6 md:px-12 mx-auto max-w-6xl">
 
         {/* ─── HERO — Full personal intro ─── */}
@@ -477,7 +477,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
         <section className="mb-32">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.5 }} className="mb-12">
             <SectionEyebrow color={p.eyebrow}>Our process</SectionEyebrow>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-4" style={{ color: p.text }}>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mt-4 break-words" style={{ color: p.text }}>
               <KineticText mode="spring" delay={0.1}>How we bring your vision to life</KineticText>
             </h2>
           </motion.div>
@@ -537,7 +537,7 @@ export default function AboutUs({ onBack, theme = 'night' }) {
               className="text-sm font-medium tracking-widest uppercase mb-4" style={{ color: p.accent }}>
               Let's build something
             </motion.p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight" style={{ color: p.text }}>
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight break-words" style={{ color: p.text }}>
               <KineticText mode="spring" delay={0.1}>Ready to build something that actually works?</KineticText>
             </h2>
             <p className="mt-4 text-base leading-relaxed" style={{ color: p.muted }}>

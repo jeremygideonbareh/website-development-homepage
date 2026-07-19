@@ -6,28 +6,28 @@ import { Code, Bot, Smartphone, Palette, ExternalLink, Star, Globe, X } from 'lu
 
 const serviceExamples = {
   'Web Development': [
-    { name: 'Mod Mutt Salon', url: 'https://modmuttsalon.com/', rating: 4.9, type: 'Pet Groomer' },
-    { name: 'Indaba Coffee', url: 'https://www.indabacoffee.com/', rating: 4.6, type: 'Coffee Shop' },
-    { name: 'Tatte Bakery', url: 'https://www.tattebakery.com/', rating: 4.8, type: 'Cafe & Bakery' },
-    { name: 'Blue Spruce Barber', url: 'https://www.bluesprucebarbershop.com/', rating: 4.8, type: 'Barbershop' },
+    { name: 'Paws for Change India', url: 'https://pawsforchangeindia.org', rating: 5.0, type: 'Animal Welfare' },
+    { name: "Kiki Garod's Portfolio", url: 'https://kikigarod.com', rating: 5.0, type: 'Filmmaker' },
+    { name: 'Crumbs Bakery', url: 'https://crumbsbakery.in', rating: 5.0, type: 'Bakery' },
+    { name: 'Chelsea Man Spa', url: 'https://chelseamanspa.com', rating: 5.0, type: 'Spa & Wellness' },
   ],
   'AI & Automation': [
-    { name: 'Acova AI', url: 'https://acova.ai', rating: 4.7 },
-    { name: 'Armory AI', url: 'https://www.armory.in', rating: 4.6 },
-    { name: 'Apechain', url: 'https://apechain.com', rating: 4.8 },
-    { name: 'Notion', url: 'https://www.notion.so/', rating: 4.8 },
+    { name: 'Support Ticket Agent', url: 'https://roguecode.ai/support-agent', rating: 4.9 },
+    { name: 'Custom Chatbot Platform', url: 'https://roguecode.ai/chatbots', rating: 4.8 },
+    { name: 'Trading Bot System', url: 'https://roguecode.ai/trading', rating: 4.7 },
+    { name: 'Data Pipeline Automation', url: 'https://roguecode.ai/pipelines', rating: 4.8 },
   ],
   'Mobile Apps': [
-    { name: 'MyFitnessPal', url: 'https://www.myfitnesspal.com/', rating: 4.7 },
-    { name: 'Sweetgreen', url: 'https://sweetgreen.com/', rating: 4.4 },
-    { name: 'Anytime Fitness', url: 'https://www.anytimefitness.com/', rating: 4.3 },
-    { name: 'The Sill', url: 'https://thesill.com/', rating: 4.6 },
+    { name: 'Chelsea Man Spa App', url: 'https://chelseamanspa.com/app', rating: 4.9 },
+    { name: 'Booking Platform', url: 'https://roguecode.dev/booking', rating: 4.8 },
+    { name: 'Fitness Tracker App', url: 'https://roguecode.dev/fitness', rating: 4.6 },
+    { name: 'Delivery Tracker', url: 'https://roguecode.dev/delivery', rating: 4.7 },
   ],
   'UI/UX Design': [
-    { name: 'Cuberto', url: 'https://cuberto.com', rating: 4.9 },
-    { name: 'Noomo Agency', url: 'https://noomoagency.com', rating: 4.9 },
-    { name: 'Playfight', url: 'https://www.letsplayfight.com', rating: 4.8 },
-    { name: 'John Kail', url: 'https://www.johnkail.com/', rating: 4.6 },
+    { name: 'Brand Identity Suite', url: 'https://roguecode.design/brand', rating: 4.9 },
+    { name: 'Design System Library', url: 'https://roguecode.design/systems', rating: 4.8 },
+    { name: 'UX Audit & Redesign', url: 'https://roguecode.design/audit', rating: 4.9 },
+    { name: 'Mobile App Redesign', url: 'https://roguecode.design/mobile', rating: 4.7 },
   ],
 }
 
@@ -44,6 +44,7 @@ const services = [
   {
     title: 'Web Development',
     slug: 'web-development',
+    from: '₹9,000',
     subtitle: 'React, Next.js, TypeScript',
     desc: 'Rogue Code builds custom websites and web applications using React 19, Next.js, TypeScript, and Tailwind CSS. No WordPress themes, no page builders, no Squarespace templates — just production-grade code engineered for 95+ Lighthouse scores, sub-2-second load times, and conversion-optimized user flows.',
     icon: Code,
@@ -51,14 +52,15 @@ const services = [
     decor: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80',
     projects: [
       'Paws for Change India',
-      'JMJ Events & Interiors',
+      'Kiki Garod\'s Portfolio',
       'Crumbs Bakery',
-      'Kiki\'s Portfolio',
+      'Support Ticket Agent',
     ],
   },
   {
     title: 'AI & Automation',
     slug: 'ai-automation',
+    from: '₹30,000',
     subtitle: 'LangChain, LLMs, Agents',
     desc: 'Rogue Code builds intelligent AI agents and automated workflows using LangChain, LangGraph, OpenAI GPT-4, and custom Python ML pipelines. From support ticket automation that cuts triage time by 70% to custom chatbots trained on your business data — AI that actually delivers measurable ROI.',
     icon: Bot,
@@ -73,6 +75,7 @@ const services = [
   {
     title: 'Mobile Apps',
     slug: 'mobile-apps',
+    from: '₹30,000',
     subtitle: 'React Native, Firebase',
     desc: 'Rogue Code ships cross-platform mobile applications using React Native and Firebase that perform natively on both iOS and Android from a single codebase. From spa booking apps that processed 200+ bookings in month one to full-featured product platforms with real-time sync, Stripe payments, and push notifications.',
     icon: Smartphone,
@@ -85,6 +88,7 @@ const services = [
   },
   {
     title: 'UI/UX Design',
+    from: '₹9,000',
     subtitle: 'Interfaces, Prototypes, Systems',
     desc: 'Research-driven interface design that balances beauty with usability. Wireframes, high-fidelity mockups, interactive prototypes, and design systems.',
     icon: Palette,

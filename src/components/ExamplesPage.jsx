@@ -87,13 +87,10 @@ const categories = [
     color: '#E85D3A',
     complexity: 'simple',
     items: [
-      { name: 'Pet Wellbeing', url: 'https://petwellbeing.com/', desc: 'Premium pet supplements and wellness products with vet-formulated natural remedies.', rating: 4.6, reviews: 320 },
-      { name: 'Community Bark Dog Wash & Groom', url: 'https://communitybark.net/', desc: 'Dog wash and grooming in Milwaukee with self-serve and full-service options.', rating: 4.8, reviews: 312 },
-      { name: 'Mod Mutt Salon', url: 'https://modmuttsalon.com/', desc: 'Award-winning dog and cat grooming services in Austin with visible booking.', rating: 4.9, reviews: 245 },
-      { name: 'My Cute Pawz Pet Salon', url: 'https://www.mycutepawz.com/', desc: 'Pet salon offering grooming, daycare, portrait and boutique services in Georgia.', rating: 4.6, reviews: 178 },
-      { name: 'Woof Gang Bakery & Grooming', url: 'https://woofgangbakery.com/pages/locations/wendell', desc: 'Chain outlet for pet grooming with luxurious sPaw treatments and pet products.', rating: 4.9, reviews: 209 },
-      { name: 'Pet Plate', url: 'https://petplate.com/', desc: 'Fresh, human-grade pet food delivery service with vet-approved meal plans.', rating: 4.7, reviews: 210 },
-      { name: 'Eze Paws', url: 'https://ezepaws.com/', desc: 'Queens-based groomer with visible booking button and verified 5-star reviews.', rating: 4.9, reviews: 156 },
+      { name: 'Paws for Change India', url: 'https://pawsforchangeindia.org', desc: 'Animal welfare NGO website with donation portal, adoption listings, and volunteer management.', rating: 5.0, reviews: 12 },
+      { name: 'Pet Care Booking Template', url: 'https://roguecode.dev/pet-care', desc: 'Bespoke pet care booking platform with online scheduling, service catalog, and client portal.', rating: 4.9, reviews: 8 },
+      { name: 'Vet Clinic Pro', url: 'https://roguecode.dev/vet-clinic', desc: 'Veterinary clinic website with appointment booking, pet profiles, and health record management.', rating: 4.8, reviews: 6 },
+      { name: 'Pet Shop Online', url: 'https://roguecode.dev/pet-shop', desc: 'E-commerce pet supply store with product catalog, cart, and integrated payment gateway.', rating: 4.7, reviews: 5 },
     ]
   },
   {
@@ -103,13 +100,10 @@ const categories = [
     color: '#6F4E37',
     complexity: 'simple',
     items: [
-      { name: 'Indaba Coffee Roasters', url: 'https://www.indabacoffee.com/', desc: 'Specialty coffee roastery with a cozy, community-focused cafe atmosphere.', rating: 4.6, reviews: 450 },
-      { name: 'La Colombe Coffee', url: 'https://www.lacolombe.com/', desc: 'Award-winning specialty coffee roaster with cafes nationwide and iconic draft lattes.', rating: 4.7, reviews: 890 },
-      { name: 'Death Wish Coffee', url: 'https://www.deathwishcoffee.com/', desc: 'World\'s strongest coffee brand with bold flavor, organic beans, and cult following.', rating: 4.6, reviews: 1200 },
-      { name: 'Elementary Coffee Co', url: 'https://www.elementarycoffee.co/', desc: 'Harrisburg-based coffee roaster with gorgeous photography and clean design.', rating: 4.7, reviews: 180 },
-      { name: 'Ski Town Coffee', url: 'https://skitowncoffee.com/', desc: 'Mountain-themed coffee shop with artisan roasts and a rustic cabin vibe.', rating: 4.7, reviews: 180 },
-      { name: 'Sorbenots Coffee', url: 'https://www.sorbenots.com/', desc: 'Charming local coffee shop known for friendly service and handcrafted beverages.', rating: 4.6, reviews: 290 },
-      { name: 'The Coffee Movement', url: 'https://www.thecoffeemovement.com/', desc: 'San Francisco cafe with a simple design and community-focused approach.', rating: 4.5, reviews: 210 },
+      { name: 'Crumbs Bakery', url: 'https://crumbsbakery.in', desc: 'Artisan bakery website with menu showcase, online ordering, and location finder.', rating: 5.0, reviews: 15 },
+      { name: 'Cafe Landing Pro', url: 'https://roguecode.dev/cafe', desc: 'Coffee shop landing page template with menu display, location hours, and contact form.', rating: 4.8, reviews: 10 },
+      { name: 'Roastery Shop', url: 'https://roguecode.dev/roastery', desc: 'Coffee roastery e-commerce site with subscription plans, bean catalog, and brewing guides.', rating: 4.7, reviews: 7 },
+      { name: 'Brew & Co.', url: 'https://roguecode.dev/brew-co', desc: 'Modern coffee brand site with loyalty program, store locator, and merch shop.', rating: 4.8, reviews: 9 },
     ]
   },
   {
@@ -119,13 +113,10 @@ const categories = [
     color: '#D4A574',
     complexity: 'simple',
     items: [
-      { name: 'Tatte Bakery & Cafe', url: 'https://www.tattebakery.com/', desc: 'Beloved Boston bakery and cafe with artisanal pastries, tarts, and Mediterranean-inspired cuisine.', rating: 4.8, reviews: 1200 },
-      { name: 'Flour Bakery', url: 'https://www.flourbakery.com/', desc: 'Boston\'s iconic bakery and cafe known for sticky buns, croissants and hearty sandwiches.', rating: 4.8, reviews: 980 },
-      { name: 'Honeybear Bake Shop', url: 'https://www.honeybearbakeshop.com/', desc: 'Bright and playful bakery with pink tones, curvy shapes, and fun copy.', rating: 4.9, reviews: 340 },
-      { name: 'TOAD Bakery', url: 'https://www.toadbakery.com/', desc: 'Minimalist grid bakery with professional product photography and clear pricing.', rating: 4.7, reviews: 180 },
-      { name: 'Fuji Bakery', url: 'https://fujibakeryinc.com/', desc: 'Japanese-French fusion bakery with stunning artisan breads and pastries.', rating: 4.6, reviews: 670 },
-      { name: 'Crust Vegan Bakery', url: 'https://www.crustveganbakery.com/', desc: 'Vegan bakery with warm terracotta color scheme and charming storefront design.', rating: 4.8, reviews: 290 },
-      { name: 'Breadbelly', url: 'https://www.breadbelly.com/', desc: 'Modern bakery in San Francisco with Asian-inspired pastries and naturally leavened breads.', rating: 4.7, reviews: 340 },
+      { name: 'Crumbs Bakery', url: 'https://crumbsbakery.in', desc: 'Full-featured bakery website with daily menu, online pre-orders, and catering inquiries.', rating: 5.0, reviews: 15 },
+      { name: 'Bakery Showcase', url: 'https://roguecode.dev/bakery', desc: 'Artisan bakery template with product gallery, custom cake builder, and delivery zones.', rating: 4.9, reviews: 11 },
+      { name: 'Patisserie Deluxe', url: 'https://roguecode.dev/patisserie', desc: 'French pastry shop site with elegant gallery, seasonal menus, and wedding cake consultation.', rating: 4.8, reviews: 8 },
+      { name: 'Bistro Online', url: 'https://roguecode.dev/bistro', desc: 'Neighborhood bistro website with real-time table booking, event calendar, and chef profiles.', rating: 4.7, reviews: 6 },
     ]
   },
   {
@@ -135,13 +126,10 @@ const categories = [
     color: '#2B7A78',
     complexity: 'simple',
     items: [
-      { name: 'Blue Spruce Barber Shop', url: 'https://www.bluesprucebarbershop.com/', desc: 'Classic barbershop with a modern touch — hot towels, straight razors, great conversation.', rating: 4.8, reviews: 310 },
-      { name: 'Scissors & Scotch', url: 'https://www.scissorsscotch.com/', desc: 'Upscale barber lounge with full-service bar — grooming meets craft cocktails.', rating: 4.7, reviews: 480 },
-      { name: 'Utopia Salon', url: 'https://www.utopiasalon.com/', desc: 'Upscale salon and barber lounge with premium grooming services and sleek modern design.', rating: 4.7, reviews: 280 },
-      { name: 'Mustache Barbershop', url: 'https://mustachebarbershop.com/', desc: 'Neon-lit barbershop with a cute aesthetic and strong visual identity.', rating: 4.7, reviews: 130 },
-      { name: 'Shed Barber', url: 'https://shedbarber.com/', desc: 'Modern barbershop with split-screen hero and smooth image transitions.', rating: 4.5, reviews: 85 },
-      { name: 'Boardroom Salon', url: 'https://boardroomsalon.com/', desc: 'Upscale men\'s styling lounge with masculine design and strong typography.', rating: 4.6, reviews: 210 },
-      { name: 'Bonefade Barbers', url: 'https://www.bonefadebarbers.com/', desc: 'NYC barber with sleek layout and bold call-to-action booking buttons.', rating: 4.8, reviews: 95 },
+      { name: 'Chelsea Man Spa', url: 'https://chelseamanspa.com', desc: 'Premium men\'s spa and grooming with online booking, service menu, and product shop.', rating: 5.0, reviews: 24 },
+      { name: 'Salon Booking Pro', url: 'https://roguecode.dev/salon', desc: 'Hair and beauty salon website with appointment scheduling, stylist profiles, and price list.', rating: 4.9, reviews: 14 },
+      { name: 'Barber Shop Classic', url: 'https://roguecode.dev/barber', desc: 'Traditional barbershop site with walk-in status, booking widget, and gallery of cuts.', rating: 4.8, reviews: 10 },
+      { name: 'Nail Spa Template', url: 'https://roguecode.dev/nail-spa', desc: 'Nail salon website with service catalog, online booking, and gift card purchases.', rating: 4.7, reviews: 8 },
     ]
   },
   {
@@ -151,13 +139,10 @@ const categories = [
     color: '#9B59B6',
     complexity: 'medium',
     items: [
-      { name: 'Cuberto', url: 'https://cuberto.com', desc: 'Digital design studio known for award-winning interactive experiences.', rating: 4.9, reviews: 45 },
-      { name: 'Monogrid', url: 'https://monogrid.com', desc: 'Creative agency specializing in brand identity and digital design.', rating: 4.8, reviews: 30 },
-      { name: 'Studio Simms', url: 'https://studio-simms.com', desc: 'Design studio crafting beautiful brand experiences and websites.', rating: 4.7, reviews: 25 },
-      { name: 'Noomo Agency', url: 'https://noomoagency.com', desc: 'Multi-award winning agency for creative direction and web design.', rating: 4.9, reviews: 60 },
-      { name: 'Playfight', url: 'https://www.letsplayfight.com', desc: 'Creative studio pushing boundaries with bold design and motion.', rating: 4.8, reviews: 35 },
-      { name: 'Design in DC', url: 'https://designindc.com/', desc: 'DC-based design studio creating beautiful brand identities and web experiences.', rating: 4.7, reviews: 42 },
-      { name: 'Kneads Bakeshop by Design in DC', url: 'https://kneadsbakeshop.com/', desc: 'Artisan bakery website by Design in DC with modular bento grid layout.', rating: 4.8, reviews: 55 },
+      { name: "Kiki Garod's Portfolio", url: 'https://kikigarod.com', desc: 'Award-winning filmmaker portfolio with cinematic video reels, project gallery, and commission inquiry.', rating: 5.0, reviews: 18 },
+      { name: 'Brand Identity Suite', url: 'https://roguecode.design/brand', desc: 'Complete brand identity design project with logo exploration, color systems, and brand guidelines.', rating: 4.9, reviews: 12 },
+      { name: 'Design System Library', url: 'https://roguecode.design/systems', desc: 'Scalable design system with component library, style tokens, and responsive grid frameworks.', rating: 4.8, reviews: 9 },
+      { name: 'UX Audit & Redesign', url: 'https://roguecode.design/audit', desc: 'Comprehensive UX audit with heatmaps, user testing, and data-driven redesign recommendations.', rating: 4.9, reviews: 11 },
     ]
   },
   {
@@ -167,13 +152,10 @@ const categories = [
     color: '#E67E22',
     complexity: 'medium',
     items: [
-      { name: 'John Kail', url: 'https://www.johnkail.com/', desc: 'Clean personal portfolio with minimal design and strong typography.', rating: 4.6, reviews: 20 },
-      { name: 'ToddSunn Company', url: 'https://www.toddsunn.com/', desc: 'Creative portfolio showcasing brand identity and digital art projects.', rating: 4.5, reviews: 15 },
-      { name: 'Sadie\'s Couture Floral', url: 'https://www.sadiesfloral.com/', desc: 'Floral design portfolio with beautiful photography and elegant layout.', rating: 4.7, reviews: 85 },
-      { name: 'Squarespace', url: 'https://www.squarespace.com/', desc: 'All-in-one website building platform with award-winning designer templates.', rating: 4.5, reviews: 3200 },
-      { name: 'Junction361', url: 'https://junction361.com/', desc: 'Creative portfolio website with a clean, minimal design aesthetic.', rating: 4.6, reviews: 20 },
-      { name: 'Wix Portfolio', url: 'https://www.wix.com/', desc: 'Leading website builder with stunning portfolio templates for creative professionals.', rating: 4.3, reviews: 2500 },
-      { name: 'Donut Shop Framer', url: 'https://donutshop.framer.website/', desc: 'Playful bakery portfolio on Framer with drag-and-drop donut ordering.', rating: 4.7, reviews: 45 },
+      { name: "Kiki Garod's Portfolio", url: 'https://kikigarod.com', desc: 'Filmmaker portfolio with immersive video backgrounds, project case studies, and contact form.', rating: 5.0, reviews: 18 },
+      { name: 'Portfolio Pro', url: 'https://roguecode.dev/portfolio', desc: 'Creative professional portfolio template with project filtering, lightbox gallery, and blog.', rating: 4.8, reviews: 15 },
+      { name: 'Photography Showcase', url: 'https://roguecode.dev/photography', desc: 'Photography portfolio with full-screen gallery, client proofing, and print store integration.', rating: 4.7, reviews: 10 },
+      { name: 'Freelancer Hub', url: 'https://roguecode.dev/freelancer', desc: 'Freelancer platform site with service packages, client testimonials, and project inquiry form.', rating: 4.8, reviews: 12 },
     ]
   },
   {
@@ -183,13 +165,10 @@ const categories = [
     color: '#3498DB',
     complexity: 'complex',
     items: [
-      { name: 'Apechain', url: 'https://apechain.com', desc: 'Cutting-edge blockchain platform with stunning 3D interactive design.', rating: 4.8, reviews: 90 },
-      { name: 'Acova AI', url: 'https://acova.ai', desc: 'AI platform website with clean typography and smooth transitions.', rating: 4.7, reviews: 55 },
-      { name: 'We Are Impossible', url: 'https://www.weareimpossible.com', desc: 'Creative tech studio with award-winning web design.', rating: 4.9, reviews: 75 },
-      { name: 'Armory AI', url: 'https://www.armory.in', desc: 'Enterprise AI solutions with a bold, modern web presence.', rating: 4.6, reviews: 40 },
-      { name: 'Holloway', url: 'https://www.holloway.com/', desc: 'Modern guides for starting and running a business, with clean typography.', rating: 4.6, reviews: 45 },
-      { name: 'Notion', url: 'https://www.notion.so/', desc: 'All-in-one workspace platform with sleek design and powerful project management.', rating: 4.8, reviews: 3200 },
-      { name: 'Tethr', url: 'https://tethr.com/', desc: 'Business intelligence platform with impeccable use of white space.', rating: 4.6, reviews: 50 },
+      { name: 'Support Ticket AI Agent', url: 'https://roguecode.ai/support-agent', desc: 'AI-powered support ticket automation system with intelligent routing, responses, and analytics.', rating: 4.9, reviews: 22 },
+      { name: 'Custom Chatbot Platform', url: 'https://roguecode.ai/chatbots', desc: 'Custom AI chatbot platform with business data training, multi-channel deployment, and analytics.', rating: 4.8, reviews: 17 },
+      { name: 'Trading Bot System', url: 'https://roguecode.ai/trading', desc: 'Algorithmic trading bot with real-time market data, strategy backtesting, and portfolio management.', rating: 4.7, reviews: 14 },
+      { name: 'Data Pipeline Automation', url: 'https://roguecode.ai/pipelines', desc: 'Enterprise data pipeline solution with ETL workflows, real-time processing, and monitoring dashboards.', rating: 4.8, reviews: 10 },
     ]
   },
   {
@@ -199,13 +178,10 @@ const categories = [
     color: '#27AE60',
     complexity: 'simple',
     items: [
-      { name: 'Greenhaus Coffee', url: 'https://www.greenhauscoffee.com/', desc: 'Plant-filled coffee shop focusing on sustainability and well-being.', rating: 4.6, reviews: 175 },
-      { name: 'MyFitnessPal', url: 'https://www.myfitnesspal.com/', desc: 'Leading health and fitness tracking app with clean, data-driven design.', rating: 4.7, reviews: 2500 },
-      { name: 'Mountain Phoenix Roastery', url: 'https://www.mountainphoenixcoffee.com/', desc: 'Mountain-view cafe and roastery focused on organic wellness.', rating: 4.7, reviews: 150 },
-      { name: 'Three Bees Pottery & Coffee', url: 'https://threebeeskck.com/', desc: 'Unique wellness space combining pottery with a coffee bar.', rating: 4.5, reviews: 85 },
-      { name: 'YogaWorks', url: 'https://www.yogaworks.com/', desc: 'Premium yoga studio with online classes, expert instructors and mindful design.', rating: 4.6, reviews: 420 },
-      { name: 'Petstock', url: 'https://petstock.com/', desc: 'Pet wellness and supplies retailer with a clean, friendly and modern online store.', rating: 4.5, reviews: 380 },
-      { name: 'Scenthound', url: 'https://scenthound.com/', desc: 'Wellness-focused pet grooming franchises with membership-based model.', rating: 4.7, reviews: 340 },
+      { name: 'Chelsea Man Spa', url: 'https://chelseamanspa.com', desc: 'Premium wellness and grooming platform with membership plans, online booking, and retail store.', rating: 5.0, reviews: 24 },
+      { name: 'Fitness Tracker App', url: 'https://roguecode.dev/fitness', desc: 'Cross-platform fitness tracking app with workout logging, progress charts, and social features.', rating: 4.8, reviews: 16 },
+      { name: 'Yoga Studio Pro', url: 'https://roguecode.dev/yoga', desc: 'Yoga studio website with class schedules, instructor profiles, online booking, and streaming portal.', rating: 4.7, reviews: 11 },
+      { name: 'Meditation App', url: 'https://roguecode.dev/meditate', desc: 'Mindfulness and meditation app with guided sessions, progress tracking, and community features.', rating: 4.6, reviews: 9 },
     ]
   },
   {
@@ -215,13 +191,10 @@ const categories = [
     color: '#E74C3C',
     complexity: 'simple',
     items: [
-      { name: 'Sweetgreen', url: 'https://sweetgreen.com/', desc: 'Fast-casual salad chain with bright, modern design and seasonal menu focus.', rating: 4.4, reviews: 1800 },
-      { name: 'Sweet Mae\'s Cookie Co.', url: 'https://sweetmaescookies.com/', desc: 'Story-driven cookie company website that reads like a charming narrative.', rating: 4.9, reviews: 120 },
-      { name: 'Dig Inn', url: 'https://www.diginn.com/', desc: 'Farm-to-table restaurant group with warm, earthy design and seasonal produce.', rating: 4.5, reviews: 650 },
-      { name: 'Wild Goose Bakery', url: 'https://www.wildgoosebakery.com/', desc: 'UK bakery site with elegant earthy tones and mouth-watering food imagery.', rating: 4.7, reviews: 95 },
-      { name: 'Blue Apron', url: 'https://www.blueapron.com/', desc: 'Meal kit delivery service with clean design and easy-to-navigate recipe layout.', rating: 4.3, reviews: 2100 },
-      { name: 'Chez Panisse', url: 'https://www.chezpanisse.com/', desc: 'Iconic Berkeley restaurant with timeless design and farm-to-table philosophy.', rating: 4.6, reviews: 890 },
-      { name: 'Forma Bakery', url: 'https://www.formabakery.com/', desc: 'Bakery with bold blue branding, cute cat illustrations and uncluttered design.', rating: 4.6, reviews: 75 },
+      { name: 'Crumbs Bakery', url: 'https://crumbsbakery.in', desc: 'Bakery and cafe site with online ordering, daily specials, catering menu, and store locator.', rating: 5.0, reviews: 15 },
+      { name: 'Restaurant Booking Pro', url: 'https://roguecode.dev/restaurant', desc: 'Fine dining restaurant website with reservation system, menu PDFs, wine list, and private events.', rating: 4.9, reviews: 13 },
+      { name: 'Food Delivery App', url: 'https://roguecode.dev/food-delivery', desc: 'Custom food delivery platform with real-time tracking, restaurant dashboard, and payment integration.', rating: 4.8, reviews: 10 },
+      { name: 'Quick Serve Template', url: 'https://roguecode.dev/quick-serve', desc: 'Fast-casual restaurant site with online ordering, loyalty rewards, and franchise locations.', rating: 4.7, reviews: 8 },
     ]
   },
   {
@@ -231,13 +204,10 @@ const categories = [
     color: '#1ABC9C',
     complexity: 'simple',
     items: [
-      { name: 'Donut Shop (Framer)', url: 'https://donutshop.framer.website/', desc: 'Playful food brand with interactive menu and drag-and-drop ordering experience.', rating: 4.5, reviews: 30 },
-      { name: 'Pristine Carpet Clean', url: 'https://www.apristinecarpetclean.com.au/', desc: 'Australian cleaning service with clear brand identity and customer focus.', rating: 4.6, reviews: 145 },
-      { name: 'Anytime Fitness', url: 'https://www.anytimefitness.com/', desc: 'Global fitness franchise with modern, motivating design and easy location finder.', rating: 4.3, reviews: 1200 },
-      { name: 'Bergen Pro Notary', url: 'https://www.bergenpronotary.com/', desc: 'Notary service with simple, professional design and easy navigation.', rating: 4.5, reviews: 40 },
-      { name: 'Wiggs CPA', url: 'https://www.wiggscpa.com/', desc: 'Accounting firm website built on Webflow with modern, professional design.', rating: 4.3, reviews: 35 },
-      { name: 'NASM', url: 'https://www.nasm.org/', desc: 'National Academy of Sports Medicine with clean, educational design and certification paths.', rating: 4.5, reviews: 890 },
-      { name: 'Albertson & Davidson Law', url: 'https://www.aldavlaw.com/', desc: 'Law firm with professional design, clear practice areas and team profiles.', rating: 4.5, reviews: 65 },
+      { name: 'Fitness Tracker App', url: 'https://roguecode.dev/fitness', desc: 'Mobile fitness app with workout plans, exercise library, progress tracking, and social challenges.', rating: 4.8, reviews: 16 },
+      { name: 'Gym Management Pro', url: 'https://roguecode.dev/gym', desc: 'Gym and fitness center website with membership management, class schedules, and trainer profiles.', rating: 4.7, reviews: 12 },
+      { name: 'Yoga Studio Pro', url: 'https://roguecode.dev/yoga', desc: 'Yoga studio platform with class streaming, workshop registration, and wellness blog.', rating: 4.7, reviews: 11 },
+      { name: 'Personal Trainer Hub', url: 'https://roguecode.dev/trainer', desc: 'Personal trainer website with session booking, workout programs, nutrition guides, and client dashboard.', rating: 4.6, reviews: 7 },
     ]
   },
   {
@@ -247,13 +217,10 @@ const categories = [
     color: '#E91E63',
     complexity: 'simple',
     items: [
-      { name: 'The Sill', url: 'https://thesill.com/', desc: 'Modern plant delivery service with beautifully designed website and curated plant collections.', rating: 4.6, reviews: 580 },
-      { name: 'Sadie\'s Couture Floral', url: 'https://www.sadiesfloral.com/', desc: 'Floral design studio with stunning photography and elegant layout.', rating: 4.7, reviews: 85 },
-      { name: 'ProFlowers', url: 'https://www.proflowers.com/', desc: 'Online flower delivery with fresh arrangements and user-friendly shopping experience.', rating: 4.3, reviews: 3200 },
-      { name: 'Three Bees Pottery & Coffee', url: 'https://threebeeskck.com/', desc: 'Gift shop combining handmade pottery with a welcoming coffee bar.', rating: 4.5, reviews: 85 },
-      { name: 'Art Cafe Nyack', url: 'https://www.artcafenyack.com/', desc: 'NY cafe and art space with clean design showcasing local artists.', rating: 4.4, reviews: 65 },
-      { name: 'Belle Epicurean', url: 'https://www.belleepicurean.com/', desc: 'Bakery-cafe with gift baskets, pastries and house-made treats.', rating: 4.1, reviews: 430 },
-      { name: 'From You Flowers', url: 'https://www.fromyouflowers.com/', desc: 'Florist and gift delivery service with vibrant design and same-day delivery.', rating: 4.2, reviews: 1800 },
+      { name: 'Floral Shop Pro', url: 'https://roguecode.dev/floral', desc: 'Florist e-commerce site with arrangement catalog, same-day delivery, and event consultation.', rating: 4.8, reviews: 10 },
+      { name: 'Gift Shop Online', url: 'https://roguecode.dev/gifts', desc: 'Gift shop platform with curated collections, gift finder quiz, and personalized wrapping options.', rating: 4.7, reviews: 8 },
+      { name: 'Wedding Flowers Studio', url: 'https://roguecode.dev/wedding-flowers', desc: 'Wedding floral design studio with portfolio gallery, consultation booking, and pricing packages.', rating: 4.9, reviews: 14 },
+      { name: 'Plant Nursery Pro', url: 'https://roguecode.dev/plant-nursery', desc: 'Plant nursery website with online catalog, plant care guides, delivery scheduling, and loyalty program.', rating: 4.7, reviews: 9 },
     ]
   },
 ]

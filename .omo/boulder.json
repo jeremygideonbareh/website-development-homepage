@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "active_work_id": "motion-whileInView-reliability-fix",
+  "works": {
+    "rogue-code-pricing-case-studies": {
+      "work_id": "rogue-code-pricing-case-studies",
+      "active_plan": "C:\\Users\\cloud\\OneDrive\\Desktop\\Hybrid_Second_Brain\\clients website\\webistedevhompage\\.omo\\plans\\rogue-code-pricing-case-studies.md",
+      "plan_name": "rogue-code-pricing-case-studies",
+      "session_ids": ["opencode:ses_0ceb8eb14ffe5obYzXSqk3wv9h"],
+      "status": "completed",
+      "started_at": "2026-07-17T13:20:00.000Z",
+      "completed_at": "2026-07-17T14:55:00.000Z",
+      "worktree_path": null
+    },
+    "mobile-heading-clip-fix": {
+      "work_id": "mobile-heading-clip-fix",
+      "active_plan": "C:\\Users\\cloud\\OneDrive\\Desktop\\Hybrid_Second_Brain\\clients website\\webistedevhompage\\.omo\\plans\\mobile-heading-clip-fix.md",
+      "plan_name": "mobile-heading-clip-fix",
+      "session_ids": ["opencode:ses_0ceb8eb14ffe5obYzXSqk3wv9h"],
+      "status": "completed",
+      "started_at": "2026-07-17T14:42:00.000Z",
+      "completed_at": "2026-07-17T14:55:00.000Z",
+      "worktree_path": null
+    },
+    "mobile-text-foolproof-revamp": {
+      "work_id": "mobile-text-foolproof-revamp",
+      "active_plan": "C:\\Users\\cloud\\OneDrive\\Desktop\\Hybrid_Second_Brain\\clients website\\webistedevhompage\\.omo\\plans\\mobile-text-foolproof-revamp.md",
+      "plan_name": "mobile-text-foolproof-revamp",
+      "session_ids": ["opencode:ses_0ceb8eb14ffe5obYzXSqk3wv9h"],
+      "status": "completed",
+      "started_at": "2026-07-19T07:40:49.121Z",
+      "completed_at": "2026-07-19T08:22:00.000Z",
+      "worktree_path": null,
+      "elapsed_ms": 2471000
+    },
+    "motion-whileInView-reliability-fix": {
+      "work_id": "motion-whileInView-reliability-fix",
+      "active_plan": "C:\\Users\\cloud\\OneDrive\\Desktop\\Hybrid_Second_Brain\\clients website\\webistedevhompage\\.omo\\plans\\motion-whileInView-reliability-fix.md",
+      "plan_name": "motion-whileInView-reliability-fix",
+      "session_ids": ["opencode:ses_0ceb8eb14ffe5obYzXSqk3wv9h"],
+      "status": "active",
+      "started_at": "2026-07-19T10:16:00.524Z",
+      "worktree_path": null
+    }
+  },
+  "active_plan": "C:\\Users\\cloud\\OneDrive\\Desktop\\Hybrid_Second_Brain\\clients website\\webistedevhompage\\.omo\\plans\\motion-whileInView-reliability-fix.md",
+  "plan_name": "motion-whileInView-reliability-fix",
+  "status": "active",
+  "agent": "atlas"
+}

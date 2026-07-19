@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Check } from 'lucide-react'
@@ -7,9 +6,9 @@ import { useTiltEffect } from '../hooks/useTiltEffect'
 const packages = [
   {
     name: 'Basic',
-    monthlyPrice: '₹7,000',
-    yearlyPrice: '₹70,000',
+    price: '₹7,000',
     priceLabel: 'starting from',
+    paymentTerms: '50% upfront · 50% on delivery',
     desc: 'A responsive React 19 website with TypeScript and Tailwind CSS — optimized for mobile, with basic JSON-LD SEO and Cloudflare deployment.',
     features: [
       '5-page React 19 website with Tailwind CSS',
@@ -24,9 +23,9 @@ const packages = [
   },
   {
     name: 'Business',
-    monthlyPrice: '₹14,000',
-    yearlyPrice: '₹1,40,000',
+    price: '₹14,000',
     priceLabel: 'starting from',
+    paymentTerms: '50% upfront · 25% milestone · 25% delivery',
     desc: 'Custom full-stack React app or AI automation with CMS, analytics, and API integrations — built to scale your operations.',
     features: [
       'Custom React 19 web app or AI automation',
@@ -43,9 +42,9 @@ const packages = [
   },
   {
     name: 'Enterprise',
-    monthlyPrice: '₹25,000',
-    yearlyPrice: '₹2,50,000',
+    price: '₹25,000',
     priceLabel: 'starting from',
+    paymentTerms: '30% upfront · 40% milestone · 30% delivery',
     desc: 'Full-stack product with React 19, Node.js, AI agent integration, and React Native mobile app — dedicated PM and unlimited revisions.',
     features: [
       'Full-stack product with React 19 + Node.js',
@@ -60,11 +59,11 @@ const packages = [
     examples: ['Multi-tenant Platform', 'Marketplace', 'ERP System'],
     accent: '#3B8A88',
   },
-    {
+  {
     name: 'Custom Animated',
-    monthlyPrice: '₹3,00,000',
-    yearlyPrice: '₹30,00,000',
+    price: '₹3,00,000',
     priceLabel: 'onwards',
+    paymentTerms: '30% upfront · 30% milestone · 20% milestone · 20% delivery',
     desc: 'Award-caliber 3D WebGL experiences using Three.js and React Three Fiber with cinematic GSAP ScrollTrigger motion design.',
     features: [
       'Custom 3D / WebGL with React Three Fiber',
@@ -91,42 +90,7 @@ const item = {
   visible: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
 }
 
-function BillingToggle({ isYearly, onToggle }) {
-  const { t } = useTranslation()
-  return (
-    <div className="flex justify-center mb-12">
-      <div className="relative flex w-fit items-center rounded-full p-1" style={{ background: 'rgba(255,255,255,0.06)' }}>
-        <motion.div
-          className="absolute top-0 h-full rounded-full"
-          layoutId="billing-pill"
-          transition={{ type: 'spring', stiffness: 500, damping: 40 }}
-          style={{
-            width: '50%',
-            background: 'rgba(255,255,255,0.1)',
-            left: isYearly ? '50%' : '0%',
-          }}
-        />
-        <button
-          onClick={() => onToggle(false)}
-          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32 min-h-[44px]"
-          style={{ color: isYearly ? '#8A8A8A' : '#F2F2F2', touchAction: 'manipulation' }}
-        >
-          {t('pricing.monthly')}
-        </button>
-        <button
-          onClick={() => onToggle(true)}
-          className="relative z-10 rounded-full px-6 py-2.5 text-sm font-medium transition-colors w-32 min-h-[44px]"
-          style={{ color: isYearly ? '#F2F2F2' : '#8A8A8A', touchAction: 'manipulation' }}
-        >
-          {t('pricing.yearly')}
-          <span className="ml-1.5 text-[10px]" style={{ color: '#FF6B4A' }}>-17%</span>
-        </button>
-      </div>
-    </div>
-  )
-}
-
-function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isYearly }) {
+function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook }) {
   const { t } = useTranslation()
   const {
     cardRef,
@@ -180,9 +144,10 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isY
             </div>
             <div className="flex items-baseline gap-1 mt-3">
               <span className="text-4xl font-black tracking-tight" style={{ color: text }}>
-                {isYearly ? pkg.yearlyPrice : pkg.monthlyPrice}
+                {pkg.price}
               </span>
               <span className="text-sm" style={{ color: dim }}>{pkg.priceLabel}</span>
+              {pkg.paymentTerms && <p className="text-xs opacity-60 mt-1" style={{ color: dim }}>{pkg.paymentTerms}</p>}
             </div>
             <p className="text-sm mt-3 leading-relaxed" style={{ color: muted }}>{pkg.desc}</p>
           </div>
@@ -231,7 +196,6 @@ function PricingCard({ pkg, isDay, text, muted, dim, border, cardBg, onBook, isY
 
 export default function PricingSection({ isDay = true, onBook }) {
   const { t } = useTranslation()
-  const [isYearly, setIsYearly] = useState(false)
 
   const accent = isDay ? '#E85D3A' : '#FF6B4A'
   const text = isDay ? '#1A1A1A' : '#F2F2F2'
@@ -270,8 +234,6 @@ export default function PricingSection({ isDay = true, onBook }) {
           />
         </motion.div>
 
-        <BillingToggle isYearly={isYearly} onToggle={setIsYearly} />
-
         <motion.div
           variants={container}
           initial="hidden"
@@ -290,7 +252,6 @@ export default function PricingSection({ isDay = true, onBook }) {
               border={border}
               cardBg={cardBg}
               onBook={onBook}
-              isYearly={isYearly}
             />
           ))}
         </motion.div>
