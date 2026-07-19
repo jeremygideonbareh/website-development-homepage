@@ -1,43 +1,63 @@
 import { motion } from 'framer-motion'
 
 export function WordReveal({ children, className, delay = 0 }) {
-  const words = children.split(' ')
+  const segments = children.split(/(\s+)/)
+  let wordIndex = 0
   return (
-    <span className={className} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-      {words.map((word, i) => (
-        <span key={i} className="inline">
-          <motion.span
-            initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-            whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.5, delay: delay + i * 0.04, ease: [0.25, 0.4, 0.25, 1] }}
-            className="inline-block"
-          >
-            {word}
-          </motion.span>
-          {i < words.length - 1 && <span className="inline-block w-[0.25em]">&nbsp;</span>}
-        </span>
-      ))}
+    <span className={className} style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+      {segments.map((seg, i) => {
+        if (seg.match(/^\s+$/)) {
+          return <span key={i} className="inline-block whitespace-pre">{'\u00A0'}</span>
+        }
+        const currentWordIndex = wordIndex++
+        return (
+          <span key={i} className="inline-block whitespace-pre">
+            <motion.span
+              initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+              whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.5, delay: delay + currentWordIndex * 0.04, ease: [0.25, 0.4, 0.25, 1] }}
+              className="inline-block"
+            >
+              {seg}
+            </motion.span>
+          </span>
+        )
+      })}
     </span>
   )
 }
 
 export function CharReveal({ children, className, delay = 0 }) {
-  const chars = children.split('')
+  const segments = children.split(/(\s+)/)
+  let flatIndex = 0
   return (
-    <span className={className} style={{ overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-      {chars.map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.4, delay: delay + i * 0.015, ease: [0.25, 0.4, 0.25, 1] }}
-          className="inline-block"
-        >
-          {char}
-        </motion.span>
-      ))}
+    <span className={className} style={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
+      {segments.map((seg, i) => {
+        if (seg.match(/^\s+$/)) {
+          flatIndex++ // whitespace token takes one index slot
+          return <span key={i} className="inline-block whitespace-pre">{'\u00A0'}</span>
+        }
+        return (
+          <span key={i} className="inline-block whitespace-pre">
+            {seg.split('').map((char, j) => {
+              const charIndex = flatIndex++
+              return (
+                <motion.span
+                  key={j}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ duration: 0.4, delay: delay + charIndex * 0.015, ease: [0.25, 0.4, 0.25, 1] }}
+                  className="inline-block"
+                >
+                  {char}
+                </motion.span>
+              )
+            })}
+          </span>
+        )
+      })}
     </span>
   )
 }
@@ -94,24 +114,46 @@ const kineticVariants = {
 }
 
 export function KineticText({ children, mode = 'spring', delay = 0, className }) {
-  const chars = children.split('')
+  const segments = children.split(/(\s+)/)
   const v = kineticVariants[mode] || kineticVariants.spring
+  let flatIndex = 0
 
   return (
     <span className={className} style={{ display: 'inline', whiteSpace: 'pre-wrap', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
-      {chars.map((char, i) => {
-        const anim = v(i)
+      {segments.map((seg, i) => {
+        if (seg.match(/^\s+$/)) {
+          const anim = v(flatIndex++)
+          return (
+            <motion.span
+              key={i}
+              initial={anim.initial}
+              whileInView={anim.whileInView}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
+              style={{ display: 'inline-block' }}
+            >
+              {'\u00A0'}
+            </motion.span>
+          )
+        }
         return (
-          <motion.span
-            key={i}
-            initial={anim.initial}
-            whileInView={anim.whileInView}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
-            style={{ display: 'inline-block' }}
-          >
-            {char === ' ' ? ' ' : char}
-          </motion.span>
+          <span key={i} className="inline-block whitespace-pre">
+            {seg.split('').map((char, j) => {
+              const anim = v(flatIndex++)
+              return (
+                <motion.span
+                  key={j}
+                  initial={anim.initial}
+                  whileInView={anim.whileInView}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={anim.transition ? { ...anim.transition, delay: (anim.transition.delay || 0) + delay } : undefined}
+                  style={{ display: 'inline-block' }}
+                >
+                  {char}
+                </motion.span>
+              )
+            })}
+          </span>
         )
       })}
     </span>
