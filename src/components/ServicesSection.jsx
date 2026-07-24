@@ -6,28 +6,28 @@ import { Code, Bot, Smartphone, Palette, ExternalLink, Star, Globe, X } from 'lu
 
 const serviceExamples = {
   'Web Development': [
-    { name: 'Paws for Change India', url: 'https://pawsforchangeindia.org', rating: 5.0, type: 'Animal Welfare' },
-    { name: "Kiki Garod's Portfolio", url: 'https://kikigarod.com', rating: 5.0, type: 'Filmmaker' },
-    { name: 'Crumbs Bakery', url: 'https://crumbsbakery.in', rating: 5.0, type: 'Bakery' },
-    { name: 'Chelsea Man Spa', url: 'https://chelseamanspa.com', rating: 5.0, type: 'Spa & Wellness' },
+    { name: "Skitown Coffee", url: 'https://skitowncoffee.com', rating: 5.0, type: 'Coffee Roaster' },
+    { name: "Sorbenot's Coffee", url: 'https://sorbenots.com', rating: 5.0, type: 'Coffee Roaster' },
+    { name: 'Design in DC', url: 'https://designindc.com', rating: 4.9, type: 'Design Agency' },
+    { name: 'Jazean Coffee', url: 'https://jazeancoffee.com', rating: 4.9, type: 'Coffee Roaster' },
   ],
   'AI & Automation': [
-    { name: 'Support Ticket Agent', url: 'https://roguecode.ai/support-agent', rating: 4.9 },
-    { name: 'Custom Chatbot Platform', url: 'https://roguecode.ai/chatbots', rating: 4.8 },
-    { name: 'Trading Bot System', url: 'https://roguecode.ai/trading', rating: 4.7 },
-    { name: 'Data Pipeline Automation', url: 'https://roguecode.ai/pipelines', rating: 4.8 },
+    { name: 'Getmicro', url: 'https://getmicro.com', rating: 4.9, type: 'SaaS Platform' },
+    { name: 'SafetyWing', url: 'https://safetywing.com', rating: 4.8, type: 'InsurTech' },
+    { name: 'Kriss AI', url: 'https://kriss.ai', rating: 4.8, type: 'AI Platform' },
+    { name: 'Minitap', url: 'https://minitap.ai', rating: 4.7, type: 'Mobile App' },
   ],
   'Mobile Apps': [
-    { name: 'Chelsea Man Spa App', url: 'https://chelseamanspa.com/app', rating: 4.9 },
-    { name: 'Booking Platform', url: 'https://roguecode.dev/booking', rating: 4.8 },
-    { name: 'Fitness Tracker App', url: 'https://roguecode.dev/fitness', rating: 4.6 },
-    { name: 'Delivery Tracker', url: 'https://roguecode.dev/delivery', rating: 4.7 },
+    { name: 'Donut Shop', url: 'https://donutshop.framer.website', rating: 4.9, type: 'Food Service' },
+    { name: 'Tastavents', url: 'https://tastavents.com', rating: 4.8, type: 'Catering' },
+    { name: 'The Olly', url: 'https://theolly.it', rating: 4.8, type: 'Restaurant' },
+    { name: 'Yoga Maya', url: 'https://yogamaya.com', rating: 4.7, type: 'Wellness' },
   ],
   'UI/UX Design': [
-    { name: 'Brand Identity Suite', url: 'https://roguecode.design/brand', rating: 4.9 },
-    { name: 'Design System Library', url: 'https://roguecode.design/systems', rating: 4.8 },
-    { name: 'UX Audit & Redesign', url: 'https://roguecode.design/audit', rating: 4.9 },
-    { name: 'Mobile App Redesign', url: 'https://roguecode.design/mobile', rating: 4.7 },
+    { name: 'Fantik Studio', url: 'https://fantik.studio', rating: 5.0, type: 'Design Studio' },
+    { name: 'Synchronized Studio', url: 'https://synchronized.studio', rating: 4.9, type: 'Design Studio' },
+    { name: 'Federico Pian', url: 'https://federicopian.com', rating: 4.8, type: 'Designer Portfolio' },
+    { name: 'Aino Agency', url: 'https://aino.agency', rating: 4.9, type: 'Design Agency' },
   ],
 }
 
@@ -51,10 +51,10 @@ const services = [
     accent: '#E85D3A',
     decor: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1600&q=80',
     projects: [
-      'Paws for Change India',
-      'Kiki Garod\'s Portfolio',
-      'Crumbs Bakery',
-      'Support Ticket Agent',
+      'Skitown Coffee',
+      'Sorbenot\'s Coffee',
+      'Design in DC',
+      'Jazean Coffee',
     ],
   },
   {
@@ -67,9 +67,10 @@ const services = [
     accent: '#FF6B4A',
     decor: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1600&q=80',
     projects: [
-      'Support Ticket Agent',
-      'Trading Bot',
-      'Custom Chatbots',
+      'Getmicro',
+      'SafetyWing',
+      'Kriss AI',
+      'Minitap',
     ],
   },
   {
@@ -82,8 +83,10 @@ const services = [
     accent: '#2B7A78',
     decor: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1600&q=80',
     projects: [
-      'Chelsea Man Spa',
-      'Booking Platforms',
+      'Donut Shop',
+      'Tastavents',
+      'The Olly',
+      'Yoga Maya',
     ],
   },
   {
@@ -95,9 +98,10 @@ const services = [
     accent: '#3B8A88',
     decor: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1600&q=80',
     projects: [
-      'Brand Identity Design',
-      'Design Systems',
-      'UX Audits',
+      'Fantik Studio',
+      'Synchronized Studio',
+      'Federico Pian',
+      'Aino Agency',
     ],
   },
 ]
