@@ -17,10 +17,10 @@ export default function Loader() {
             animate={{ y: 0, opacity: 1, rotate: 0 }}
             transition={{
               type: 'spring',
-              stiffness: 100,
+              stiffness: 200,
               damping: 9,
               mass: 0.8,
-              delay: i * 0.07,
+              delay: i * 0.035,
             }}
             className="inline-block text-2xl sm:text-4xl lg:text-5xl font-bold tracking-[0.2em] sm:tracking-[0.35em]"
             style={{ color: '#ffffff' }}
@@ -33,7 +33,7 @@ export default function Loader() {
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
         animate={{ scaleX: 1, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.9, ease: 'easeOut' }}
+        transition={{ duration: 0.4, delay: 0.45, ease: 'easeOut' }}
         className="h-px"
         style={{
           width: 160,
@@ -45,7 +45,7 @@ export default function Loader() {
       <motion.p
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 1.3 }}
+        transition={{ duration: 0.3, delay: 0.65 }}
         className="text-xs tracking-[0.15em] uppercase"
         style={{ color: 'rgba(255,255,255,0.35)' }}
       >
